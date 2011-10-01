@@ -118,7 +118,7 @@
 			   	    <ul class="nav.secondary-nav" class="pull-right" style="float:right">
            			<li><a href="{{ url_for('show_cases') }}">Cases</a></li>
             		<li><a href="{{ url_for('show_leaderboard') }}">Leaderboard</a></li>
-            		<li><a href="{{ url_for('show_users, userName=session.emailAddress') }}">{{ session.emailAddress }}</a></li>
+            		<li><a href="{{ url_for('show_users', userName=session.emailAddress) }}">{{ session.emailAddress }}</a></li>
             		</ul>
             		<button class="btn" href="{{ url_for('logout') }}" type="submit">Sign out</button>
                {% endif %}
@@ -127,7 +127,7 @@
       </div>
     </div
 
-	<!-- This is some weird flask code that brings in messages == -->
+	<!-- This is some weird flask code that brings in messges == -->
 
     {% for message in get_flashed_messages() %}
     <div class=flash>{{ message }}</div>
