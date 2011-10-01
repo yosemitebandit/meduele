@@ -17,12 +17,6 @@ Patrick thinks this is awesome!
       adminRights
     }
 
-    comment {
-      author
-      body
-      timestamp
-      caseName
-    }
    
     /patients/patientName/cases/caseName
  
@@ -40,6 +34,11 @@ Patrick thinks this is awesome!
       duration
       phone number
       who_heard
+      comments: [{
+        author
+        body
+        timestamp
+      }]
     }
 ```
 

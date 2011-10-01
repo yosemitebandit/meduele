@@ -15,6 +15,17 @@ class Mongo:
 
         self.connection = pymongo.Connection(mongoConfig['host'], int(mongoConfig['port']))   # mongo mandates integer ports
         self.db = self.connection[mongoConfig['dbName']]
+   
+
+    def retrieve_cases(self, patientName):
+        # first get the phone number from patients coll
+        query = {'patientName': patientName}
+        patient = list(self.db['patients'].find(query))[0]
+
+        # now get cases based on phone number
+        query = {'phoneNumber': patient['phoneNumber']}
+        cases = list(self.db['cases'].find(query))
+        return cases
 
 
     def retrieve_user(self, **kwargs):

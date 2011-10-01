@@ -29,8 +29,12 @@ execfile(settings_path)
 
 @app.route('/patients/<patientName>', methods=['GET'])
 def show_patient(patientName):
-if 'logged_in' not in flask.session or not flask.session['logged_in']:  # not defined or is false
-    return flask.redirect(flask.url_for('show_home'))
+    if 'logged_in' not in flask.session or not flask.session['logged_in']:  # not defined or is false
+        return flask.redirect(flask.url_for('show_home'))
+
+    cases = mongo.retrieve_cases(patientName)
+    return flask.render_template('show_patient.html', patientName=patientName, cases=cases)
+
 
 
 @app.route('/patients/<patientName>/cases', methods=['GET'])
