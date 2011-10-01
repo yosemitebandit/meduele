@@ -1,16 +1,21 @@
 {% extends "layout.html" %}
 {% block body %}
   {% if caseName %}
-    <h2><a href=" {{ url_for('show_cases', caseName=caseName) }}">{{ caseName }}</a></h2>
-    {# expound extensively on this single case using the history var #}
-    {#{% if case.callSID %}
-    <p class='callSID' id='{{ entry.callSID }}'>{{ .callSID }}</a></h2>
-    <p class='callRecording'>{{ entry
+    <h2><a href="{{ url_for('show_cases', caseName=caseName) }}">{{ caseName }}</a></h2>
+    {% for entry in history %}
+      {% if entry.callSID %}
+        <p class='callSID' id='{{ entry.callSID }}'>{{ entry.callSID }}</a></h2>
+        <p class='callRecording'>{{ entry.url }}</p>
 
-    {% endif %}t#}
+      {% else %}
+        <p>{{ entry.body }}</p>
+        <p>{{ entry.author }}</p>
+
+      {% endif %}
+    {% endfor %}
 
   {% else %}
-  <div class="container" style="margin-top:100px">
+    <div class="container" style="margin-top:100px">
     	<div class="content">
     		<div class="page-header">
 				<h1>
