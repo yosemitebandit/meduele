@@ -22,11 +22,6 @@ settings_path = os.environ.get('MEDUELE_SETTINGS')
 execfile(settings_path)
 
 
-#@app.route('/patients', methods=['GET'])
-#def show_patients():
-
-
-
 @app.route('/patients/<patientName>', methods=['GET'])
 def show_patient(patientName):
     if 'logged_in' not in flask.session or not flask.session['logged_in']:  # not defined or is false
@@ -41,14 +36,16 @@ def show_patient(patientName):
         else:
             resolved.append(case)
 
-    return flask.render_template('show_patients.html', patientName=patientName, unresolved=unresolved, resolved=resolved)
+    return flask.render_template('show_patients.html', patientName=patientName, unresolved=unresolved, resolved=resolve)
 
 
+@app.route('/patients/<patientName>/cases/<caseName>', methods=['GET'])
+def show_case(patientName, caseName):
+    if 'logged_in' not in flask.session or not flask.session['logged_in']:  # not defined or is false
+        return flask.redirect(flask.url_for('show_home'))
 
-#@app.route('/patients/<patientName>/cases', methods=['GET'])
-
-
-#@app.route('/patients/<patientName>/cases/<caseName>', methods=['GET'])
+    case = mongo.retrieve_case_by_caseName(caseName)
+    return flask.render_template('show_case.html', patientName, case)
 
 
 @app.route('/cases', methods=['GET'])

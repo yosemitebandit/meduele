@@ -28,6 +28,12 @@ class Mongo:
         return cases
 
 
+    def retrieve_case_by_caseName(self, caseName):
+        query = {'caseName': caseName}
+        case = list(self.db['cases'].find(query))[0]
+        return case
+
+
     def retrieve_user(self, **kwargs):
         emailAddress = kwargs.pop('emailAddress', None)
         userName = kwargs.pop('userName', None)

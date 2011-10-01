@@ -6,7 +6,7 @@
             <h1>{{ patientName }}</h1>
         </div>
 		<div class="page-header">
-			<h2>New Cases</h1>
+			<h2>New Cases</h2>
 		</div>
         {% for case in unresolved %}
         <div class="row">
@@ -51,7 +51,7 @@
                 {% if not case.transcriptionText %}
                     <p> Transcription not yet available.</p>
                 {% else %}
-                    <p> {{ case.transcriptionText }} </p>
+                    <p> "{{ case.transcriptionText }}" </p>
                 {% endif %}
                 
             <h4> Comments:</h4>
@@ -76,7 +76,6 @@
         <h4>No unresolved cases at this time.</h4>
         {% endfor %}
  	</div>
-
 
 {% endblock %}
 
