@@ -186,6 +186,26 @@ def twilio_incoming_callback():
     # not sure what to return here..
     return flask.redirect(flask.url_for('show_home'))
 
+
+@app.route('/twilio/transcription_callback', methods=['POST'])
+def twilio_transcription_callback():
+    callSID = flask.request.form['CallSid']
+    # http://www.twilio.com/docs/api/twiml/twilio_request#synchronous-request-parameters
+    transcriptionText = flask.request.form['TranscriptionText']
+    transcriptionStatus = flask.request.form['TranscriptionStatus']
+    transcriptionURL = flask.request.form['TranscriptionUrl']
+    
+    # insert into db..
+    mongo.update_call(
+            callSID
+            , transcriptionText
+            , transcriptionStatus 
+            , transcriptionURL)
+
+    # not sure what to return here..
+    return flask.redirect(flask.url_for('show_home'))
+
+
 @app.route('/test', methods=['GET'])
 def show_test():
     client_name = "jenny"
@@ -194,6 +214,7 @@ def show_test():
     capability.allow_client_incoming(client_name)
     token = capability.generate()
     return flask.render_template('show_test.html', token=token)
+
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -246,6 +267,7 @@ def logout():
     flask.session.pop('emailAddress', None)
     flask.flash('you logged out, adios')
     return flask.redirect(flask.url_for('show_home'))
+
 
 @app.route('/')
 def show_home():

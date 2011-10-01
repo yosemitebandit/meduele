@@ -108,7 +108,17 @@ class Mongo:
         }
         result = self.db['calls'].insert(call)
         return (True, case['caseName'])
-        
+
+    
+    def update_call(self, callSID, text, status, url):
+        ''' inserts the transcription data into the call object
+        '''
+        if status == 'completed':
+            query = {'callSID': callSID}
+            self.db['calls'].update(query, {'$set': {'transcriptionText': text
+                                                        , 'transcriptionStatus': status
+                                                        , 'transcriptionURL': url}})
+
 
     def insert_new_project(self, projectName, client, description, emailAddress):
         ''' create new project in the db
