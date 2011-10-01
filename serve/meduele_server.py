@@ -157,6 +157,22 @@ def twilio_incoming():
     return flask.render_template('twilio_incoming.xml')
 
 
+@app.route('/twilio/incoming_callback', methods=['POST'])
+def twilio_incoming_callback():
+    callSID = flask.request.form['CallSid']
+    incomingNumber = flask.request.form['From']
+    dialedNumber = flask.request.form['To']
+    # http://www.twilio.com/docs/api/twiml/twilio_request#synchronous-request-parameters
+    url = flask.request.form['RecordingUrl']
+    duration = flask.request.form['RecordingDuration']
+    print callSID, incomingNumber, url
+    
+    # insert into db..
+
+    # not sure what to return here..
+    return flask.redirect(flask.url_for('show_home'))
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
