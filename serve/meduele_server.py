@@ -33,7 +33,15 @@ def show_patient(patientName):
         return flask.redirect(flask.url_for('show_home'))
 
     cases = mongo.retrieve_cases(patientName)
-    return flask.render_template('show_patients.html', patientName=patientName, cases=cases)
+    resolved = []
+    unresolved = []
+    for case in cases:
+        if case['needsResolution']:
+            unresolved.append(case)
+        else:
+            resolved.append(case)
+
+    return flask.render_template('show_patients.html', patientName=patientName, unresolved=unresolved, resolved=resolved)
 
 
 
