@@ -181,6 +181,12 @@ def twilio_incoming_callback():
     return flask.redirect(flask.url_for('show_home'))
 
 
+@app.route('/test', methods=['GET'])
+def show_about():
+    error = None
+    return flask.render_template('show_test.html', error=error)
+
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     error = None
@@ -233,7 +239,10 @@ def logout():
     flask.flash('you logged out, adios')
     return flask.redirect(flask.url_for('show_home'))
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 56777f9737b4ca0afee2d158001ee327cc4b9e92
 @app.route('/')
 def show_home():
     if 'logged_in' in flask.session:
