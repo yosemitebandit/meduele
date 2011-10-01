@@ -324,7 +324,7 @@ def init():
     if mongo.retrieve_user(userName=userName):
         print 'failed, username "%s" exists' % username
     if mongo.retrieve_user(emailAddress=emailAddress):
-        print 'failed, emailAddres "%s" exists' % emailAddress 
+        print 'failed, emailAddress "%s" exists' % emailAddress 
     else:
         _salt = mongo._create_random_string(34)
         _hash = generate_password_hash(password + _salt)
