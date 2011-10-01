@@ -7,8 +7,9 @@
     <Record
         action="https://callmeduele.com/twilio/incoming_callback"
         method="POST"
-        maxLength="1800"
+        maxLength="120"
         finishOnKey="*"
+        transcribeCallback="https://callmeduele.com/twilio/transcription_callback"
         />
     <Say>I did not receive a recording</Say>
 </Response>
