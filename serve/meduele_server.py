@@ -165,9 +165,14 @@ def twilio_incoming_callback():
     # http://www.twilio.com/docs/api/twiml/twilio_request#synchronous-request-parameters
     url = flask.request.form['RecordingUrl']
     duration = flask.request.form['RecordingDuration']
-    print callSID, incomingNumber, url
     
     # insert into db..
+    mongo.insert_call(
+            callSID
+            , incomingNumber
+            , dialedNumber
+            , url
+            , duration)
 
     # not sure what to return here..
     return flask.redirect(flask.url_for('show_home'))
