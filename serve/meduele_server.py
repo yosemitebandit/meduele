@@ -227,7 +227,7 @@ def init():
         user "bruce@wayneindustries.com" created with specified password
     '''
     userName = 'batman'
-    emailAddress = app.config['INIT_EMAIL']
+    emailAddress = app.config['INIT_USERNAME']
     password = app.config['INIT_PASSWORD']
     bio = 'hard childhood'
     picture = None
