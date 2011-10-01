@@ -12,7 +12,7 @@ def prod():
     env.hosts = ['kepler']
     env.virtualenv_dir = '/home/matt/virtualenvs/meduele-lib'
     env.project_dir = '/home/matt/meduele'
-    env.supervisord_config = '/home/matt/meduele-supervisord.conf'
+    env.supervisord_config = '/home/matt/conf/meduele/supervisord.conf'
     env.branch = 'master'
 
 
