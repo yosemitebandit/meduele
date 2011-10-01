@@ -5,11 +5,10 @@
     	<div class="page-header" style="margin-top:80px">
             <h1>{{ patientName }}</h1>
         </div>
-        {% for case in cases %}
-        {% if case.needsResolution %}
 		<div class="page-header">
-			<h2>New Cases</h1>
+			<h2>New Cases</h2>
 		</div>
+        {% for case in unresolved %}
         <div class="row">
 			<div class="span10">
                 <h4> Transcription:</h4>
@@ -39,18 +38,21 @@
 			</div>
         </div>	
         {% else %}
+        <h4>No new cases at this time.</h4>
+        {% endfor %}
+
 		<div class="page-header">
 			<h2>Old Cases</h1>
-		</div>
+        </div>
+        {% for case in resolved %}
         <div class="row">
 			<div class="span10">
                 <h4> Transcription:</h4>
                 {% if not case.transcriptionText %}
                     <p> Transcription not yet available.</p>
                 {% else %}
-                    <p> {{ case.transcriptionText }} </p>
+                    <p> "{{ case.transcriptionText }}" </p>
                 {% endif %}
-                
                 
             <h4> Comments:</h4>
                 {% for comment in case.comments %}
@@ -70,89 +72,10 @@
                 <h4> Duration: {{ case.duration }} </h4>
 			</div>
         </div>	
-        {% endif %}
+        {% else %}
+        <h4>No unresolved cases at this time.</h4>
         {% endfor %}
  	</div>
 
-
-{#
-    <h2><a href="{{ url_for('show_cases', caseName=caseName) }}">{{ caseName }}</a></h2>
-    {% for entry in history %}
-      {% if entry.callSID %}
-        <p class='callSID' id='{{ entry.callSID }}'>{{ entry.callSID }}</a></h2>
-        <p class='callRecording'>{{ entry.url }}</p>
-
-      {% else %}
-        <p>{{ entry.body }}</p>
-        <p>{{ entry.author }}</p>
-
-      {% endif %}
-      {% endfor %}
-#}
-{#
-  {% else %}
-    <div class="container" style="margin-top:100px">
-    	<div class="content">
-    		<div class="page-header">
-				<h1>
-					New Patients
-					<small>Select one of the following:</small>
-				</h1>
-			</div>
-			<div class="row">
-				<table class="zebra-striped">
-				<thead>
-					<tr>
-						<th class="header">Patient</th>
-						<th class="header">Date Submitted</th>
-						<th class="header">Length</th>
-					</tr>
-                </thead>
-				<tbody>
-                {% for case in openCases %}
-					 <tr>
-                         <td><a href="{{ url_for('show_cases', caseName=case.caseName) }}">{{ case.caseName }}</a></td>
-                         <td>{{ case.timestamp }}</td>
-                         <td>{{ case.duration }}</td>
-                    </tr> 
-                {% else %}
-                  <p> no open cases at this time. </p>
-                {% endfor %}
-      			</tbody>
-            </table>
-      		</div>
-		</div>
-        {% endif %}
-        #}
-    {#
-    {% if comments %}
-      <ul class=comments>
-        {% for comment in comments %}
-          <div class=comment>
-            <p class=body> {{ comment.body }} </p>
-            <p class=author> {{ comment.author }} </p>
-            <p class=timestamp> {{ comment.timestamp}} </p>
-          </div>
-        {% else %}
-          <div class=comment>
-            <p class=empty> no comments at this time </p>
-          </div>
-        {% endfor %}
-      </ul> 
-      {% endif %}
-      #}
-
-      {# 
-    {% if acceptComments %}
-       <form action="{{ url_for('show_cases', caseName=case.name, action='add_comment') }}" method=post>
-          <dl>
-              <dd><textarea rows=5 cols=40 name=body></textarea>
-              <dd><input type=submit value='Comment'>
-          </dl>
-      </form>
-      {% endif %}
-      #}
-
-    
 {% endblock %}
 
