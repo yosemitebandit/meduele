@@ -32,11 +32,15 @@ def show_patient(patientName):
     if 'logged_in' not in flask.session or not flask.session['logged_in']:  # not defined or is false
         return flask.redirect(flask.url_for('show_home'))
 
+    cases = mongo.retrieve_cases(patientName)
+    return flask.render_template('show_patients.html', patientName=patientName, cases=cases)
 
-@app.route('/patients/<patientName>/cases', methods=['GET'])
 
 
-@app.route('/patients/<patientName>/cases/<caseName>', methods=['GET'])
+#@app.route('/patients/<patientName>/cases', methods=['GET'])
+
+
+#@app.route('/patients/<patientName>/cases/<caseName>', methods=['GET'])
 
 
 @app.route('/cases', methods=['GET'])
@@ -194,14 +198,14 @@ def twilio_incoming_callback():
     duration = flask.request.form['RecordingDuration']
     
     # insert into db..
-    # mongo.insert_case(
-    #         , callSID
-    #         , int(time.time())
-    #         , url
-    #         , True
-    #         , duration
-    #         , incomingNumber
-    #         , None)
+    mongo.insert_case(
+            callSID
+            , int(time.time())
+            , url
+            , True
+            , duration
+            , incomingNumber
+            , None)
     # not sure what to return here..
     return flask.redirect(flask.url_for('show_home'))
 
