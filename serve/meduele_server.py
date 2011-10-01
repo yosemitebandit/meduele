@@ -239,10 +239,7 @@ def logout():
     flask.flash('you logged out, adios')
     return flask.redirect(flask.url_for('show_home'))
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 56777f9737b4ca0afee2d158001ee327cc4b9e92
 @app.route('/')
 def show_home():
     if 'logged_in' in flask.session:
