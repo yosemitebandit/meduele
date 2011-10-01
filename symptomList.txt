@@ -30,3 +30,6 @@ lung
 kidney
 liver
 chest
+sore
+throat
+nausea
