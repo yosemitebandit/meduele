@@ -180,6 +180,7 @@ def twilio_incoming_callback():
     # not sure what to return here..
     return flask.redirect(flask.url_for('show_home'))
 
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     error = None
@@ -232,10 +233,6 @@ def logout():
     flask.flash('you logged out, adios')
     return flask.redirect(flask.url_for('show_home'))
 
-@app.route('/test')
-def logout():
-    error = None
-    return flask.redirect(flask.url_for('show_test'))
 
 @app.route('/')
 def show_home():
