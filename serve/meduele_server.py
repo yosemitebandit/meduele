@@ -77,8 +77,6 @@ def show_cases(caseName=None, action=None):
             history = None
             openCases = mongo.retrieve_open_cases(4)
             acceptComments = False
-        print history
-        print openCases
         return flask.render_template('show_cases.html'
                                     , caseName=caseName
                                     , openCases=openCases

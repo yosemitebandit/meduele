@@ -1,9 +1,8 @@
 {% extends "layout.html" %}
 {% block body %}
-{# get history, maybe get caseName, and acceptComments #}
   {% if caseName %}
     <h2><a href=" {{ url_for('show_cases', caseName=caseName) }}">{{ caseName }}</a></h2>
-    {# expound extensively on this single case #}
+    {# expound extensively on this single case using the history var #}
     {#{% if case.callSID %}
     <p class='callSID' id='{{ entry.callSID }}'>{{ .callSID }}</a></h2>
     <p class='callRecording'>{{ entry
@@ -12,7 +11,7 @@
 
   {% else %}
     <ul class=cases>
-      {% for case in cases%}
+      {% for case in openCases%}
         <li><h2><a href=" {{ url_for('show_cases', caseName=case.name) }}">{{ case.name }}</a></h2>
       {% else %}
         <li><em>Unbelieveable.  No cases created yet</em>
