@@ -70,13 +70,18 @@ def show_cases(caseName=None, action=None):
         if caseName:   # specific case name specified
             # retrieve all the comments and calls for a case
             history = mongo.compile_history_by_case(caseName)
+            openCases = None
             acceptComments = True
         else:   # generic request to /cases
             # retrieve the lastest audio interaction
-            history = mongo.retrieve_open_cases(4)
+            history = None
+            openCases = mongo.retrieve_open_cases(4)
             acceptComments = False
+        print history
+        print openCases
         return flask.render_template('show_cases.html'
                                     , caseName=caseName
+                                    , openCases=openCases
                                     , history=history
                                     , acceptComments=acceptComments)
     else:
