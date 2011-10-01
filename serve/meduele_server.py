@@ -241,7 +241,7 @@ def init():
         _hash = generate_password_hash(password + _salt)
         _adminRights = True
         (success, message) = mongo.insert_new_user(
-                                username 
+                                userName 
                                 , emailAddress
                                 , bio
                                 , picture
