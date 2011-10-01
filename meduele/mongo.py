@@ -182,7 +182,7 @@ class Mongo:
 
         user = {
             'emailAddress': emailAddress
-            , 'userName': user
+            , 'userName': userName
             , 'bio': bio
             , 'picture': picture
             , 'salt': salt
