@@ -12,6 +12,7 @@ Patrick thinks this is awesome!
       username
       bio
       picture
+      verified
     }
 
     comment {
