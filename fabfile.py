@@ -45,7 +45,7 @@ def gunicorn(command):
     elif command == 'status':
         run('supervisorctl -c %s status gunicorn' % env.supervisord_config)
     elif command == 'logs':   # view the logs; supervisord redirects stderr and stdout to this path based on current config
-        run('tail ~/log/meduele/gunicorn.log')
+        run('tail ~/log/meduele/supervisord.log')
     else:
         print 'sorry, did not understand that gunicorn command'
 
