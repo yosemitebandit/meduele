@@ -82,6 +82,29 @@ class Mongo:
         query = {'projectName': projectName}
         returnFields = {'_id': False, 'projectName': False}
         return list(self.db['comments'].find(query, returnFields))
+
+
+    def insert_call(self, callSID, incomingNumber, dialedNumber, url, duration):
+        query = {'number': incomingNumber}
+        returnFields = {'_id': False, 'caseName': True}
+        case = list(self.db['cases'].find(query, returnFields))[0]
+        if not case:    # first-time caller
+            caseName = 'odelay' + str(int(random.random()*10000))
+            case = {'caseName': caseName, 'phoneNumber': phoneNumber}
+            self.db['cases'].insert(case)
+        
+        call = {
+            'callSID': callSID
+            , 'phoneNumber': incomingNumber
+            , 'caseName': case['caseName']
+            , 'dialedNumber': dialedNumber
+            , 'url': url
+            , 'duration': duration
+            , 'timestamp': int(time.time())
+            , 'needsResolution': True
+        }
+        result = self.db['calls'].insert(call)
+        return (True, case['caseName'])
         
 
     def insert_new_project(self, projectName, client, description, emailAddress):
@@ -106,16 +129,33 @@ class Mongo:
         return (True, projectName)
 
 
-    def insert_new_comment(self, projectName, body, emailAddress):
+    def track_interaction(self, caseName, userName):
+        ''' make sure the volunteer's case list has this case
+        '''
+        user = self.retrieve_user(userName=userName)
+        print user, caseName
+        if user and caseName not in user['cases']:
+            # eh..
+            user['cases'] = user['cases'].append(caseName)
+            query = {'caseName': caseName}
+            self.db['users'].update(query, user)
+
+
+    def insert_comment(self, userName, body, caseName):
         ''' create new comment in the db tied to the project
+        also make sure this volunteer/patient interaction is tracked
         '''
         comment = {
-            'projectName': projectName
+            'caseName': caseName 
             , 'body': body
-            , 'author': emailAddress
+            , 'author': userName 
             , 'timestamp': int(time.time())
         }
         result = self.db['comments'].insert(comment)
+
+        print caseName
+
+        self.track_interaction(caseName, userName)
         return (True, 'comment created')
 
     
@@ -145,7 +185,7 @@ class Mongo:
 
         user = {
             'emailAddress': emailAddress
-            , 'userName': user
+            , 'userName': userName
             , 'bio': bio
             , 'picture': picture
             , 'salt': salt

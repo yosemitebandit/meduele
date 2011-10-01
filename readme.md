@@ -13,6 +13,7 @@ Patrick thinks this is awesome!
       bio
       picture
       verified
+      cases = []
     }
 
     comment {
@@ -22,17 +23,19 @@ Patrick thinks this is awesome!
       caseName
     }
 
-    patient {
+    case {
       caseName
       phone_number
     }
 
     calls {
       caseName
-      internal_id
+      callSID
       timestamp
-      twilio_link
+      url
       needsResolution
+      duration
+      dialed number
       who_heard
     }
 ```

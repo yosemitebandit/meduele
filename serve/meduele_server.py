@@ -42,10 +42,10 @@ def show_cases(caseName=None, action=None):
                 return flask.redirect(flask.url_for('show_cases', caseName=caseName))
 
     elif action == 'add_comment' and flask.request.method == 'POST':
-        (success, message) = mongo.insert_new_comment(
-                                caseName
+        (success, message) = mongo.insert_comment(
+                                flask.session['emailAddress']
                                 , flask.request.form['body']
-                                , flask.session['emailAddress'])
+                                , caseName)
         if not success:
             flask.flash('comment not saved, sorry!')
         else:
@@ -165,9 +165,14 @@ def twilio_incoming_callback():
     # http://www.twilio.com/docs/api/twiml/twilio_request#synchronous-request-parameters
     url = flask.request.form['RecordingUrl']
     duration = flask.request.form['RecordingDuration']
-    print callSID, incomingNumber, url
     
     # insert into db..
+    mongo.insert_call(
+            callSID
+            , incomingNumber
+            , dialedNumber
+            , url
+            , duration)
 
     # not sure what to return here..
     return flask.redirect(flask.url_for('show_home'))
@@ -222,7 +227,7 @@ def init():
         user "bruce@wayneindustries.com" created with specified password
     '''
     userName = 'batman'
-    emailAddress = app.config['INIT_EMAIL']
+    emailAddress = app.config['INIT_USERNAME']
     password = app.config['INIT_PASSWORD']
     bio = 'hard childhood'
     picture = None
@@ -236,7 +241,7 @@ def init():
         _hash = generate_password_hash(password + _salt)
         _adminRights = True
         (success, message) = mongo.insert_new_user(
-                                username 
+                                userName 
                                 , emailAddress
                                 , bio
                                 , picture
@@ -245,24 +250,17 @@ def init():
                                 , _adminRights
                                 , [])
         if success:
-            print 'user "%s" created with specified password' % username
+            print 'user "%s" created with specified password' % userName
         else:
             print 'user creation failed, sorry.'
 
     (success, message) = mongo.insert_comment(
                             emailAddress
                             , 'what a lovely case'
-                            , int(time.time())
                             , 'Red Badger')
     if success:
         print 'comment created'
 
-    (success, message) = mongo.insert_patient(
-                            'Red Badger'
-                            , '4568123421')
-
-    if success:
-        print 'patient created'
 '''
     (success, message) = mongo.insert_incoming_call(
                             'Red Badger'
