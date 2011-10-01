@@ -45,7 +45,7 @@ def show_case(patientName, caseName):
         return flask.redirect(flask.url_for('show_home'))
 
     case = mongo.retrieve_case_by_caseName(caseName)
-    return flask.render_template('show_case.html', patientName, case)
+    return flask.render_template('show_case.html', patientName=patientName, case=case)
 
 
 @app.route('/cases', methods=['GET'])
