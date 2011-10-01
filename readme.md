@@ -22,29 +22,23 @@ Patrick thinks this is awesome!
       body
       timestamp
       caseName
-      callSID
-    }
-
-    case {
-      caseName
     }
    
     /patients/patientName/cases/caseName
  
     patient {
-      patientNames
-      phoneNumbers
-      cases: []
+      patientName
+      phoneNumber
     }
 
-    calls {
+    cases {
       caseName
       callSID
       timestamp
       url
       needsResolution
       duration
-      dialed number
+      phone number
       who_heard
     }
 ```
