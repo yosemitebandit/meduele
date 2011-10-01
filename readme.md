@@ -22,11 +22,19 @@ Patrick thinks this is awesome!
       body
       timestamp
       caseName
+      callSID
     }
 
     case {
       caseName
-      phone_number
+    }
+   
+    /patients/patientName/cases/caseName
+ 
+    patient {
+      patientNames
+      phoneNumbers
+      cases: []
     }
 
     calls {

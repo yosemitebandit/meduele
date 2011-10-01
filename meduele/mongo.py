@@ -49,6 +49,7 @@ class Mongo:
         calls = list(self.db['calls'].find(query, returnFields).sort('timestamp', pymongo.DESCENDING).limit(10))
 
         # get all the comments; cheating a bit with the same query
+        
         comments = list(self.db['comments'].find(query, returnFields).sort('timestamp', pymongo.DESCENDING).limit(10))
 
         # combine and sort by timestamp
@@ -77,12 +78,6 @@ class Mongo:
             query = {'$or': names}
         returnFields = {'_id': False, 'name': True, 'client': True, 'description': True}
         return list(self.db['cases'].find(query, returnFields))
-
-
-    def retrieve_comments_by_project(self, projectName):
-        query = {'projectName': projectName}
-        returnFields = {'_id': False, 'projectName': False}
-        return list(self.db['comments'].find(query, returnFields))
 
 
     def insert_call(self, callSID, incomingNumber, dialedNumber, url, duration):
@@ -154,7 +149,7 @@ class Mongo:
             self.db['users'].update(query, user)
 
 
-    def insert_comment(self, userName, body, caseName):
+    def insert_comment(self, userName, body, caseName, callSID):
         ''' create new comment in the db tied to the project
         also make sure this volunteer/patient interaction is tracked
         '''
@@ -163,10 +158,9 @@ class Mongo:
             , 'body': body
             , 'author': userName 
             , 'timestamp': int(time.time())
+            , 'callSID': callSID
         }
         result = self.db['comments'].insert(comment)
-
-        print caseName
 
         self.track_interaction(caseName, userName)
         return (True, 'comment created')
