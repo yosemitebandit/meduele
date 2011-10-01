@@ -15,6 +15,12 @@ class Mongo:
 
         self.connection = pymongo.Connection(mongoConfig['host'], int(mongoConfig['port']))   # mongo mandates integer ports
         self.db = self.connection[mongoConfig['dbName']]
+
+
+    def retrieve_unresolved_cases(self, responseLimit):
+        query = {'needResolution': True}
+        cases = list(self.db['cases'].find(query).sort('timestamp', pymongo.ASCENDING).limit(responseLimit))
+        return cases 
    
 
     def retrieve_cases(self, patientName):
