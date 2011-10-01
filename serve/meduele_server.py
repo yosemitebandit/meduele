@@ -196,6 +196,12 @@ def show_contact():
     return flask.render_template('show_contact.html', error=error)
 
 
+@app.route('/leaderboard', methods=['GET'])
+def show_leaderboard():
+    error = None
+    return flask.render_template('show_leaderboard.html', error=error)
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
