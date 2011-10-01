@@ -199,7 +199,7 @@ def twilio_incoming_callback():
     
     # insert into db..
     mongo.insert_case(
-            , callSID
+            callSID
             , int(time.time())
             , url
             , True
