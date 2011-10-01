@@ -140,7 +140,7 @@ class Mongo:
             self.db['users'].update(query, user)
 
 
-    def insert_new_comment(self, caseName, body, userName):
+    def insert_comment(self, userName, body, caseName):
         ''' create new comment in the db tied to the project
         also make sure this volunteer/patient interaction is tracked
         '''

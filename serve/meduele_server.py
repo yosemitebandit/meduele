@@ -42,10 +42,10 @@ def show_cases(caseName=None, action=None):
                 return flask.redirect(flask.url_for('show_cases', caseName=caseName))
 
     elif action == 'add_comment' and flask.request.method == 'POST':
-        (success, message) = mongo.insert_new_comment(
-                                caseName
+        (success, message) = mongo.insert_comment(
+                                flask.session['emailAddress']
                                 , flask.request.form['body']
-                                , flask.session['emailAddress'])
+                                , caseName)
         if not success:
             flask.flash('comment not saved, sorry!')
         else:
@@ -250,14 +250,13 @@ def init():
                                 , _adminRights
                                 , [])
         if success:
-            print 'user "%s" created with specified password' % username
+            print 'user "%s" created with specified password' % userName
         else:
             print 'user creation failed, sorry.'
 
     (success, message) = mongo.insert_comment(
                             emailAddress
                             , 'what a lovely case'
-                            , int(time.time())
                             , 'Red Badger')
     if success:
         print 'comment created'
