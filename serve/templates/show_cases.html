@@ -1,12 +1,53 @@
 {% extends "layout.html" %}
 {% block body %}
-  <ul class=cases>
-  {% for case in cases %}
-  <li><h2><a href=" {{ url_for('show_cases', caseName=case.name) }}">{{ case.name }}</a></h2>
-    <p class='caseClient' id='{{ case.name }}_client'> {{ case.client }}</p>
-    <p class='caseDescription' id='{{ case.name }}_description'>{{ case.description }}</p>
-    <a href=" {{ url_for('show_cases', caseName=case.name, action='edit') }}">Edit</a>
-    
+  {% if caseName %}
+    <h2><a href="{{ url_for('show_cases', caseName=caseName) }}">{{ caseName }}</a></h2>
+    {% for entry in history %}
+      {% if entry.callSID %}
+        <p class='callSID' id='{{ entry.callSID }}'>{{ entry.callSID }}</a></h2>
+        <p class='callRecording'>{{ entry.url }}</p>
+
+      {% else %}
+        <p>{{ entry.body }}</p>
+        <p>{{ entry.author }}</p>
+
+      {% endif %}
+    {% endfor %}
+
+  {% else %}
+    <div class="container" style="margin-top:100px">
+    	<div class="content">
+    		<div class="page-header">
+				<h1>
+					New Patients
+					<small>Select one of the following:</small>
+				</h1>
+			</div>
+			<div class="row">
+				<table class="zebra-striped">
+				<thead>
+					<tr>
+						<th class="header">Patient</th>
+						<th class="header">Date Submitted</th>
+						<th class="header">Length</th>
+					</tr>
+                </thead>
+				<tbody>
+                {% for case in openCases %}
+					 <tr>
+                         <td><a href="{{ url_for('show_cases', caseName=case.caseName) }}">{{ case.caseName }}</a></td>
+                         <td>{{ case.timestamp }}</td>
+                         <td>{{ case.duration }}</td>
+                    </tr> 
+                {% else %}
+                  <p> no open cases at this time. </p>
+                {% endfor %}
+      			</tbody>
+            </table>
+      		</div>
+		</div>
+  {% endif %}
+    {#
     {% if comments %}
       <ul class=comments>
         {% for comment in comments %}
@@ -21,8 +62,10 @@
           </div>
         {% endfor %}
       </ul> 
-    {% endif %}
-   
+      {% endif %}
+      #}
+
+      {# 
     {% if acceptComments %}
        <form action="{{ url_for('show_cases', caseName=case.name, action='add_comment') }}" method=post>
           <dl>
@@ -30,12 +73,9 @@
               <dd><input type=submit value='Comment'>
           </dl>
       </form>
-    {% endif %}
+      {% endif %}
+      #}
 
-  {% else %}
-    <li><em>Unbelieveable.  No cases created yet</em>
-  {% endfor %}
-  </ul>
     
 {% endblock %}
 

@@ -5,6 +5,10 @@ meduele_server.py
 import os
 import time
 
+from twilio.rest import TwilioRestClient
+from twilio.util import TwilioCapability
+
+
 import flask
 from flaskext.bcrypt import bcrypt_init, generate_password_hash, check_password_hash
 import meduele 
@@ -14,6 +18,8 @@ app.config.from_envvar('MEDUELE_SETTINGS')
 bcrypt_init(app)
 mongo = meduele.Mongo(app.config['MONGO_CONFIG'])
 
+settings_path = os.environ.get('MEDUELE_SETTINGS')
+execfile(settings_path)
 
 @app.route('/cases', methods=['GET'])
 @app.route('/cases/<caseName>', methods=['GET'])
@@ -70,13 +76,16 @@ def show_cases(caseName=None, action=None):
         if caseName:   # specific case name specified
             # retrieve all the comments and calls for a case
             history = mongo.compile_history_by_case(caseName)
+            openCases = None
             acceptComments = True
         else:   # generic request to /cases
             # retrieve the lastest audio interaction
-            history = mongo.retrieve_open_cases(4)
+            history = None
+            openCases = mongo.retrieve_open_cases(4)
             acceptComments = False
         return flask.render_template('show_cases.html'
                                     , caseName=caseName
+                                    , openCases=openCases
                                     , history=history
                                     , acceptComments=acceptComments)
     else:
@@ -178,6 +187,35 @@ def twilio_incoming_callback():
     return flask.redirect(flask.url_for('show_home'))
 
 
+@app.route('/twilio/transcription_callback', methods=['POST'])
+def twilio_transcription_callback():
+    callSID = flask.request.form['CallSid']
+    # http://www.twilio.com/docs/api/twiml/twilio_request#synchronous-request-parameters
+    transcriptionText = flask.request.form['TranscriptionText']
+    transcriptionStatus = flask.request.form['TranscriptionStatus']
+    transcriptionURL = flask.request.form['TranscriptionUrl']
+    
+    # insert into db..
+    mongo.update_call(
+            callSID
+            , transcriptionText
+            , transcriptionStatus 
+            , transcriptionURL)
+
+    # not sure what to return here..
+    return flask.redirect(flask.url_for('show_home'))
+
+
+@app.route('/test', methods=['GET'])
+def show_test():
+    client_name = "jenny"
+    capability = TwilioCapability(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+    capability.allow_client_outgoing(TWILIO_APP_SID)
+    capability.allow_client_incoming(client_name)
+    token = capability.generate()
+    return flask.render_template('show_test.html', token=token)
+
+
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
     error = None
@@ -223,7 +261,7 @@ def login():
         return flask.redirect(flask.url_for('show_cases'))
 
 
-@app.route('/logout')
+@app.route('/logout', methods=['POST'])
 def logout():
     flask.session.pop('logged_in', None)
     flask.session.pop('emailAddress', None)

@@ -5,6 +5,7 @@ manages db transactions
 import os
 import time
 from operator import itemgetter
+import random
 
 import pymongo
 
@@ -87,10 +88,12 @@ class Mongo:
     def insert_call(self, callSID, incomingNumber, dialedNumber, url, duration):
         query = {'number': incomingNumber}
         returnFields = {'_id': False, 'caseName': True}
-        case = list(self.db['cases'].find(query, returnFields))[0]
+        case = list(self.db['cases'].find(query, returnFields))
+        if case:
+            case = case[0]
         if not case:    # first-time caller
             caseName = 'odelay' + str(int(random.random()*10000))
-            case = {'caseName': caseName, 'phoneNumber': phoneNumber}
+            case = {'caseName': caseName, 'phoneNumber': incomingNumber}
             self.db['cases'].insert(case)
         
         call = {
@@ -105,7 +108,17 @@ class Mongo:
         }
         result = self.db['calls'].insert(call)
         return (True, case['caseName'])
-        
+
+    
+    def update_call(self, callSID, text, status, url):
+        ''' inserts the transcription data into the call object
+        '''
+        if status == 'completed':
+            query = {'callSID': callSID}
+            self.db['calls'].update(query, {'$set': {'transcriptionText': text
+                                                        , 'transcriptionStatus': status
+                                                        , 'transcriptionURL': url}})
+
 
     def insert_new_project(self, projectName, client, description, emailAddress):
         ''' create new project in the db

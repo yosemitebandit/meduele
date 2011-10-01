@@ -10,6 +10,7 @@
 		<style>
 		
 		body {
+		      padding-top: 40px;
   				background-color: #FFFFFF;
   				color:#404040;
  				font-family:'Open Sans', arial, sans-serif;
@@ -97,6 +98,9 @@
 		}
 				
 		</style>
+    
+    {% block head %}{% endblock %}
+    
 	</head>
 <body>
 <!-- Topbar
@@ -121,7 +125,7 @@
             		<li><a href="{{ url_for('show_users', userName=session.emailAddress) }}">{{ session.emailAddress }}</a></li>
                 </ul>
                     <form action="{{ url_for('logout') }}" method=post>
-                      <button class="btn" href="{{ url_for('logout') }}" type="submit">Sign out</button>
+                      <button class="btn" type="submit">Sign out</button>
                     </form>
                {% endif %}
 		
@@ -142,12 +146,12 @@
     <!-- This is the footer-->
     
     <footer>
-		<label>© Me Duele 2011 </label> . <a href="{{ url_for('show_about') }}"> About us </a> . <a href="{{ url_for('show_contact') }}">Contact Us</a>
+		<center> © Me Duele 2011 <a href="{{ url_for('show_about') }}"> About us </a> . <a href="{{ url_for('show_contact') }}">Contact Us</a></center>
 	</footer>
     
 </body>
 
-
 <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js'></script>
 <script src="{{ url_for('static', filename='main.js') }}"></script>
 
+</html>

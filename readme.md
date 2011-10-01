@@ -72,3 +72,9 @@ or, if you're on the server, use supervisord or the fabfile or..if you must, gun
 
     $ /path/to/virtualenv/gunicorn -c /path/to/gunicorn/conf.py run:app
 
+### using twilio-python for outgoing calls
+
+http://readthedocs.org/docs/twilio-python/en/latest/
+    
+    $ pip install twilio
+    
