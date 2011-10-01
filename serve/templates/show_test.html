@@ -6,10 +6,9 @@
 <script type="text/javascript"
   src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js">
 </script>
-<link href="/static/twilio.css"
-  type="text/css" rel="stylesheet" />
+<link href="/static/twilio.css" type="text/css" rel="stylesheet" />
 <script type="text/javascript">
-  var js_token = {{ token }};
+  var js_token = "{{ token }}";
   try {
     Twilio.Device.setup(js_token);
   } catch (err) {
@@ -67,15 +66,14 @@
 {% block body %}
     <div class="row">
       <div class="span10">
-        <h1>Call a user</h1>
         <button class="call" onclick="call();">
           Call
         </button>
-
         <button class="hangup" onclick="hangup();">
           Hangup
         </button>
-
+        <h1>Your name is <b>{{ client }}</b></h1>
+        <p>Your token is <b>{{ token }}</b></p>
         <input type="text" id="number" name="number"
           placeholder="Enter a phone number to call"/>
 
