@@ -202,29 +202,26 @@ def show_leaderboard():
     return flask.render_template('show_leaderboard.html', error=error)
 
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/login', methods=['POST'])
 def login():
     error = None
 
-    if flask.request.method == 'POST':
-        user = mongo.retrieve_user(emailAddress=flask.request.form['emailAddress'])[0]
+    user = mongo.retrieve_user(emailAddress=flask.request.form['emailAddress'])[0]
 
-        if not user or not check_password_hash(user['password_hash'], flask.request.form['password'] + user['salt']):
-            error = 'login error, bad username/password combination.'
-        elif ('verified' not in user.keys() or not user['verified']) and not user['adminRights']:
-            error = 'sorry, you have not yet been verified.'
-        else:
-            mongo.update_last_login(flask.request.form['emailAddress'])   # updates last-login timestamp
+    if not user or not check_password_hash(user['password_hash'], flask.request.form['password'] + user['salt']):
+        error = 'login error, bad username/password combination.'
+    elif ('verified' not in user.keys() or not user['verified']) and not user['adminRights']:
+        error = 'sorry, you have not yet been verified.'
+    else:
+        mongo.update_last_login(flask.request.form['emailAddress'])   # updates last-login timestamp
 
-            flask.session['logged_in'] = True
-            flask.session['emailAddress'] = flask.request.form['emailAddress']
-            flask.session['adminRights'] = user['adminRights']
-            flask.session['apiID'] = user['apiID']
-            flask.session['apiKey'] = user['apiKey']
-            flask.flash('you logged in, nice!')
-            return flask.redirect(flask.url_for('show_cases'))
-        
-    return flask.render_template('login.html', error=error)
+        flask.session['logged_in'] = True
+        flask.session['emailAddress'] = flask.request.form['emailAddress']
+        flask.session['adminRights'] = user['adminRights']
+        flask.session['apiID'] = user['apiID']
+        flask.session['apiKey'] = user['apiKey']
+        flask.flash('you logged in, nice!')
+        return flask.redirect(flask.url_for('show_cases'))
 
 
 @app.route('/logout')
