@@ -261,12 +261,6 @@ def init():
     if success:
         print 'comment created'
 
-    (success, message) = mongo.insert_patient(
-                            'Red Badger'
-                            , '4568123421')
-
-    if success:
-        print 'patient created'
 '''
     (success, message) = mongo.insert_incoming_call(
                             'Red Badger'
