@@ -16,7 +16,9 @@ class Mongo:
         self.db = self.connection[mongoConfig['dbName']]
 
 
-    def retrieve_user(self, emailAddress):
+    def retrieve_user(self, **kwargs):
+        emailAddress = kwargs.pop('emailAddress', None)
+        userName = kwargs.pop('userName', None)
         ''' return user info based on a specified email address
         '''
         if emailAddress == '*':

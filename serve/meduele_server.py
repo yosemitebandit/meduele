@@ -84,15 +84,15 @@ def show_cases(caseName=None, action=None):
 
 
 @app.route('/users', methods=['GET'])
-@app.route('/users/<emailAddress>', methods=['GET'])
-@app.route('/users/<emailAddress>/<action>', methods=['GET', 'POST'])
-def show_users(emailAddress=None, action=None):
+@app.route('/users/<userName>', methods=['GET'])
+@app.route('/users/<userName>/<action>', methods=['GET', 'POST'])
+def show_users(userName=None, action=None):
     if 'logged_in' not in flask.session or not flask.session['logged_in']:  # not defined or is false
         return flask.redirect(flask.url_for('login'))
 
     if action == 'edit':
         if flask.request.method == 'GET':
-            user = mongo.retrieve_user(emailAddress)[0]
+            user = mongo.retrieve_user(emailAddress=emailAddress)[0]
             cases = mongo.retrieve_cases_by_user(flask.session['emailAddress'], None)
             return flask.render_template('edit_user.html', user=user, cases=cases)
 
@@ -131,10 +131,10 @@ def show_users(emailAddress=None, action=None):
         return flask.redirect(flask.url_for('show_users'))
 
     elif not action and flask.request.method == 'GET':
-        if not emailAddress:
-            users = mongo.retrieve_user('*')
+        if not userName:
+            users = mongo.retrieve_user(userName='*')
         else:
-            users = mongo.retrieve_user(emailAddress)
+            users = mongo.retrieve_user(userName=userName)
 
         if len(users) == 1:
             acceptNewUser = False
@@ -144,7 +144,6 @@ def show_users(emailAddress=None, action=None):
             else:
                 acceptNewUser = False
 
-        cases = mongo.retrieve_cases_by_user(flask.session['emailAddress'], None)
         return flask.render_template('show_users.html'
                                     , users=users
                                     , cases=cases
@@ -163,10 +162,12 @@ def login():
     error = None
 
     if flask.request.method == 'POST':
-        user = mongo.retrieve_user(flask.request.form['emailAddress'])[0]
+        user = mongo.retrieve_user(emailAddress=flask.request.form['emailAddress'])[0]
 
         if not user or not check_password_hash(user['password_hash'], flask.request.form['password'] + user['salt']):
             error = 'login error, bad username/password combination.'
+        elif ('verified' not in user.keys() or not user['verified']) and not user['adminRights']:
+            error = 'sorry, you have not yet been verified.'
         else:
             mongo.update_last_login(flask.request.form['emailAddress'])   # updates last-login timestamp
 
@@ -204,14 +205,16 @@ def init():
         >> init()
         user "bruce@wayneindustries.com" created with specified password
     '''
-    username = 'batman'
+    userName = 'batman'
     emailAddress = app.config['INIT_EMAIL']
     password = app.config['INIT_PASSWORD']
     bio = 'hard childhood'
     picture = None
 
-    if mongo.retrieve_user(username):
+    if mongo.retrieve_user(userName=userName):
         print 'failed, username "%s" exists' % username
+    if mongo.retrieve_user(emailAddress=emailAddress):
+        print 'failed, emailAddres "%s" exists' % emailAddress 
     else:
         _salt = mongo._create_random_string(34)
         _hash = generate_password_hash(password + _salt)
