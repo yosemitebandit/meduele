@@ -5,6 +5,7 @@ manages db transactions
 import os
 import time
 from operator import itemgetter
+import random
 
 import pymongo
 
