@@ -239,17 +239,20 @@ def twilio_transcription_callback():
 
 @app.route('/test', methods=['GET'])
 def show_test():
-    client_name = "jenny"
-    capability = TwilioCapability(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-    capability.allow_client_outgoing(TWILIO_APP_SID)
-    capability.allow_client_incoming(client_name)
-    token = capability.generate()
-    # client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-    # call = client.calls.create( to="9196225123",
-    #                                    from_="3093609866", 
-    #                                    url="http://twilio.nfshost.com/med/hello-client-twiml.php")
-    # return flask.render_template('show_signup.html', error=error, client=client_name, token=token)
-    return flask.render_template('show_test.html', token=token, client=client_name)
+    # if 'logged_in' not in flask.session or not flask.session['logged_in']:  # not defined or is false
+    #     return flask.redirect(flask.url_for('show_home'))
+    # else:
+        client_name = flask.session['userName']
+        capability = TwilioCapability(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+        capability.allow_client_outgoing(TWILIO_APP_SID)
+        capability.allow_client_incoming(client_name)
+        token = capability.generate()
+        # client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+        # call = client.calls.create( to="9196225123",
+        #                                    from_="3093609866", 
+        #                                    url="http://twilio.nfshost.com/med/hello-client-twiml.php")
+        # return flask.render_template('show_signup.html', error=error, client=client_name, token=token)
+        return flask.render_template('show_test.html', token=token, client=client_name)
 
 
 @app.route('/signup', methods=['GET', 'POST'])
