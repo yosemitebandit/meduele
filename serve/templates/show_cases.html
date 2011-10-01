@@ -11,7 +11,7 @@
 
   {% else %}
     <ul class=cases>
-      {% for case in openCases%}
+      {% for case in openCases %}
         <li><h2><a href=" {{ url_for('show_cases', caseName=case.name) }}">{{ case.name }}</a></h2>
       {% else %}
         <li><em>Unbelieveable.  No cases created yet</em>
