@@ -218,8 +218,6 @@ def login():
         flask.session['logged_in'] = True
         flask.session['emailAddress'] = flask.request.form['emailAddress']
         flask.session['adminRights'] = user['adminRights']
-        flask.session['apiID'] = user['apiID']
-        flask.session['apiKey'] = user['apiKey']
         flask.flash('you logged in, nice!')
         return flask.redirect(flask.url_for('show_cases'))
 
