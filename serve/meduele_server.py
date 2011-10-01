@@ -178,6 +178,24 @@ def twilio_incoming_callback():
     return flask.redirect(flask.url_for('show_home'))
 
 
+@app.route('/signup', methods=['GET', 'POST'])
+def signup():
+    error = None
+    return flask.render_template('show_signup.html', error=error)
+    
+
+@app.route('/about', methods=['GET'])
+def show_about():
+    error = None
+    return flask.render_template('show_about.html', error=error)
+
+
+@app.route('/contact', methods=['GET'])
+def show_contact():
+    error = None
+    return flask.render_template('show_contact.html', error=error)
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     error = None
