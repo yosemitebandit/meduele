@@ -10,9 +10,40 @@
     {% endif %}t#}
 
   {% else %}
+  <div class="container" style="margin-top:100px">
+    	<div class="content">
+    		<div class="page-header">
+				<h1>
+					New Patients
+					<small>Select one of the following:</small>
+				</h1>
+			</div>
+			<div class="row">
+				<table class="zebra-striped">
+				<thead>
+					<tr>
+						<th class="header">Patient</th>
+						<th class="header">Date Submitted</th>
+						<th class="header">Length</th>
+					</tr>
+                </thead>
+				<tbody>
+                {% for case in openCases %}
+					 <tr>
+                         <td><a href="{{ url_for('show_cases', caseName=case.caseName) }}">{{ case.caseName }}</a></td>
+                         <td>{{ case.timestamp }}</td>
+                         <td>{{ case.duration }}</td>
+                    </tr> 
+                {% else %}
+                  <p> no open cases at this time. </p>
+                {% endfor %}
+      			</tbody>
+            </table>
+      		</div>
+		</div>
     <ul class=cases>
       {% for case in openCases %}
-        <li><h2><a href=" {{ url_for('show_cases', caseName=case.name) }}">{{ case.caseName }}</a></h2>
+        <li><h2><a href=" {{ url_for('show_cases', caseName=case.caseName) }}">{{ case.caseName }}</a></h2>
       {% else %}
         <li><em>Unbelieveable.  No cases created yet</em>
       {% endfor %}
