@@ -226,7 +226,7 @@ def login():
         return flask.redirect(flask.url_for('show_cases'))
 
 
-@app.route('/logout')
+@app.route('/logout', methods=['POST'])
 def logout():
     flask.session.pop('logged_in', None)
     flask.session.pop('emailAddress', None)
