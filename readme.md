@@ -14,6 +14,7 @@ Patrick thinks this is awesome!
       picture
       verified
       cases = []
+      adminRights
     }
 
     comment {
