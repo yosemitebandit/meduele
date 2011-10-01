@@ -35,3 +35,28 @@ Patrick thinks this is awesome!
       who_heard
     }
 ```
+
+### git workflow
+    
+    '$' means type this in the terminal (but omit the actual '$' sign)
+    $ git add readme.md
+    $ git commit -m 'some message'
+    $ git pull
+
+[[ resolve conflicts -- ask around if it looks weird ]]
+
+    $ git push
+
+### testing 
+  
+create a virtualenv and install the dependencies:
+
+    $ mkdir -p ~/virtualenvs/meduele-lib
+    $ virtualenv --python=/path/to/python/bin --no-site-packages ~/virtualenvs/meduele-lib
+    $ pip install -E ~/virtualenvs/meduele-lib flask-bcrypt
+    $ pip install -E ~/virtualenvs/meduele-lib pymongo
+  
+go-time
+    $ export MEDUELE_SETTINGS=/path/to/conf/meduele_settings.py
+    $ /path/to/virtualenv/python /path/to/meduele/serve/meduele_server.py
+
