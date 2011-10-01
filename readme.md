@@ -55,9 +55,15 @@ create a virtualenv and install the dependencies:
     $ virtualenv --python=/path/to/python/bin --no-site-packages /path/to/virtualenvs/meduele-lib
     $ pip install -E /path/to/virtualenvs/meduele-lib flask-bcrypt
     $ pip install -E /path/to/virtualenvs/meduele-lib pymongo
+    $ pip install -E /path/to/virtualenvs/meduele-lib -e meduele/
   
 go-time
+
     $ export MEDUELE_SETTINGS=/path/to/conf/meduele_settings.py
     $ pip install -E /path/to/virtualenvs/meduele-lib -e /path/to/meduele
     $ /path/to/virtualenv/python /path/to/meduele/serve/meduele_server.py
+
+or, if you're on the server, use supervisord or the fabfile or..if you must, gunicorn
+
+    $ /path/to/virtualenv/gunicorn -c /path/to/gunicorn/conf.py run:app
 
