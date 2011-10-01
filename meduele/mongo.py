@@ -93,7 +93,7 @@ class Mongo:
             case = case[0]
         if not case:    # first-time caller
             caseName = 'odelay' + str(int(random.random()*10000))
-            case = {'caseName': caseName, 'phoneNumber': phoneNumber}
+            case = {'caseName': caseName, 'phoneNumber': incomingNumber}
             self.db['cases'].insert(case)
         
         call = {
