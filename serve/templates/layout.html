@@ -1,22 +1,152 @@
 <!doctype html>
-<title>MEDuele</title>
-<link rel=stylesheet type=text/css href="{{ url_for('static', filename='style.css') }}">
-<div class=page>
-    <h1><a href="{{ url_for('show_home') }}">MEDuele</a></h1>
-    <div class=metanav>
-        {% if not session.logged_in %}
-          <a href="{{ url_for('login') }}">log in</a>
-        {% else %}
-          <a href="{{ url_for('show_users', emailAddress=session.emailAddress) }}">{{ session.emailAddress }}</a>
-          <br />
-          <a href="{{ url_for('logout') }}">log out</a>
-        {% endif %}
-    </div>
+<html lang="en">
+	<head>
+    	<meta charset="utf-8">
+    	<title>Me Duele</title>
+    	<meta name="description" content="">
+    	<meta name="author" content="">
+		<link rel="stylesheet" href="http://twitter.github.com/bootstrap/1.3.0/bootstrap.min.css">
+		<link rel="stylesheet" href="http://twitter.github.com/bootstrap/assets/css/docs.css">
+		<link rel="stylesheet" href="http://twitter.github.com/assets/js/google-code-prettify/prettify.css">
+		<style>
+		
+		body {
+  				background-color: #FFFFFF;
+  				color:#404040;
+ 				font-family:'Open Sans', arial, sans-serif;
+  				font-size:14px;
+  				font-weight:normal;
+  				line-height:18px;
+  				margin-bottom:0;
+  				margin-left:0;
+  				margin-right:0;
+  				margin-top:0;
+			  }
+		
+		
+		
+		.jumbotron h2 {
+  			color:#FFFFFF;
+  			font-size:30px;
+  			line-height:1;
+  			text-shadow:rgba(0, 0, 0, 0.496094) 0 1px 2px;
+		}
+		
+		.jumbotron p {
+  		color:#FFFFFF;
+  		margin-bottom:9px;
+  		margin-top:12px;
+  		font-size:16px;
+  		text-align:left;
+  		text-shadow:rgba(0, 0, 0, 0.296875) 0 1px 1px;
+		}
+		s
+		.page-header {
+		margin-top:47px;
+		}
+		
+		.masthead {
+  		background-color:#74B4E2;
+  		background-image:-webkit-linear-gradient(top, #74B4E2, #74B4E2);
+  		background-repeat:no-repeat no-repeat;
+		}
+		
+		.span-one-third {
+  		width:260px;
+  		margin-right:40px;
+		}
+		
+		.topbar a {
+  		color:#404040;
+  		font-size:18px;
+  		
+		}
+		
+		.topbar-inner, .topbar .fill {
+  		-webkit-box-shadow:rgba(0, 0, 0, 0.246094) 0 1px 3px, rgba(0, 0, 0, 0.0976562) 0 -1px 0 inset;
+  		background-color:#FFFFFF;
+  		background-image:-webkit-linear-gradient(top, #FFFFFF, #FFFFFF);
+  		background-repeat:repeat no-repeat;
+  		box-shadow:rgba(0, 0, 0, 0.246094) 0 1px 3px, rgba(0, 0, 0, 0.0976562) 0 -1px 0 inset;
+		}
+		
+		.topbar div > ul a:hover, .nav a:hover {
+  		color:#74B4E2;
+  		text-decoration:none;
+		}
+		
+		.topbar div > ul .active > a, .nav .active > a {
+  		background-color:#FFFFFF);
+		}
+		
+		
+		.topbar h3 a:hover, .topbar .brand a:hover, .topbar ul .active > a {
+  		background-color:#FFFFFF;
+  		color:#74B4E2;
+ 		text-decoration:none;
+		}
+		
+		.topbar h3 a, .topbar .brand {
+  		color:#74B4E2;
+  		font-size:24px;
+		}
+		
+		.topbar div > ul.secondary-nav, .nav.secondary-nav {
+  		text-align:right;
+  		margin-left:80px;
+  		margin-right:0;
+		}
+				
+		</style>
+	</head>
+<body>
+<!-- Topbar
+    ================================================== -->
+	
+	<div class="topbar">
+      <div class="fill">
+        <div class="container">
+          <a class="brand" href="{{ url_for('show_home') }}">Me Duele</a>
+          
+          <!-- This decides whether to use the logged-in nav or not-logged in nav -->
+          	   {% if not session.logged_in %}
+          	   		<form action="{{ url_for('login') }}" method=post class="pull-right">
+						<input class="input-small" type="text" placeholder="Username"/>
+						<input class="input-small" type="password" placeholder="Password"/>
+						<button class="btn" type="submit">Sign in</button>
+					</form>
+			   {% else %}
+			   	    <ul class="nav.secondary-nav" class="pull-right" style="float:right">
+           			<li><a href="{{ url_for('show_newpatients') }}">New Patients</a></li>
+            		<li><a href="{{ url_for('show_leaderboard') }}">Leaderboard</a></li>
+            		<li><a href="{{ url_for('show_me') }}">{{ session.emailAddress }}</a></li>
+            		</ul>
+            		<button class="btn" href="espn.com" type="submit">Sign out</button>
+               {% endif %}
+		
+        </div>
+      </div>
+    </div
+
+	<!-- This is some weird flask code that brings in messges == -->
+
     {% for message in get_flashed_messages() %}
-      <div class=flash>{{ message }}</div>
+    <div class=flash>{{ message }}</div>
     {% endfor %}
+    
+    <!-- This brings in the body block of the html -->
+    
     {% block body %}{% endblock %}
-</div>
+    
+    <!-- This is the footer-->
+    
+    <footer>
+		<label>© Me Duele 2011 </label> . <a href="{{ url_for('show_about') }}"> About us </a> . <a href="{{ url_for('show_contact') }}">Contact Us</a>
+	</footer>
+    
+</body>
+
+
 <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js'></script>
 <script src="{{ url_for('static', filename='main.js') }}"></script>
 
