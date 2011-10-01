@@ -36,7 +36,7 @@ def show_patient(patientName):
         else:
             resolved.append(case)
 
-    return flask.render_template('show_patients.html', patientName=patientName, unresolved=unresolved, resolved=resolve)
+    return flask.render_template('show_patients.html', patientName=patientName, unresolved=unresolved, resolved=resolved)
 
 
 @app.route('/patients/<patientName>/cases/<caseName>', methods=['GET'])
