@@ -184,6 +184,11 @@ def signup():
     return flask.render_template('show_signup.html', error=error)
     
 
+@app.route('/about', methods=['GET'])
+def signup():
+    error = None
+    return flask.render_template('show_about.html', error=error)
+
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
