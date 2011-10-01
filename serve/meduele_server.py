@@ -20,7 +20,7 @@ mongo = meduele.Mongo(app.config['MONGO_CONFIG'])
 @app.route('/cases/<caseName>/<action>', methods=['GET', 'POST'])
 def show_cases(caseName=None, action=None):
     if 'logged_in' not in flask.session or not flask.session['logged_in']:  # not defined or is false
-        return flask.redirect(flask.url_for('login'))
+        return flask.redirect(flask.url_for('show_home'))
 
     if action == 'edit':
         if flask.request.method == 'GET':
@@ -88,7 +88,7 @@ def show_cases(caseName=None, action=None):
 @app.route('/users/<userName>/<action>', methods=['GET', 'POST'])
 def show_users(userName=None, action=None):
     if 'logged_in' not in flask.session or not flask.session['logged_in']:  # not defined or is false
-        return flask.redirect(flask.url_for('login'))
+        return flask.redirect(flask.url_for('show_home'))
 
     if action == 'edit':
         if flask.request.method == 'GET':
