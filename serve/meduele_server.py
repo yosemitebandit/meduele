@@ -236,7 +236,12 @@ def show_test():
     capability.allow_client_outgoing(TWILIO_APP_SID)
     capability.allow_client_incoming(client_name)
     token = capability.generate()
-    return flask.render_template('show_test.html', token=token)
+    # client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+    # call = client.calls.create( to="9196225123",
+    #                                    from_="3093609866", 
+    #                                    url="http://twilio.nfshost.com/med/hello-client-twiml.php")
+    # return flask.render_template('show_signup.html', error=error, client=client_name, token=token)
+    return flask.render_template('show_test.html', token=token, client=client_name)
 
 
 @app.route('/signup', methods=['GET', 'POST'])
