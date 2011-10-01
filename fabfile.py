@@ -23,7 +23,7 @@ def deploy():
     # update the remote with these changes
     run('cd %s; git pull origin %s' % (env.project_dir, env.branch))
     
-    # update the airship module installation
+    # update the meduele module installation
     run('pip install -E %s -e %s' % (env.virtualenv_dir, env.project_dir))
 
     # restart the gunicorn processes
