@@ -1,10 +1,10 @@
 {% extends "layout.html" %}
 {% block body %}
         <link href="{{ url_for('static', filename='jPlayer.css') }}" rel="stylesheet" type="text/css" />
-		<link href="http://www.jplayer.org/js/prettify/prettify-jPlayer.css" rel="stylesheet" type="text/css" />
-		<link href="http://www.jplayer.org/2.1.0/skin/blue.monday/jplayer.blue.monday.css" rel="stylesheet" type="text/css" />
-		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6/jquery.min.js"></script>
-		<script type="text/javascript" src="http://www.jplayer.org/2.1.0/js/jquery.jplayer.min.js"></script>
+        <link href="{{ url_for('static', filename='prettify-jPlayer.css') }}" rel="stylesheet" type="text/css" />
+        <link href="{{ url_for('static', filename='jplayer.blue.monday.css') }}" rel="stylesheet" type="text/css" />
+        <script type="text/javascript" src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='jquery.jplayer.min.js') }}"></script>
 		
 		<script type="text/javascript">
 		//<![CDATA[

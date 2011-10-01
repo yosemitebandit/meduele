@@ -55,10 +55,14 @@
     // get the phone number to connect the call to
     params = {"PhoneNumber": $("#number").val()};
     Twilio.Device.connect(params);
+    $("#call_button").text("Hang up");
+    $("#call_button").attr('onclick', '').click(function() { hangup(); });
   }
 
   function hangup() {
     Twilio.Device.disconnectAll();
+    $("#call_button").text("Call");
+    $("#call_button").attr('onclick', '').click(function() { call(); });
   }
 </script>
 {% endblock %}
@@ -66,11 +70,8 @@
 {% block body %}
     <div class="row">
       <div class="span10">
-        <button class="call" onclick="call();">
+        <button id="call_button" onclick="call();">
           Call
-        </button>
-        <button class="hangup" onclick="hangup();">
-          Hangup
         </button>
         <h1>Your name is <b>{{ client }}</b></h1>
         <p>Your token is <b>{{ token }}</b></p>
