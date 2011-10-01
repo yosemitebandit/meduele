@@ -1,12 +1,25 @@
 {% extends "layout.html" %}
 {% block body %}
-  <ul class=cases>
-  {% for case in cases %}
-  <li><h2><a href=" {{ url_for('show_cases', caseName=case.name) }}">{{ case.name }}</a></h2>
-    <p class='caseClient' id='{{ case.name }}_client'> {{ case.client }}</p>
-    <p class='caseDescription' id='{{ case.name }}_description'>{{ case.description }}</p>
-    <a href=" {{ url_for('show_cases', caseName=case.name, action='edit') }}">Edit</a>
-    
+{# get history, maybe get caseName, and acceptComments #}
+  {% if caseName %}
+    <h2><a href=" {{ url_for('show_cases', caseName=caseName) }}">{{ caseName }}</a></h2>
+    {# expound extensively on this single case #}
+    {#{% if case.callSID %}
+    <p class='callSID' id='{{ entry.callSID }}'>{{ .callSID }}</a></h2>
+    <p class='callRecording'>{{ entry
+
+    {% endif %}t#}
+
+  {% else %}
+    <ul class=cases>
+      {% for case in cases%}
+        <li><h2><a href=" {{ url_for('show_cases', caseName=case.name) }}">{{ case.name }}</a></h2>
+      {% else %}
+        <li><em>Unbelieveable.  No cases created yet</em>
+      {% endfor %}
+    </ul>
+  {% endif %}
+    {#
     {% if comments %}
       <ul class=comments>
         {% for comment in comments %}
@@ -21,8 +34,10 @@
           </div>
         {% endfor %}
       </ul> 
-    {% endif %}
-   
+      {% endif %}
+      #}
+
+      {# 
     {% if acceptComments %}
        <form action="{{ url_for('show_cases', caseName=case.name, action='add_comment') }}" method=post>
           <dl>
@@ -30,12 +45,9 @@
               <dd><input type=submit value='Comment'>
           </dl>
       </form>
-    {% endif %}
+      {% endif %}
+      #}
 
-  {% else %}
-    <li><em>Unbelieveable.  No cases created yet</em>
-  {% endfor %}
-  </ul>
     
 {% endblock %}
 
