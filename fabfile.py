@@ -12,7 +12,7 @@ def prod():
     env.hosts = ['kepler']
     env.virtualenv_dir = '/home/matt/virtualenvs/meduele-lib'
     env.project_dir = '/home/matt/meduele'
-    env.supervisord_config = '/home/matt/meduele-supervisord.conf'
+    env.supervisord_config = '/home/matt/conf/meduele/supervisord.conf'
     env.branch = 'master'
 
 
@@ -23,7 +23,7 @@ def deploy():
     # update the remote with these changes
     run('cd %s; git pull origin %s' % (env.project_dir, env.branch))
     
-    # update the airship module installation
+    # update the meduele module installation
     run('pip install -E %s -e %s' % (env.virtualenv_dir, env.project_dir))
 
     # restart the gunicorn processes

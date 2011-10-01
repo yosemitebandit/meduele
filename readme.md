@@ -1,5 +1,5 @@
 ## meduele
-takes incoming calls, lets people respond with help in an asynch fashion
+takes incoming calls, lets people respond with help in an asynch fashion.  650 262 5300
 
 Patrick thinks this is awesome!
 
@@ -12,33 +12,34 @@ Patrick thinks this is awesome!
       username
       bio
       picture
+      verified
     }
 
     comment {
       author
       body
       timestamp
-      patient_id
+      caseName
     }
 
     patient {
-      patient_id 
+      caseName
       phone_number
     }
 
-    incoming_call {
-      patient_id
+    calls {
+      caseName
       internal_id
       timestamp
       twilio_link
-      been_heard
+      needsResolution
       who_heard
     }
 ```
 
 ### git workflow
-    
-    '$' means type this in the terminal (but omit the actual '$' sign)
+'$' means type this in the terminal (but omit the actual '$' sign)
+
     $ git add readme.md
     $ git commit -m 'some message'
     $ git pull
@@ -52,11 +53,18 @@ Patrick thinks this is awesome!
 create a virtualenv and install the dependencies:
 
     $ mkdir -p ~/virtualenvs/meduele-lib
-    $ virtualenv --python=/path/to/python/bin --no-site-packages ~/virtualenvs/meduele-lib
-    $ pip install -E ~/virtualenvs/meduele-lib flask-bcrypt
-    $ pip install -E ~/virtualenvs/meduele-lib pymongo
+    $ virtualenv --python=/path/to/python/bin --no-site-packages /path/to/virtualenvs/meduele-lib
+    $ pip install -E /path/to/virtualenvs/meduele-lib flask-bcrypt
+    $ pip install -E /path/to/virtualenvs/meduele-lib pymongo
+    $ pip install -E /path/to/virtualenvs/meduele-lib -e meduele/
   
 go-time
+
     $ export MEDUELE_SETTINGS=/path/to/conf/meduele_settings.py
+    $ pip install -E /path/to/virtualenvs/meduele-lib -e /path/to/meduele
     $ /path/to/virtualenv/python /path/to/meduele/serve/meduele_server.py
+
+or, if you're on the server, use supervisord or the fabfile or..if you must, gunicorn
+
+    $ /path/to/virtualenv/gunicorn -c /path/to/gunicorn/conf.py run:app
 

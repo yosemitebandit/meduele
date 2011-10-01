@@ -1,0 +1,41 @@
+{% extends "layout.html" %}
+{% block body %}
+  <ul class=cases>
+  {% for case in cases %}
+  <li><h2><a href=" {{ url_for('show_cases', caseName=case.name) }}">{{ case.name }}</a></h2>
+    <p class='caseClient' id='{{ case.name }}_client'> {{ case.client }}</p>
+    <p class='caseDescription' id='{{ case.name }}_description'>{{ case.description }}</p>
+    <a href=" {{ url_for('show_cases', caseName=case.name, action='edit') }}">Edit</a>
+    
+    {% if comments %}
+      <ul class=comments>
+        {% for comment in comments %}
+          <div class=comment>
+            <p class=body> {{ comment.body }} </p>
+            <p class=author> {{ comment.author }} </p>
+            <p class=timestamp> {{ comment.timestamp}} </p>
+          </div>
+        {% else %}
+          <div class=comment>
+            <p class=empty> no comments at this time </p>
+          </div>
+        {% endfor %}
+      </ul> 
+    {% endif %}
+   
+    {% if acceptComments %}
+       <form action="{{ url_for('show_cases', caseName=case.name, action='add_comment') }}" method=post>
+          <dl>
+              <dd><textarea rows=5 cols=40 name=body></textarea>
+              <dd><input type=submit value='Comment'>
+          </dl>
+      </form>
+    {% endif %}
+
+  {% else %}
+    <li><em>Unbelieveable.  No cases created yet</em>
+  {% endfor %}
+  </ul>
+    
+{% endblock %}
+
