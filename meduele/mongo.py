@@ -133,7 +133,8 @@ class Mongo:
         ''' make sure the volunteer's case list has this case
         '''
         user = self.retrieve_user(userName=userName)
-        if caseName not in user['cases']:
+        print user, caseName
+        if user and caseName not in user['cases']:
             # eh..
             user['cases'] = user['cases'].append(caseName)
             query = {'caseName': caseName}
@@ -151,6 +152,8 @@ class Mongo:
             , 'timestamp': int(time.time())
         }
         result = self.db['comments'].insert(comment)
+
+        print caseName
 
         self.track_interaction(caseName, userName)
         return (True, 'comment created')
