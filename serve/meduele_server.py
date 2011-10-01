@@ -5,6 +5,10 @@ meduele_server.py
 import os
 import time
 
+from twilio.rest import TwilioRestClient
+from twilio.util import TwilioCapability
+
+
 import flask
 from flaskext.bcrypt import bcrypt_init, generate_password_hash, check_password_hash
 import meduele 
@@ -14,6 +18,8 @@ app.config.from_envvar('MEDUELE_SETTINGS')
 bcrypt_init(app)
 mongo = meduele.Mongo(app.config['MONGO_CONFIG'])
 
+settings_path = os.environ.get('MEDUELE_SETTINGS')
+execfile(settings_path)
 
 @app.route('/cases', methods=['GET'])
 @app.route('/cases/<caseName>', methods=['GET'])
@@ -181,9 +187,13 @@ def twilio_incoming_callback():
     return flask.redirect(flask.url_for('show_home'))
 
 @app.route('/test', methods=['GET'])
-def show_about():
-    error = None
-    return flask.render_template('show_test.html', error=error)
+def show_test():
+    client_name = "jenny"
+    capability = TwilioCapability(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+    capability.allow_client_outgoing(TWILIO_APP_SID)
+    capability.allow_client_incoming(client_name)
+    token = capability.generate()
+    return flask.render_template('show_test.html', token=token)
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
