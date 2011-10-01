@@ -87,7 +87,9 @@ class Mongo:
     def insert_call(self, callSID, incomingNumber, dialedNumber, url, duration):
         query = {'number': incomingNumber}
         returnFields = {'_id': False, 'caseName': True}
-        case = list(self.db['cases'].find(query, returnFields))[0]
+        case = list(self.db['cases'].find(query, returnFields))
+        if case:
+            case = case[0]
         if not case:    # first-time caller
             caseName = 'odelay' + str(int(random.random()*10000))
             case = {'caseName': caseName, 'phoneNumber': phoneNumber}
