@@ -110,13 +110,13 @@
           <!-- This decides whether to use the logged-in nav or not-logged in nav -->
           	   {% if not session.logged_in %}
           	   		<form action="{{ url_for('login') }}" method=post class="pull-right">
-						<input class="input-small" type="text" placeholder="Username"/>
-						<input class="input-small" type="password" placeholder="Password"/>
-						<button class="btn" type="submit">Sign in</button>
+						<input class="input-small" type="text" name="emailAddress" placeholder="Username"/>
+						<input class="input-small" type="password" name="password" placeholder="Password"/>
+                        <button class="btn" type="submit">Sign in</button>
 					</form>
 			   {% else %}
 			   	    <ul class="nav.secondary-nav" class="pull-right" style="float:right">
-           			<li><a href="{{ url_for('show_newpatients') }}">New Patients</a></li>
+           			<li><a href="{{ url_for('show_cases') }}">Cases</a></li>
             		<li><a href="{{ url_for('show_leaderboard') }}">Leaderboard</a></li>
             		<li><a href="{{ url_for('show_me') }}">{{ session.emailAddress }}</a></li>
             		</ul>
