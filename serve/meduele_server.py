@@ -21,6 +21,24 @@ mongo = meduele.Mongo(app.config['MONGO_CONFIG'])
 settings_path = os.environ.get('MEDUELE_SETTINGS')
 execfile(settings_path)
 
+
+#@app.route('/patients', methods=['GET'])
+#def show_patients():
+
+
+
+@app.route('/patients/<patientName>', methods=['GET'])
+def show_patient(patientName):
+if 'logged_in' not in flask.session or not flask.session['logged_in']:  # not defined or is false
+    return flask.redirect(flask.url_for('show_home'))
+
+
+@app.route('/patients/<patientName>/cases', methods=['GET'])
+
+
+@app.route('/patients/<patientName>/cases/<caseName>', methods=['GET'])
+
+
 @app.route('/cases', methods=['GET'])
 @app.route('/cases/<caseName>', methods=['GET'])
 @app.route('/cases/<caseName>/<action>', methods=['GET', 'POST'])
@@ -176,13 +194,14 @@ def twilio_incoming_callback():
     duration = flask.request.form['RecordingDuration']
     
     # insert into db..
-    mongo.insert_call(
-            callSID
-            , incomingNumber
-            , dialedNumber
+    mongo.insert_case(
+            , callSID
+            , int(time.time())
             , url
-            , duration)
-
+            , True
+            , duration
+            , incomingNumber
+            , None)
     # not sure what to return here..
     return flask.redirect(flask.url_for('show_home'))
 
@@ -196,7 +215,7 @@ def twilio_transcription_callback():
     transcriptionURL = flask.request.form['TranscriptionUrl']
     
     # insert into db..
-    mongo.update_call(
+    mongo.update_case(
             callSID
             , transcriptionText
             , transcriptionStatus 
