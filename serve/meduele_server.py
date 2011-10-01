@@ -36,7 +36,7 @@ def show_patient(patientName):
         else:
             resolved.append(case)
 
-    return flask.render_template('show_patients.html', patientName=patientName, unresolved=unresolved, resolved=resolved)
+    return flask.render_template('show_patients.html', patientName=patientName, unresolved=unresolved, resolved=resolve)
 
 
 @app.route('/patients/<patientName>/cases/<caseName>', methods=['GET'])
@@ -45,7 +45,16 @@ def show_case(patientName, caseName):
         return flask.redirect(flask.url_for('show_home'))
 
     case = mongo.retrieve_case_by_caseName(caseName)
-    return flask.render_template('show_case.html', patientName=patientName, case=case)
+    return flask.render_template('show_case.html', caseName=caseName, case=case)
+
+
+@app.route('/cases', methods=['GET'])
+def show_new_cases():
+    if 'logged_in' not in flask.session or not flask.session['logged_in']:  # not defined or is false
+        return flask.redirect(flask.url_for('show_home'))
+
+    cases = mongo.retrieve_unresolved_cases(6)
+
 
 
 @app.route('/cases', methods=['GET'])
@@ -329,7 +338,7 @@ def init():
     if mongo.retrieve_user(userName=userName):
         print 'failed, username "%s" exists' % username
     if mongo.retrieve_user(emailAddress=emailAddress):
-        print 'failed, emailAddress "%s" exists' % emailAddress 
+        print 'failed, emailAddres "%s" exists' % emailAddress 
     else:
         _salt = mongo._create_random_string(34)
         _hash = generate_password_hash(password + _salt)
