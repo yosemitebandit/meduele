@@ -302,13 +302,19 @@ def show_leaderboard():
 @app.route('/login', methods=['POST'])
 def login():
     error = None
+    user = mongo.retrieve_user(emailAddress=flask.request.form['emailAddress'])
+    if user:
+        user = user[0]
+    else:  # email not found
+        error = 'login error, bad username/password combination'
+        return flask.redirect(flask.url_for('show_home'))
 
-    user = mongo.retrieve_user(emailAddress=flask.request.form['emailAddress'])[0]
-
-    if not user or not check_password_hash(user['password_hash'], flask.request.form['password'] + user['salt']):
+    if not check_password_hash(user['password_hash'], flask.request.form['password'] + user['salt']):
         error = 'login error, bad username/password combination.'
+        return flask.redirect(flask.url_for('show_home'))
     elif ('verified' not in user.keys() or not user['verified']) and not user['adminRights']:
         error = 'sorry, you have not yet been verified.'
+        return flask.redirect(flask.url_for('show_home'))
     else:
         mongo.update_last_login(flask.request.form['emailAddress'])   # updates last-login timestamp
 
