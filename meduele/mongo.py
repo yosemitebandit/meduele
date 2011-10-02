@@ -39,7 +39,7 @@ class Mongo:
         cases = list(self.db['cases'].find(query))
         
         _cases = []
-        for case in cases
+        for case in cases:
             case['timestamp'] = time.strftime('%a, %d %b %Y %H:%M', time.localtime(case['timestamp']))
             _cases.append(case)
         return _cases
