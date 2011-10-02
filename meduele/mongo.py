@@ -37,7 +37,12 @@ class Mongo:
         # now get cases based on phone number
         query = {'phoneNumber': patient['phoneNumber']}
         cases = list(self.db['cases'].find(query))
-        return cases
+        
+        _cases = []
+        for case in cases
+            case['timestamp'] = time.strftime('%a, %d %b %Y %H:%M', time.localtime(case['timestamp']))
+            _cases.append(case)
+        return _cases
 
 
     def retrieve_case_by_caseName(self, caseName):

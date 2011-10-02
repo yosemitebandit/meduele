@@ -31,7 +31,7 @@ def show_patient(patientName):
     resolved = []
     unresolved = []
     for case in cases:
-        if case['needsResolution']:
+        if 'needsResolution' in case.keys() and case['needsResolution']:
             unresolved.append(case)
         else:
             resolved.append(case)
