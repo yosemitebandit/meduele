@@ -2,12 +2,13 @@
 <html lang="en">
 	<head>
     	<meta charset="utf-8">
-    	<title>Me Duele</title>
+    	<title>MEDuele</title>
     	<meta name="description" content="">
     	<meta name="author" content="">
 		<link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
 		<link rel="stylesheet" href="{{ url_for('static', filename='docs.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
+<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js'></script>
 		
     {% block head %}{% endblock %}
     
@@ -56,12 +57,11 @@
     <!-- This is the footer-->
     
     <footer>
-		<center> © Me Duele 2011 <a href="{{ url_for('show_about') }}"> About us </a> . <a href="{{ url_for('show_contact') }}">Contact Us</a></center>
+		<center> © MEDuele 2011 <a href="{{ url_for('show_about') }}"> About us </a> . <a href="{{ url_for('show_contact') }}">Contact Us</a></center>
 	</footer>
     
 </body>
 
-<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js'></script>
 <script src="{{ url_for('static', filename='main.js') }}"></script>
 
 </html>
