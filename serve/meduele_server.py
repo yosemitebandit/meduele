@@ -45,11 +45,17 @@ def show_case(patientName, caseName):
         return flask.redirect(flask.url_for('show_home'))
 
     case = mongo.retrieve_case_by_caseName(caseName)
+    
+    client_name = flask.session['userName']
+    capability = TwilioCapability(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
+    capability.allow_client_outgoing(TWILIO_APP_SID)
+    capability.allow_client_incoming(client_name)
+    token = capability.generate()
 
     url = case['url']
     protocol = url.split(':')
     case['url'] = protocol[0] + 's:' + protocol[1]
-    return flask.render_template('show_case.html', patientName=patientName, case=case)
+    return flask.render_template('show_case.html', token=token, patientName=patientName, case=case)
 
 
 @app.route('/cases', methods=['GET'])
