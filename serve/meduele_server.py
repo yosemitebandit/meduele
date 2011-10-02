@@ -168,10 +168,6 @@ def show_users(userName=None, action=None):
                                     , _hash
                                     , _adminRights
                                     , flask.request.form.getlist('cases'))
-            if not success:
-                flask.flash('user %s not updated, sorry' % emailAddress)
-            else:
-                flask.flash('user %s updated, hooray!' % emailAddress)
             return flask.redirect(flask.url_for('show_users', emailAddress=emailAddress))
 
     elif action == 'add_user' and flask.request.method == 'POST':
@@ -186,10 +182,6 @@ def show_users(userName=None, action=None):
                                 , _hash
                                 , _adminRights
                                 , flask.request.form.getlist('cases'))
-        if not success:
-            flask.flash('user not saved, apologies!')
-        else:
-            flask.flash('user %s created, hooray!' % flask.request.form['emailAddress'])
         return flask.redirect(flask.url_for('show_users'))
 
     elif not action and flask.request.method == 'GET':
@@ -324,7 +316,6 @@ def login():
         flask.session['emailAddress'] = flask.request.form['emailAddress']
         flask.session['userName'] = user['userName']
         flask.session['adminRights'] = user['adminRights']
-        flask.flash('you logged in, nice!')
         return flask.redirect(flask.url_for('show_new_cases'))
 
 
@@ -332,7 +323,6 @@ def login():
 def logout():
     flask.session.pop('logged_in', None)
     flask.session.pop('emailAddress', None)
-    flask.flash('you logged out, adios')
     return flask.redirect(flask.url_for('show_home'))
 
 
