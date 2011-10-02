@@ -83,3 +83,12 @@ text-decoration:none;
 	margin-left:80px;
 	margin-right:0;
 }
+
+/* Styling for Twilio call from browser */
+#log {
+  color: #BBB;
+}
+
+button.call {
+  width: 100px;
+}
