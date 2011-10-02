@@ -207,7 +207,7 @@ def show_users(userName=None, action=None):
         flask.abort(405)
 
 
-@app.route('/twilio/client', methods=['GET'])
+@app.route('/twilio/client', methods=['POST'])
 def twilio_client():
     return flask.render_template('twilio_client.xml')
     
