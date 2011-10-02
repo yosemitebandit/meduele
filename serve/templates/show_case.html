@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
-<script src='http://static.flowplayer.org/js/global-0.54.js?054'><script>
+<script src="{{ url_for('static', filename='global-0.54.js') }} "><script>
 {#
         <link href="{{ url_for('static', filename='jPlayer.css') }}" rel="stylesheet" type="text/css" />
         <link href="{{ url_for('static', filename='prettify-jPlayer.css') }}" rel="stylesheet" type="text/css" />
@@ -37,7 +37,7 @@
             <div id="audio" style="display:block;width:750px;height:30px;" href="{{ case.url }}"></div>
             <script>
                     // install flowplayer into container
-                    $f("audio", "http://releases.flowplayer.org/swf/flowplayer-3.2.7.swf", {
+                    $f("audio", "{{ url_for('static', filename='flowplayer-3.2.7.swf') }}", {
 
                         // fullscreen button not needed here
                         plugins: {
