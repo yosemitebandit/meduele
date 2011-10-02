@@ -275,10 +275,21 @@ def show_test():
         return flask.render_template('show_test.html', token=token, client=client_name)
 
 
-@app.route('/signup', methods=['GET', 'POST'])
-def signup():
+@app.route('/volunteer', methods=['GET', 'POST'])
+def register():
     error = None
-    return flask.render_template('show_signup.html', error=error)
+    if flask.request.method =='GET':
+        # logged in users cannot register
+        if 'logged_in' in flask.session and flask.session['logged_in']:
+            return flask.redirect(flask.url_for('show_home'))
+
+    if flask.request.method == 'POST':
+        # check that username is unique
+        # check that email is unique
+        # check that passwords match
+        # insert user with message that they need to be verified before they can view cases
+        print 'hi'
+    return flask.render_template('register.html', error=error)
     
 
 @app.route('/about', methods=['GET'])
@@ -334,8 +345,10 @@ def logout():
 
 @app.route('/')
 def show_home():
+    '''
     if 'logged_in' in flask.session:
         return flask.redirect(flask.url_for('show_new_cases'))
+    '''
     return flask.render_template('show_home.html')
 
 
@@ -350,6 +363,7 @@ def init():
     userName = 'batman'
     emailAddress = app.config['INIT_USERNAME']
     password = app.config['INIT_PASSWORD']
+    languages = ['spanish', 'french']
     bio = 'hard childhood'
     picture = None
 
@@ -364,6 +378,7 @@ def init():
         (success, message) = mongo.insert_new_user(
                                 userName 
                                 , emailAddress
+                                , languages
                                 , bio
                                 , picture
                                 , _salt

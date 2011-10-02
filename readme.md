@@ -11,6 +11,7 @@ Patrick thinks this is awesome!
       password stuff
       username
       bio
+      languages
       picture
       verified
       cases = []

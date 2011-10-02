@@ -219,7 +219,7 @@ class Mongo:
         return (True, 'patient created')
 
 
-    def insert_new_user(self, userName, emailAddress, bio, picture, salt, passwordHash, adminRights, cases):
+    def insert_new_user(self, userName, emailAddress, languages, bio, picture, salt, passwordHash, adminRights, cases):
         ''' create a new user in the db if the user doesn't exist already
         '''
         query = {'emailAddress': emailAddress}
@@ -231,6 +231,7 @@ class Mongo:
             'emailAddress': emailAddress
             , 'userName': userName
             , 'bio': bio
+            , 'languages': languages
             , 'picture': picture
             , 'salt': salt
             , 'password_hash': passwordHash

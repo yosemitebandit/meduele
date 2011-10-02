@@ -17,39 +17,43 @@
 <!-- Topbar
     ================================================== -->
 	
+          
+          <!-- This decides whether to use the logged-in nav or not-logged in nav -->
+          {% if not session.logged_in %}
+            <div class="topbar" data-dropdown="dropdown" >
+              <div class="topbar-inner">
+                <div class="container">
+                  <h3><a href="{{ url_for('show_home') }}">MEDuele</a></h3>
+                  <ul class="nav secondary-nav">
+                    <form action="{{ url_for('login') }}" method=post>
+                      <input class="span3" id="emailAddress" name="emailAddress" type="text" placeholder="email address" />
+                      <input class="span2" id="password" name="password" type="password" placeholder='password' />
+                      <button class="btn" type="submit">Sign In</button>
+                    </form>
+                  </ul>
+                </div><!-- /container -->
+              </div><!-- /topbar-inner -->
+            </div><!-- /topbar -->
+          
+			   {% else %}
 	<div class="topbar">
       <div class="fill">
         <div class="container">
           <a class="brand" href="{{ url_for('show_home') }}">MEDuele</a>
-          
-          <!-- This decides whether to use the logged-in nav or not-logged in nav -->
-          	   {% if not session.logged_in %}
-          	   		<form action="{{ url_for('login') }}" method=post class="pull-right">
-						<input class="input-small" type="text" name="emailAddress" placeholder="Username"/>
-						<input class="input-small" type="password" name="password" placeholder="Password"/>
-                        <button class="btn" type="submit">Sign in</button>
-					</form>
-			   {% else %}
 			   	    <ul class="nav.secondary-nav" class="pull-right" style="float:right">
-           			<li><a href="{{ url_for('show_new_cases') }}">Cases</a></li>
-            		<li><a href="{{ url_for('show_leaderboard') }}">Leaderboard</a></li>
-            		<li><a href="{{ url_for('show_users', userName=session.emailAddress) }}">{{ session.emailAddress }}</a></li>
-                </ul>
-                    <form action="{{ url_for('logout') }}" method=post>
+                        <li><a href="{{ url_for('show_new_cases') }}">Cases</a></li>
+                        <li><a href="{{ url_for('show_leaderboard') }}">Leaderboard</a></li>
+                        <li><a href="{{ url_for('show_users', userName=session.emailAddress) }}">{{ session.emailAddress }}</a></li>
+                    </ul>
+                    <form action="{{ url_for('logout') }}" class='pull-right' method=post>
                       <button class="btn" type="submit">Sign out</button>
                     </form>
-               {% endif %}
-		
         </div>
       </div>
     </div
+               {% endif %}
+		
 
-	<!-- This is some weird flask code that brings in messges == -->
-
-    {% for message in get_flashed_messages() %}
-    <div class=flash>{{ message }}</div>
-    {% endfor %}
-    
     <!-- This brings in the body block of the html -->
     
     {% block body %}{% endblock %}
@@ -57,7 +61,7 @@
     <!-- This is the footer-->
     
     <footer>
-    <center> © MEDuele 2011 <a href="{{ url_for('show_about') }}"> About Us </a> <a href="{{ url_for('show_contact') }}">Contact</a></center>
+    <center> © MEDuele 2011 <a href="{{ url_for('show_about') }}"> About Us </a>&nbsp; <a href="{{ url_for('show_contact') }}">Contact</a></center>
     <br />
 	</footer>
     
