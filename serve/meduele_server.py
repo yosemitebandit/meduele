@@ -207,6 +207,16 @@ def show_users(userName=None, action=None):
         flask.abort(405)
 
 
+@app.route('/twilio/client', methods=['GET'])
+def twilio_client():
+    return flask.render_template('twilio_client.xml')
+<Response>
+<Dial callerId="+13093609866">
+<Client>jenny</Client>
+</Dial>
+</Response>
+    
+
 @app.route('/twilio/incoming_handler.xml', methods=['GET'])
 def twilio_incoming():
     return flask.render_template('twilio_incoming.xml')
