@@ -46,7 +46,7 @@ def show_case(patientName, caseName):
 
     case = mongo.retrieve_case_by_caseName(caseName)
     
-    client_name = flask.session['userName']
+    client_name = 'jenny'
     capability = TwilioCapability(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
     capability.allow_client_outgoing(TWILIO_APP_SID)
     capability.allow_client_incoming(client_name)
