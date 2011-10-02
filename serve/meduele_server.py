@@ -69,6 +69,8 @@ def show_new_cases():
         case['patientName'] = patientName
         _cases.append(case)
 
+    print cases
+
     return flask.render_template('show_cases2.html', cases=_cases)
 
 '''
