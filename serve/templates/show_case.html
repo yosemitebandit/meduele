@@ -3,7 +3,7 @@
 {% block head %}
 
 <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js'></script>
-<script src="http://static.twilio.com/libs/twiliojs/1.0/twilio.min.js"></script>
+<script src="{{ url_for('static', filename='twilio.min.js') }} "></script>
 
 <script type="text/javascript">
   var phoneNum = 9196225123;
