@@ -26,7 +26,11 @@ class Mongo:
     def retrieve_unresolved_cases(self, responseLimit):
         query = {'needsResolution': True}
         cases = list(self.db['cases'].find(query).sort('timestamp', pymongo.ASCENDING).limit(responseLimit))
-        return cases 
+        _cases = []
+        for case in cases:
+            case['timestamp'] = time.strftime('%a, %d %b %Y %H:%M', time.localtime(case['timestamp']))
+            _cases.append(case)
+        return _cases
    
 
     def retrieve_cases(self, patientName):
@@ -48,6 +52,7 @@ class Mongo:
     def retrieve_case_by_caseName(self, caseName):
         query = {'caseName': caseName}
         case = list(self.db['cases'].find(query))[0]
+        case['timestamp'] = time.strftime('%a, %d %b %Y %H:%M', time.localtime(case['timestamp']))
         return case
 
 
