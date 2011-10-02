@@ -1,94 +1,93 @@
 body {
-      padding-top: 70px;
-			background-color: #FFFFFF;
-			color:#404040;
-		  font-family:'Open Sans', arial, sans-serif;
-			font-size:14px;
-			font-weight:normal;
-			line-height:18px;
-			margin-bottom:0;
-			margin-left:0;
-			margin-right:0;
-			margin-top:0;
+    padding-top: 70px;
+    background-color: #FFFFFF;
+    font-family:'Open Sans', arial, sans-serif;
+    font-size:14px;
+    font-weight:normal;
+    line-height:18px;
+    margin-bottom:0;
+    margin-left:0;
+    margin-right:0;
+    margin-top:0;
 }
-	  
+
 .jumbotron h2 {
-		color:#FFFFFF;
-		font-size:30px;
-		line-height:1;
-		text-shadow:rgba(0, 0, 0, 0.496094) 0 1px 2px;
+    color:#FFFFFF;
+    font-size:30px;
+    line-height:1;
+    text-shadow:rgba(0, 0, 0, 0.496094) 0 1px 2px;
 }
 
 .jumbotron p {
-	color:#FFFFFF;
-	margin-bottom:9px;
-	margin-top:12px;
-	font-size:16px;
-	text-align:left;
-	text-shadow:rgba(0, 0, 0, 0.296875) 0 1px 1px;
+    color:#FFFFFF;
+    margin-bottom:9px;
+    margin-top:12px;
+    font-size:16px;
+    text-align:left;
+    text-shadow:rgba(0, 0, 0, 0.296875) 0 1px 1px;
 }
-s
+
 .page-header {
-margin-top:47px;
+    margin-top:47px;
 }
 
 .masthead {
-	background-color:#74B4E2;
-	background-image:-webkit-linear-gradient(top, #74B4E2, #74B4E2);
-	background-repeat:no-repeat no-repeat;
+    background-color:#74B4E2;
+    background-image:-webkit-linear-gradient(top, #74B4E2, #74B4E2);
+    background-repeat:no-repeat no-repeat;
 }
 
 .span-one-third {
-	width:260px;
-	margin-right:40px;
+    width:260px;
+    margin-right:40px;
 }
 
 .topbar a {
-	color:#404040;
-	font-size:18px;
-	
+    /*color:#404040;*/
+    font-size:18px;
 }
 
 .topbar-inner, .topbar .fill {
-	-webkit-box-shadow:rgba(0, 0, 0, 0.246094) 0 1px 3px, rgba(0, 0, 0, 0.0976562) 0 -1px 0 inset;
-	background-color:#FFFFFF;
-	background-image:-webkit-linear-gradient(top, #FFFFFF, #FFFFFF);
-	background-repeat:repeat no-repeat;
-	box-shadow:rgba(0, 0, 0, 0.246094) 0 1px 3px, rgba(0, 0, 0, 0.0976562) 0 -1px 0 inset;
+    -webkit-box-shadow:rgba(0, 0, 0, 0.246094) 0 1px 3px, rgba(0, 0, 0, 0.0976562) 0 -1px 0 inset;
+    background-color:#FFFFFF;
+    color: #000000;
+    /*background-image:-webkit-linear-gradient(top, 'black', #FFFFFF);*/
+    background-repeat:repeat no-repeat;
+    box-shadow:rgba(0, 0, 0, 0.246094) 0 1px 3px, rgba(0, 0, 0, 0.0976562) 0 -1px 0 inset;
 }
 
 .topbar div > ul a:hover, .nav a:hover {
-	color:#74B4E2;
-	text-decoration:none;
+    color:#74B4E2;
+    text-decoration:none;
 }
 
 .topbar div > ul .active > a, .nav .active > a {
-	background-color:#FFFFFF);
+    background-color:#FFFFFF;
 }
 
 
 .topbar h3 a:hover, .topbar .brand a:hover, .topbar ul .active > a {
-	background-color:#FFFFFF;
-	color:#74B4E2;
-text-decoration:none;
+    /*background-color:#FFFFFF;*/
+    color:#74B4E2;
+    text-decoration:none;
 }
 
 .topbar h3 a, .topbar .brand {
-	color:#74B4E2;
-	font-size:24px;
+    color:#74B4E2;
+    font-size:24px;
 }
 
 .topbar div > ul.secondary-nav, .nav.secondary-nav {
-	text-align:right;
-	margin-left:80px;
-	margin-right:0;
+    text-align:right;
+    margin-left:80px;
+    margin-right:0;
 }
 
 /* Styling for Twilio call from browser */
 #log {
-  color: #BBB;
+    color: #BBB;
 }
 
 button.call {
-  width: 100px;
+    width: 100px;
 }
