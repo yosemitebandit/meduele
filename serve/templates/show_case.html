@@ -35,29 +35,31 @@
             <!-- setup player container  -->
             <div id="audio" style="display:block;width:750px;height:30px;" href="{{ case.url }}"></div>
             <script>
-// install flowplayer into container
-$f("audio", "{{ url_for('static', filename='flowplayer-3.2.7.swf') }}", {
+                $(function() {
+                    // install flowplayer into container
+                    $f("audio", "{{ url_for('static', filename='flowplayer-3.2.7.swf') }}", {
 
-	// fullscreen button not needed here
-	plugins: {
-		controls: {
-			fullscreen: false,
-			height: 30,
-			autoHide: false
-		}
-	},
+                        // fullscreen button not needed here
+                        plugins: {
+                            controls: {
+                                fullscreen: false,
+                                height: 30,
+                                autoHide: false
+                            }
+                        },
 
-	clip: {
-		autoPlay: false,
+                        clip: {
+                            autoPlay: false,
 
-		// optional: when playback starts close the first audio playback
-		onBeforeBegin: function() {
-			$f("player").close();
-		}
-	}
+                            // optional: when playback starts close the first audio playback
+                            onBeforeBegin: function() {
+                                $f("player").close();
+                            }
+                        }
 
-});
-</script>                            
+                    });
+                });
+            </script>                            
                 {#
 				<div id="jquery_jplayer_1" class="jp-jplayer" style="width: 0px; height: 0px; ">
 					<img id="jp_poster_0" style="width: 0px; height: 0px; display: none; "/>
