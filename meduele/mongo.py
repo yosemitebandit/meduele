@@ -28,7 +28,7 @@ class Mongo:
         cases = list(self.db['cases'].find(query).sort('timestamp', pymongo.ASCENDING).limit(responseLimit))
         _cases = []
         for case in cases:
-            case['timestamp'] = time.strftime('%a, %d %b %Y %H:%M', time.localtime(case['timestamp']))
+            case['timestamp'] = time.strftime('%a, %d %b %Y %H:%M', time.localtime(case['timestamp'] - 7*60*60))
             _cases.append(case)
         return _cases
    
@@ -44,7 +44,7 @@ class Mongo:
         
         _cases = []
         for case in cases:
-            case['timestamp'] = time.strftime('%a, %d %b %Y %H:%M', time.localtime(case['timestamp']))
+            case['timestamp'] = time.strftime('%a, %d %b %Y %H:%M', time.localtime(case['timestamp'] - 7*60*60))
             _cases.append(case)
         return _cases
 
@@ -52,7 +52,7 @@ class Mongo:
     def retrieve_case_by_caseName(self, caseName):
         query = {'caseName': caseName}
         case = list(self.db['cases'].find(query))[0]
-        case['timestamp'] = time.strftime('%a, %d %b %Y %H:%M', time.localtime(case['timestamp']))
+        case['timestamp'] = time.strftime('%a, %d %b %Y %H:%M', time.localtime(case['timestamp'] - 7*60*60))
         return case
 
 
@@ -102,7 +102,7 @@ class Mongo:
         '''
         query = {'needsResolution': True}
         returnFields = {'_id': False}
-        return list(self.db['calls'].find(query, returnFields).sort('timestamp', pymongo.ASCENDING).limit(responseNumberLimit))
+        return list(self.db['calls'].find(query, returnFields).sort('timestamp', pymongo.DESCENDING).limit(responseNumberLimit))
 
 
     def retrieve_cases_by_name(self, projectNames):
