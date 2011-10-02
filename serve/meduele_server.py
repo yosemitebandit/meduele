@@ -63,9 +63,15 @@ def show_new_cases():
         return flask.redirect(flask.url_for('show_home'))
 
     cases = mongo.retrieve_unresolved_cases(6)
+    _cases = []
+    for case in cases:
+        patientName = mongo.find_patientName_by_phoneNumber(case['phoneNumber'])
+        case['patientName'] = patientName
+        _cases.append(case)
 
+    flask.render_template('show_cases2.html', cases=_cases)
 
-
+'''
 @app.route('/cases', methods=['GET'])
 @app.route('/cases/<caseName>', methods=['GET'])
 @app.route('/cases/<caseName>/<action>', methods=['GET', 'POST'])
@@ -135,7 +141,7 @@ def show_cases(caseName=None, action=None):
                                     , acceptComments=acceptComments)
     else:
         flask.abort(405)
-
+'''
 
 @app.route('/users', methods=['GET'])
 @app.route('/users/<userName>', methods=['GET'])
@@ -317,7 +323,7 @@ def login():
         flask.session['userName'] = user['userName']
         flask.session['adminRights'] = user['adminRights']
         flask.flash('you logged in, nice!')
-        return flask.redirect(flask.url_for('show_cases'))
+        return flask.redirect(flask.url_for('show_new_cases'))
 
 
 @app.route('/logout', methods=['POST'])
@@ -331,7 +337,7 @@ def logout():
 @app.route('/')
 def show_home():
     if 'logged_in' in flask.session:
-        return flask.redirect(flask.url_for('show_cases'))
+        return flask.redirect(flask.url_for('show_new_cases'))
     return flask.render_template('show_home.html')
 
 

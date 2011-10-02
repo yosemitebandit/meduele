@@ -1,0 +1,36 @@
+{% extends "layout.html" %}
+
+{% block body %}
+  
+  <div class="container">
+    	<div class="content">
+    		<div class="page-header">
+				<h1>
+					New Cases
+					<small>Select one of the following:</small>
+				</h1>
+			</div>
+			<div class="row">
+				<table class="zebra-striped">
+				<thead>
+					<tr>
+						<th class="header">Patient</th>
+						<th class="header">Date Submitted</th>
+						<th class="header">Length</th>
+					</tr>
+				</thead>
+                <tbody>
+                    {% for case in cases %}
+					 <tr>
+                         <td><a href="{{ url_for('show_patient', patientName=case.patientName) }}">{{ case.caseName }}</a></td>
+                         <td>{{ case.timestamp }}</td>
+                         <td>{{ case.duration }}s</td>
+                    </tr> 
+                    {% endfor %}
+      			</tbody>
+      			</table
+      		</div>
+		</div>
+  
+{% endblock %}
+

@@ -17,6 +17,11 @@ class Mongo:
         self.db = self.connection[mongoConfig['dbName']]
 
 
+    def find_patientName_by_phoneNumber(self, phoneNumber):
+        query = {'phoneNumber': phoneNumber}
+        patients = list(self.db['patients'].find(query))[0]
+        return patients['patientName']
+
     def retrieve_unresolved_cases(self, responseLimit):
         query = {'needResolution': True}
         cases = list(self.db['cases'].find(query).sort('timestamp', pymongo.ASCENDING).limit(responseLimit))
