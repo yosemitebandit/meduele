@@ -75,6 +75,9 @@ def show_new_cases():
     return flask.render_template('new_cases.html', cases=_cases)
 
 
+'''
+user mgmt
+'''
 @app.route('/users/<userName>', methods=['GET'])
 def show_profile(userName):
     ''' logged in users see people's profile and edit their own
@@ -101,6 +104,22 @@ def show_profile(userName):
         return flask.render_template('profile.html', notFound=True)
 
 
+@app.route('/users/<userName>/edit', methods=['GET', 'POST'])
+def edit_profile(userName):
+    ''' admin users can edit errybody, logged in users can edit themselves
+    '''
+    if 'logged_in' not in flask.session or not flask.session['logged_in']:  # not defined or is false
+        return flask.redirect(flask.url_for('login'))
+
+    if flask.session['adminRights'] or userName == flask.session['userName']:
+        return flask.render_template('edit_profile.html', userName=userName)
+    else:
+        return flask.redirect(flask.url_for('login'))
+
+
+'''
+lang hubs
+'''
 @app.route('/languages/<language>', methods=['GET'])
 def show_language_hub(language):
     ''' display activity around a given language
@@ -173,6 +192,8 @@ def register():
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     if flask.request.method == 'GET':
+        if 'logged_in' in flask.session and flask.session['logged_in']:
+            return flask.redirect(flask.url_for('show_home'))
         return flask.render_template('login.html')
 
     else:
@@ -200,13 +221,13 @@ def login():
 
 @app.route('/logout', methods=['POST'])
 def logout():
-    flask.session.pop('logged_in', None)
-    flask.session.pop('emailAddress', None)
-    flask.session.pop('userName', None)
-    flask.session.pop('adminRights', None)
-    flask.session.pop('verified', None)
+    if 'logged_in' in flask.session:
+        flask.session.pop('logged_in', None)
+        flask.session.pop('emailAddress', None)
+        flask.session.pop('userName', None)
+        flask.session.pop('adminRights', None)
+        flask.session.pop('verified', None)
 
-    flask.flash('logged out!', category='success')
     return flask.redirect(flask.url_for('show_home'))
 
 
