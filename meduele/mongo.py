@@ -240,17 +240,17 @@ class Mongo:
         ''' handles the web registration
         '''
         if not userName or not emailAddress or not salt or not passwordHash or not bio:
-            return (False, 'missing some info')
+            return (False, 'you seem to be missing some info')
 
         query = {'emailAddress': emailAddress}
         returnFields = {'_id': True}
         if list(self.db['users'].find(query, returnFields)):
-            return (False, 'email address exists')
+            return (False, 'the email address "%s" is already registered with us' % emailAddress)
 
         query = {'userName': userName}
         returnFields = {'_id': True}
         if list(self.db['users'].find(query, returnFields)):
-            return (False, 'username exists')
+            return (False, 'the username "%s" is already registered with us' % userName)
 
         volunteer = {
             'userName': userName
