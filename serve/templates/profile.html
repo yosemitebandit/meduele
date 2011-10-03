@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div class="container">
+
+    {% if notFound %}
+    <div class='row'>
+        <div class="alert-message warning span-one-third offset-one-third">
+            <!--<a class="close" href="#">&times;</a>-->
+            <p>Hm, no users found by that name </p>
+        </div>
+    </div>
+
+
+    {% else %}
+
+    <div class="page-header" style="font-weight:normal">
+        <h1>{{ user.userName }}</h1>
+    </div>
+
+    {#{% if session.adminRights or user.userName == session.userName %}#}
+    {# an admin or the page's owner #}
+    {% if session.adminRights %}
+
+
+
+    {% else %}
+    <div class='row'>
+        <div class='span5'>
+            <img src="{{ url_for('static', filename='Step3.png') }}" />
+            <p>User Since: {{ user.created }} </p>
+            <p>Last Online: {{ user.lastLogin }} </p>
+        </div>
+
+        <div class='span6'>
+            <h3>Bio</h3>
+            <p>{{ user.bio }}</p>
+        </div>
+
+        <div class='span6'>
+            <h3>Language Proficiencies</h3>
+            <ul>
+                {% for lang in user.languages %}
+                <a href="{{ url_for('show_language_hub', language=lang) }}"><li>{{ lang }}</li></a>
+                {% else %}
+                <i>None listed</i>
+                {% endfor %}
+            </ul>
+
+        </div>
+    </div>
+
+
+    {% endif %} {# /owner or admin check #}
+
+    {% endif %} {# /notFound check #}
+</div><!-- /container -->
+{% endblock %}
+

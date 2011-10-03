@@ -75,6 +75,50 @@ def show_new_cases():
     return flask.render_template('new_cases.html', cases=_cases)
 
 
+@app.route('/users/<userName>', methods=['GET'])
+def show_profile(userName):
+    ''' logged in users see people's profile and edit their own
+    admin users can set admin rights
+    '''
+    if 'logged_in' not in flask.session or not flask.session['logged_in']:  # not defined or is false
+        return flask.redirect(flask.url_for('login'))
+
+    user = mongo.retrieve_users(userName=userName)
+    if user:
+        user = user[0]
+        # convert the times
+        user['lastLogin'] = time.strftime('%A, %b %d %Y', time.localtime(user['lastLogin'] - 7*60*60))
+        user['created'] = time.strftime('%b %d %Y', time.localtime(user['created'] - 7*60*60))
+
+        # stringify the languages
+        languages = []
+        for lang in user['languages']:   #lammmmbda
+            languages.append(lang.capitalize())
+        user['languages'] = languages
+        
+        return flask.render_template('profile.html', user=user)
+    else:
+        return flask.render_template('profile.html', notFound=True)
+
+
+@app.route('/languages/<language>', methods=['GET'])
+def show_language_hub(language):
+    ''' display activity around a given language
+    '''
+    if 'logged_in' not in flask.session or not flask.session['logged_in']:  # not defined or is false
+        return flask.redirect(flask.url_for('login'))
+
+    languageName = language.capitalize()
+
+    if not flask.session['verified']:
+        return flask.render_template('language_hub.html', languageName=languageName, notVerified=True)
+
+    # get all cases by language or something..
+    # may need to lowercase things
+
+    return flask.render_template('language_hub.html', languageName=languageName)
+
+
 '''
 session setting/destroying
 '''

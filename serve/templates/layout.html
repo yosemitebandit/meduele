@@ -41,7 +41,7 @@
                     <ul class="nav.secondary-nav" class="pull-right" style="float:right">
                         <li><a href="{{ url_for('show_new_cases') }}">Cases</a></li>
                         <li><a href="{{ url_for('show_leaderboard') }}">Leaderboard</a></li>
-                        <li><a href="#">{{ session.userName }}</a></li>
+                        <li><a href="{{ url_for('show_profile', userName=session.userName) }}">{{ session.userName }}</a></li>
                     </ul>
                     <form action="{{ url_for('logout') }}" class='pull-right' method=post>
                         <button class="btn" type="submit">Sign out</button>
