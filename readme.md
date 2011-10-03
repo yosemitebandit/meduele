@@ -17,27 +17,28 @@ Patrick thinks this is awesome!
       adminRights
     }
 
-    comment {
-      author
-      body
-      timestamp
-      caseName
+   
+    /patients/patientName/cases/caseName
+ 
+    patient {
+      patientName
+      phoneNumber
     }
 
-    case {
-      caseName
-      phone_number
-    }
-
-    calls {
+    cases {
       caseName
       callSID
       timestamp
       url
       needsResolution
       duration
-      dialed number
+      phone number
       who_heard
+      comments: [{
+        author
+        body
+        timestamp
+      }]
     }
 ```
 

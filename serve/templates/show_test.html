@@ -1,15 +1,14 @@
 {% extends "layout.html" %}
 
 {% block head %}
-<script type="text/javascript"
-  src="http://static.twilio.com/libs/twiliojs/1.0/twilio.min.js"></script>
-<script type="text/javascript"
-  src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js">
-</script>
-<link href="/static/twilio.css"
-  type="text/css" rel="stylesheet" />
+
+<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js'></script>
+<script src="http://static.twilio.com/libs/twiliojs/1.0/twilio.min.js"></script>
+
 <script type="text/javascript">
-  var js_token = {{ token }};
+  var phoneNum = 9196225123;
+  var js_token = "{{ token }}";
+  
   try {
     Twilio.Device.setup(js_token);
   } catch (err) {
@@ -51,37 +50,34 @@
       $("#" + pres.from).remove();
     }
   });
-  
+
   function call() {
-    // get the phone number to connect the call to
-    params = {"PhoneNumber": $("#number").val()};
+    params = {"PhoneNumber": phoneNum };
     Twilio.Device.connect(params);
+    $("#call_button").text("Hang up");
+    $("#call_button").attr('class', 'btn large danger call');
+    $("#call_button").attr('onclick', '').click(function() { hangup(); });
   }
 
   function hangup() {
     Twilio.Device.disconnectAll();
+    $("#call_button").text("Call");
+    $("#call_button").attr('class', 'btn large primary call');
+    $("#call_button").attr('onclick', '').click(function() { call(); });
   }
+  
 </script>
 {% endblock %}
 
 {% block body %}
     <div class="row">
       <div class="span10">
-        <h1>Call a user</h1>
-        <button class="call" onclick="call();">
+        <h1>Your name is <b>{{ client }}</b></h1>
+        <p>Your token is <b>{{ token }}</b></p>
+        <button class="btn large primary call" id="call_button" onclick="call();">
           Call
         </button>
-
-        <button class="hangup" onclick="hangup();">
-          Hangup
-        </button>
-
-        <input type="text" id="number" name="number"
-          placeholder="Enter a phone number to call"/>
-
-        <div id="log">Loading pigeons...</div>
-
-        <ul id="people"/>
+        <div id="log">Status of call...</div>
       </div>
     </div>
 {% endblock %}

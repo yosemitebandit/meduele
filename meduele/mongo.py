@@ -17,6 +17,29 @@ class Mongo:
         self.db = self.connection[mongoConfig['dbName']]
 
 
+    def retrieve_unresolved_cases(self, responseLimit):
+        query = {'needResolution': True}
+        cases = list(self.db['cases'].find(query).sort('timestamp', pymongo.ASCENDING).limit(responseLimit))
+        return cases 
+   
+
+    def retrieve_cases(self, patientName):
+        # first get the phone number from patients coll
+        query = {'patientName': patientName}
+        patient = list(self.db['patients'].find(query))[0]
+
+        # now get cases based on phone number
+        query = {'phoneNumber': patient['phoneNumber']}
+        cases = list(self.db['cases'].find(query))
+        return cases
+
+
+    def retrieve_case_by_caseName(self, caseName):
+        query = {'caseName': caseName}
+        case = list(self.db['cases'].find(query))[0]
+        return case
+
+
     def retrieve_user(self, **kwargs):
         emailAddress = kwargs.pop('emailAddress', None)
         userName = kwargs.pop('userName', None)
@@ -49,6 +72,7 @@ class Mongo:
         calls = list(self.db['calls'].find(query, returnFields).sort('timestamp', pymongo.DESCENDING).limit(10))
 
         # get all the comments; cheating a bit with the same query
+        
         comments = list(self.db['comments'].find(query, returnFields).sort('timestamp', pymongo.DESCENDING).limit(10))
 
         # combine and sort by timestamp
@@ -79,43 +103,35 @@ class Mongo:
         return list(self.db['cases'].find(query, returnFields))
 
 
-    def retrieve_comments_by_project(self, projectName):
-        query = {'projectName': projectName}
-        returnFields = {'_id': False, 'projectName': False}
-        return list(self.db['comments'].find(query, returnFields))
-
-
-    def insert_call(self, callSID, incomingNumber, dialedNumber, url, duration):
-        query = {'number': incomingNumber}
-        returnFields = {'_id': False, 'caseName': True}
-        case = list(self.db['cases'].find(query, returnFields))
-        if case:
-            case = case[0]
-        if not case:    # first-time caller
-            caseName = 'odelay' + str(int(random.random()*10000))
-            case = {'caseName': caseName, 'phoneNumber': incomingNumber}
-            self.db['cases'].insert(case)
+    def insert_case(self, callSID, timestamp, url, needsResolution, duration, incomingNumber, responder):
+        caseName = 'odelay' + str(int(random.random()*100000))
         
-        call = {
-            'callSID': callSID
-            , 'phoneNumber': incomingNumber
-            , 'caseName': case['caseName']
-            , 'dialedNumber': dialedNumber
+        query = {'phoneNumber': incomingNumber}
+        patient = list(self.db['patients'].find(query))
+        if not patient:    # first-time caller; patient-gen
+            patientName = 'shakespeare' + str(int(random.random()*100000))
+            patient = {'patientName': patientName, 'phoneNumber': incomingNumber}
+            self.db['patients'].insert(patient)
+        
+        case = {
+            'caseName': caseName
+            , 'callSID': callSID
+            , 'timestamp': timestamp
             , 'url': url
+            , 'needsResolution': needsResolution
             , 'duration': duration
-            , 'timestamp': int(time.time())
-            , 'needsResolution': True
+            , 'phoneNumber': incomingNumber
+            , 'responder': responder
         }
-        result = self.db['calls'].insert(call)
-        return (True, case['caseName'])
+        result = self.db['cases'].insert(case)
 
     
-    def update_call(self, callSID, text, status, url):
-        ''' inserts the transcription data into the call object
+    def update_case(self, callSID, text, status, url):
+        ''' inserts the transcription data into the case object
         '''
         if status == 'completed':
             query = {'callSID': callSID}
-            self.db['calls'].update(query, {'$set': {'transcriptionText': text
+            self.db['cases'].update(query, {'$set': {'transcriptionText': text
                                                         , 'transcriptionStatus': status
                                                         , 'transcriptionURL': url}})
 
@@ -154,7 +170,7 @@ class Mongo:
             self.db['users'].update(query, user)
 
 
-    def insert_comment(self, userName, body, caseName):
+    def insert_comment(self, userName, body, caseName, callSID):
         ''' create new comment in the db tied to the project
         also make sure this volunteer/patient interaction is tracked
         '''
@@ -163,10 +179,9 @@ class Mongo:
             , 'body': body
             , 'author': userName 
             , 'timestamp': int(time.time())
+            , 'callSID': callSID
         }
         result = self.db['comments'].insert(comment)
-
-        print caseName
 
         self.track_interaction(caseName, userName)
         return (True, 'comment created')
