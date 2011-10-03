@@ -1,75 +1,75 @@
 <!doctype html>
 <html lang="en">
-	<head>
-    	<meta charset="utf-8">
-    	<title>MEDuele</title>
-    	<meta name="description" content="">
-    	<meta name="author" content="">
-		<link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
-		<link rel="stylesheet" href="{{ url_for('static', filename='docs.css') }}">
-    <link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
-<script src='https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js'></script>
-		
-    {% block head %}{% endblock %}
-    
-	</head>
-<body>
-<!-- Topbar ================================================== -->
-          
-          <!-- This decides whether to use the logged-in nav or not-logged in nav -->
-          {% if not session.logged_in %}
-            <div class="topbar" data-dropdown="dropdown" >
-              <div class="topbar-inner">
+    <head>
+        <meta charset="utf-8">
+        <title>MEDuele</title>
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link rel="stylesheet" href="{{ url_for('static', filename='bootstrap.min.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='docs.css') }}">
+        <link rel="stylesheet" href="{{ url_for('static', filename='custom.css') }}">
+        <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js'></script>
+
+        {% block head %}{% endblock %}
+
+    </head>
+    <body>
+        <!-- Topbar ================================================== -->
+
+        <!-- This decides whether to use the logged-in nav or not-logged in nav -->
+        {% if not session.logged_in %}
+        <div class="topbar" data-dropdown="dropdown" >
+            <div class="topbar-inner">
                 <div class="container">
-                  <h3><a href="{{ url_for('show_home') }}">MEDuele</a></h3>
-                  <ul class="nav secondary-nav">
-                    <form action="{{ url_for('login') }}" method=post>
-                      <input class="span3" id="userName" name="userName" type="text" placeholder="Username" />
-                      <input class="span2" id="password" name="password" type="password" placeholder='Password' />
-                      <button class="btn" type="submit">Sign In</button>
-                    </form>
-                  </ul>
+                    <h3><a href="{{ url_for('show_home') }}">MEDuele</a></h3>
+                    <ul class="nav secondary-nav">
+                        <form action="{{ url_for('login') }}" method=post>
+                            <input class="span3" id="userName" name="userName" type="text" placeholder="Username" />
+                            <input class="span2" id="password" name="password" type="password" placeholder='Password' />
+                            <button class="btn" type="submit">Sign In</button>
+                        </form>
+                    </ul>
                 </div><!-- /container -->
-              </div><!-- /topbar-inner -->
-            </div><!-- /topbar -->
-          
-           {% else %}
-            <div class="topbar">
-              <div class="fill">
+            </div><!-- /topbar-inner -->
+        </div><!-- /topbar -->
+
+        {% else %}
+        <div class="topbar">
+            <div class="fill">
                 <div class="container">
-                  <a class="brand" href="{{ url_for('show_home') }}">MEDuele</a>
-                            <ul class="nav.secondary-nav" class="pull-right" style="float:right">
-                                <li><a href="{{ url_for('show_new_cases') }}">Cases</a></li>
-                                <li><a href="{{ url_for('show_leaderboard') }}">Leaderboard</a></li>
-                                <li><a href="#">{{ session.userName }}</a></li>
-                            </ul>
-                            <form action="{{ url_for('logout') }}" class='pull-right' method=post>
-                              <button class="btn" type="submit">Sign out</button>
-                            </form>
+                    <a class="brand" href="{{ url_for('show_home') }}">MEDuele</a>
+                    <ul class="nav.secondary-nav" class="pull-right" style="float:right">
+                        <li><a href="{{ url_for('show_new_cases') }}">Cases</a></li>
+                        <li><a href="{{ url_for('show_leaderboard') }}">Leaderboard</a></li>
+                        <li><a href="#">{{ session.userName }}</a></li>
+                    </ul>
+                    <form action="{{ url_for('logout') }}" class='pull-right' method=post>
+                        <button class="btn" type="submit">Sign out</button>
+                    </form>
                 </div>
-              </div>
-            </div
-           {% endif %}
-		
+            </div>
+        </div>
+            {% endif %}
 
-    <!-- This brings in the body block of the html -->
-    
-    {% block body %}{% endblock %}
-    
-    <!-- This is the footer-->
-    
-    <footer>
-    <center> © MEDuele 2011 
-        <a href="{{ url_for('show_leaderboard') }}"> Leaderboard </a>
-        &nbsp; 
-        <a href="{{ url_for('show_about') }}"> About Us </a>
-        &nbsp; 
-        <a href="{{ url_for('show_contact') }}">Contact</a></center>
-    <br />
-	</footer>
-    
-</body>
 
-<script src="{{ url_for('static', filename='main.js') }}"></script>
+            <!-- This brings in the body block of the html -->
 
-</html>
+            {% block body %}{% endblock %}
+
+            <!-- This is the footer-->
+
+            <footer>
+            <center> © MEDuele 2011 
+                <a href="{{ url_for('show_leaderboard') }}"> Leaderboard </a>
+                &nbsp; 
+                <a href="{{ url_for('show_about') }}"> About Us </a>
+                &nbsp; 
+                <a href="{{ url_for('show_contact') }}">Contact</a></center>
+            <br />
+            </footer>
+
+        </body>
+
+        <script src="{{ url_for('static', filename='main.js') }}"></script>
+
+    </html>

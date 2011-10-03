@@ -75,6 +75,10 @@ body {
     margin-right:0;
 }
 
+.step-description {
+    width: 230px;
+    margin-right: 70px;
+}
 /* Styling for Twilio call from browser */
 #log {
     color: #BBB;
