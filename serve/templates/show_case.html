@@ -1,6 +1,7 @@
 {% extends "layout.html" %}
 
 {% block head %}
+{% if not notVerified %}
 
 <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js'></script>
 <script src="{{ url_for('static', filename='twilio.min.js') }} "></script>
@@ -65,18 +66,8 @@
     $("#call_button").attr('class', 'btn large primary call');
     $("#call_button").attr('onclick', '').click(function() { call(); });
   }
-  
-</script>
-{% endblock %}
 
-{% block body %}
-<link href="{{ url_for('static', filename='jPlayer.css') }}" rel="stylesheet" type="text/css" />
-<link href="{{ url_for('static', filename='prettify-jPlayer.css') }}" rel="stylesheet" type="text/css" />
-<link href="{{ url_for('static', filename='jplayer.blue.monday.css') }}" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="{{ url_for('static', filename='jquery.min.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='jquery.jplayer.min.js') }}"></script>
 
-<script type="text/javascript">
 //<![CDATA[
 $(document).ready(function(){
   $("#jquery_jplayer_1").jPlayer({
@@ -91,10 +82,32 @@ $(document).ready(function(){
   });
 });
 //]]>
-
+  
 </script>
+<link href="{{ url_for('static', filename='jPlayer.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ url_for('static', filename='prettify-jPlayer.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ url_for('static', filename='jplayer.blue.monday.css') }}" rel="stylesheet" type="text/css" />
+<script type="text/javascript" src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jquery.jplayer.min.js') }}"></script>
+
+<!-- /verified check -->
+{% endif %}
+
+{% endblock %}
+
+{% block body %}
+
+
 
 <div class="container">
+          {% if notVerified %}
+            <div class='offset1 span8'>
+              <div class="alert-message warning span11">
+                <!--<a class="close" href="#">&times;</a>-->
+                <p><strong>Sorry!</strong>  We're still working on getting you verified.  Hang tight!</p>
+              </div>
+            </div>
+            {% else %}
   <div class="page-header" style="margin-top:80px">
     <h1>{{ case.timestamp }}</h1>
   </div>
@@ -168,7 +181,8 @@ $(document).ready(function(){
         </button>
       </div>
   </div>	
-</div>
+  {% endif %}
+</div><!--/container-->
 
 <script type="text/javascript" src="{{ url_for('static', filename='prettify-jPlayer.js') }}"></script>
 

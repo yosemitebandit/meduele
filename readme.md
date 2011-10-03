@@ -6,20 +6,20 @@ Patrick thinks this is awesome!
 
 ### high-level data types
 ```json
-    volunteer {
-      email address
-      password stuff
-      username
-      bio
-      languages
-      picture
-      verified
-      cases = []
-      adminRights
-    }
-
-   
-    /patients/patientName/cases/caseName
+      volunteer = {
+            'userName': userName
+            , 'emailAddress': emailAddress
+            , 'bio': bio
+            , 'languages': languages
+            , 'picture': picture
+            , 'salt': salt
+            , 'password_hash': passwordHash
+            , 'cases': [] 
+            , 'lastLogin': int(time.time())
+            , 'created': int(time.time())
+            , 'adminRights': False
+            , 'verified': False
+        }
  
     patient {
       patientName

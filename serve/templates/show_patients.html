@@ -2,6 +2,14 @@
 {% block body %}
 
     <div class="container">
+          {% if notVerified %}
+            <div class='offset1 span8'>
+              <div class="alert-message warning span11">
+                <!--<a class="close" href="#">&times;</a>-->
+                <p><strong>Sorry!</strong>  We're still working on getting you verified.  Hang tight!</p>
+              </div>
+            </div>
+          {% else %}
     	<div class="page-header">
             <h1>{{ patientName }}</h1>
         </div>
@@ -75,7 +83,8 @@
         {% else %}
         <h4>No unresolved cases at this time.</h4>
         {% endfor %}
- 	</div>
+        {% endif %}
+    </div><!--/container-->
 
 {% endblock %}
 

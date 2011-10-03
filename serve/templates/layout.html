@@ -14,9 +14,7 @@
     
 	</head>
 <body>
-<!-- Topbar
-    ================================================== -->
-	
+<!-- Topbar ================================================== -->
           
           <!-- This decides whether to use the logged-in nav or not-logged in nav -->
           {% if not session.logged_in %}
@@ -26,8 +24,8 @@
                   <h3><a href="{{ url_for('show_home') }}">MEDuele</a></h3>
                   <ul class="nav secondary-nav">
                     <form action="{{ url_for('login') }}" method=post>
-                      <input class="span3" id="emailAddress" name="emailAddress" type="text" placeholder="email address" />
-                      <input class="span2" id="password" name="password" type="password" placeholder='password' />
+                      <input class="span3" id="userName" name="userName" type="text" placeholder="Username" />
+                      <input class="span2" id="password" name="password" type="password" placeholder='Password' />
                       <button class="btn" type="submit">Sign In</button>
                     </form>
                   </ul>
@@ -35,23 +33,23 @@
               </div><!-- /topbar-inner -->
             </div><!-- /topbar -->
           
-			   {% else %}
-	<div class="topbar">
-      <div class="fill">
-        <div class="container">
-          <a class="brand" href="{{ url_for('show_home') }}">MEDuele</a>
-			   	    <ul class="nav.secondary-nav" class="pull-right" style="float:right">
-                        <li><a href="{{ url_for('show_new_cases') }}">Cases</a></li>
-                        <li><a href="{{ url_for('show_leaderboard') }}">Leaderboard</a></li>
-                        <li><a href="{{ url_for('show_users', userName=session.emailAddress) }}">{{ session.emailAddress }}</a></li>
-                    </ul>
-                    <form action="{{ url_for('logout') }}" class='pull-right' method=post>
-                      <button class="btn" type="submit">Sign out</button>
-                    </form>
-        </div>
-      </div>
-    </div
-               {% endif %}
+           {% else %}
+            <div class="topbar">
+              <div class="fill">
+                <div class="container">
+                  <a class="brand" href="{{ url_for('show_home') }}">MEDuele</a>
+                            <ul class="nav.secondary-nav" class="pull-right" style="float:right">
+                                <li><a href="{{ url_for('show_new_cases') }}">Cases</a></li>
+                                <li><a href="{{ url_for('show_leaderboard') }}">Leaderboard</a></li>
+                                <li><a href="#">{{ session.userName }}</a></li>
+                            </ul>
+                            <form action="{{ url_for('logout') }}" class='pull-right' method=post>
+                              <button class="btn" type="submit">Sign out</button>
+                            </form>
+                </div>
+              </div>
+            </div
+           {% endif %}
 		
 
     <!-- This brings in the body block of the html -->
@@ -61,7 +59,12 @@
     <!-- This is the footer-->
     
     <footer>
-    <center> © MEDuele 2011 <a href="{{ url_for('show_about') }}"> About Us </a>&nbsp; <a href="{{ url_for('show_contact') }}">Contact</a></center>
+    <center> © MEDuele 2011 
+        <a href="{{ url_for('show_leaderboard') }}"> Leaderboard </a>
+        &nbsp; 
+        <a href="{{ url_for('show_about') }}"> About Us </a>
+        &nbsp; 
+        <a href="{{ url_for('show_contact') }}">Contact</a></center>
     <br />
 	</footer>
     

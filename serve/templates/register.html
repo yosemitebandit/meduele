@@ -7,17 +7,28 @@
       </div>
       
       <div class='row'>
+        {% if alreadyRegistered %}
+        <div class='offset1 span8'>
+          <div class="alert-message warning span11">
+            <!--<a class="close" href="#">&times;</a>-->
+            <p><strong>Hey!</strong>  You're already registered!</p>
+          </div>
+        </div>
+        {% else %}
+
+
       <div class='span3'>
         <p> Thanks for offering to help out!  Please fill out the info to the right and we'll be in touch!</p>
       </div>
 
-        {#
-      {% if error %}
-        <p class=error><strong>Error:</strong> {{ error }}
-        {% endif %}
-        #}
-
       <div class='offset1 span8'>
+        {% if error %}
+          <div class="alert-message error span11">
+            <!--<a class="close" href="#">&times;</a>-->
+            <p><strong>Uh Oh!</strong> {{ error }}</p>
+          </div>
+        {% endif %}
+          
         <form action="{{ url_for('register') }}" method=post>
           <fieldset>
           <div class="clearfix">
@@ -100,11 +111,12 @@
           </div><!-- /clearfix -->
 
           <div class="actions">
-            <input type="submit" class="btn primary" value="Save">
+            <input type="submit" class="btn primary" value="Submit">
           </div>
 
-      </div>
-      </div>
-  </div>
+        </div><! -- /offset1 span8 -->
+        {% endif %}   {# ends alreadyRegistered check #}
+      </div><!-- /row -->
+    </div><!-- /container -->
 {% endblock %}
 

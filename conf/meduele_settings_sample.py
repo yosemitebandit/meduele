@@ -10,5 +10,12 @@ MONGO_CONFIG = {
     , 'port': 12345
 }
 
-INIT_USERNAME = 'bruce@wayneindustries.com'
-INIT_PASSWORD = 'r4ch3L'
+INITIAL_USER = {
+    'emailAddress': 'bruce@wayneindustries.com'
+    , 'userName': 'thebat'
+    , 'password': 'j0k3rsuck5'
+}
+
+TWILIO_ACCOUNT_SID = 'AC123'
+TWILIO_AUTH_TOKEN = 'abcd'
+TWILIO_APP_SID = 'AP123'
