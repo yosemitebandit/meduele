@@ -68,7 +68,7 @@ def show_new_cases():
     if 'verified' not in flask.session or not flask.session['verified']:
         return flask.render_template('new_cases.html', notVerified=True)
 
-    cases = mongo.retrieve_unresolved_cases(6)
+    cases = mongo.retrieve_unresolved_cases(20)
     _cases = []
     for case in cases:
         patientName = mongo.find_patientName_by_phoneNumber(case['phoneNumber'])

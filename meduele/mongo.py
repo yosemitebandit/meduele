@@ -25,7 +25,7 @@ class Mongo:
 
     def retrieve_unresolved_cases(self, responseLimit):
         query = {'needsResolution': True}
-        cases = list(self.db['cases'].find(query).sort('timestamp', pymongo.ASCENDING).limit(responseLimit))
+        cases = list(self.db['cases'].find(query).sort('timestamp', pymongo.DESCENDING).limit(responseLimit))
         _cases = []
         for case in cases:
             case['timestamp'] = time.strftime('%a, %d %b %Y %H:%M', time.localtime(case['timestamp'] - 7*60*60))
