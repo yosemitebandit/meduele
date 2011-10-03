@@ -16,11 +16,14 @@ bcrypt_init(app)
 mongo = meduele.Mongo(app.config['MONGO_CONFIG'])
 
 
+'''
+case-related routes
+'''
 @app.route('/patients/<patientName>', methods=['GET'])
 def show_patient(patientName):
     if 'logged_in' not in flask.session or not flask.session['logged_in']:  # not defined or is false
         return flask.redirect(flask.url_for('login'))
-    
+
     if not flask.session['verified']:
         return flask.render_template('show_patients.html', notVerified=True)
 
@@ -40,12 +43,12 @@ def show_patient(patientName):
 def show_case(patientName, caseName):
     if 'logged_in' not in flask.session or not flask.session['logged_in']:  # not defined or is false
         return flask.redirect(flask.url_for('login'))
-    
+
     if not flask.session['verified']:
         return flask.render_template('show_case.html', notVerified=True)
 
     case = mongo.retrieve_case_by_caseName(caseName)
-    
+
     client_name = 'will'
     capability = TwilioCapability(app.config['TWILIO_ACCOUNT_SID'], app.config['TWILIO_AUTH_TOKEN'])
     capability.allow_client_outgoing(app.config['TWILIO_APP_SID'])
@@ -62,7 +65,7 @@ def show_new_cases():
     if 'logged_in' not in flask.session or not flask.session['logged_in']:  # not defined or is false
         return flask.redirect(flask.url_for('login'))
 
-    if not flask.session['verified']:
+    if 'verified' not in flask.session or not flask.session['verified']:
         return flask.render_template('new_cases.html', notVerified=True)
 
     cases = mongo.retrieve_unresolved_cases(6)
@@ -98,7 +101,7 @@ def show_profile(userName):
         for lang in user['languages']:   #lammmmbda
             languages.append(lang.capitalize())
         user['languages'] = languages
-        
+
         return flask.render_template('profile.html', user=user)
     else:
         return flask.render_template('profile.html', notFound=True)
@@ -108,13 +111,94 @@ def show_profile(userName):
 def edit_profile(userName):
     ''' admin users can edit errybody, logged in users can edit themselves
     '''
-    if 'logged_in' not in flask.session or not flask.session['logged_in']:  # not defined or is false
-        return flask.redirect(flask.url_for('login'))
+    if flask.request.method == 'GET':
+        if 'logged_in' not in flask.session or not flask.session['logged_in']:  # not defined or is false
+            return flask.redirect(flask.url_for('login'))
 
-    if flask.session['adminRights'] or userName == flask.session['userName']:
-        return flask.render_template('edit_profile.html', userName=userName)
-    else:
-        return flask.redirect(flask.url_for('login'))
+        if ('adminRights' in flask.session and flask.session['adminRights']) or userName == flask.session['userName']:
+            user = mongo.retrieve_users(userName=userName)
+            if user:
+                user = user[0]
+                return flask.render_template('edit_profile.html', user=user)
+            else:
+                return flask.render_template('profile.html', notFound=True)
+        else:   # stranger
+            return flask.redirect(flask.url_for('login'))
+
+
+    elif flask.request.method == 'POST':
+        if 'logged_in' not in flask.session or not flask.session['logged_in']:
+            return flask.redirect(flask.url_for('login'))
+
+        if ('adminRights' in flask.session and flask.session['adminRights']) or userName == flask.session['userName']:
+            ''' do an update no matter what, use defaults if nothing in the form is specified
+            '''
+            user = mongo.retrieve_users(userName=userName)
+            if user:
+                user = user[0]
+            else:   # what is this, I don't even..
+                return flask.redirect(flask.url_for('login'))
+
+            # bio is currently the only mutable required change
+            if not flask.request.form['bio']:
+                return flask.render_template('edit_profile.html', user=user, error='please write something about yourself')
+            else:
+                bio = flask.request.form['bio']
+            
+            # if a new password is specified, verify some things..
+            if flask.request.form['newPassword']:
+                if not check_password_hash(user['passwordHash'], flask.request.form['oldPassword'] + user['salt']):
+                    return flask.render_template('edit_profile.html', user=user, error='old password is incorrect')
+                if flask.request.form['newPassword'] != flask.request.form['retypeNewPassword']:
+                    return flask.render_template('edit_profile.html', user=user, error='new passwords do not match')
+                if len(flask.request.form['newPassword']) < 6:
+                    return flask.render_template('edit_profile.html', user=user, error='new password must be at least six characters in length')
+                passwordHash = generate_password_hash(flask.request.form['newPassword'] + user['salt'])
+            else:
+                passwordHash = user['passwordHash']  # new pass not specified, keeping with the old one..
+
+            languages = flask.request.form.getlist('languages')
+
+            if 'adminRights' in flask.session and flask.session['adminRights']:
+                # have to do some type conversions from what comes in on the form
+                verified = True if flask.request.form['verifiedOptions'] == 'True' else False
+                adminRights = True if flask.request.form['adminOptions'] == 'True' else False
+            else:
+                verified = user['verified']
+                adminRights = user['adminRights']
+
+            (success, message) = mongo.update_user(
+                    flask.request.form['userName']
+                    , bio
+                    , passwordHash
+                    , languages
+                    , verified
+                    , adminRights)
+            
+            if success:
+                success = message
+                error = None
+                # update the user object and pass to the template
+                user['bio'] = bio
+                user['languages'] = languages
+                user['verified'] = verified
+                user['adminRights'] = adminRights
+                if userName == flask.session['userName']:
+                    # update session state, only if the logged in user is modifying hisself
+                    if adminRights:
+                        flask.session['adminRights'] = True
+                    else:
+                        flask.session.pop('adminRights', None)
+                    if verified:
+                        flask.session['verified'] = True
+                    else:
+                        flask.session.pop('verified', None)
+
+            else:
+                success = None
+                error = message
+
+            return flask.render_template('edit_profile.html', user=user, error=error, success=success)
 
 
 '''
@@ -129,7 +213,7 @@ def show_language_hub(language):
 
     languageName = language.capitalize()
 
-    if not flask.session['verified']:
+    if 'verified' not in flask.session or not flask.session['verified']:
         return flask.render_template('language_hub.html', languageName=languageName, notVerified=True)
 
     # get all cases by language or something..
@@ -156,7 +240,7 @@ def register():
                 and not flask.request.form['password'] \
                 and not flask.request.form['retypePassword'] \
                 and not flask.request.form['bio']:
-            return flask.render_template('register.html', error='we\'re missing some info')
+                    return flask.render_template('register.html', error='we\'re missing some info')
 
         if flask.request.form['password'] != flask.request.form['retypePassword']:
             return flask.render_template('register.html', error='passwords do not match')
@@ -168,13 +252,13 @@ def register():
 
         # def register_user(self, userName, emailAddress, password, retypePassword, languages, bio, picture):
         (success, message) = mongo.register_user(
-                                flask.request.form['userName']
-                                , flask.request.form['emailAddress']
-                                , salt
-                                , passwordHash
-                                , flask.request.form.getlist('languages')
-                                , flask.request.form['bio']
-                                , None)   # picture
+                flask.request.form['userName']
+                , flask.request.form['emailAddress']
+                , salt
+                , passwordHash
+                , flask.request.form.getlist('languages')
+                , flask.request.form['bio']
+                , None)   # picture
         if success:
             # log them in 
             flask.session['logged_in'] = True
@@ -184,7 +268,7 @@ def register():
             flask.session['verified'] = False
 
             return flask.redirect(flask.url_for('show_new_cases'))
-        
+
         else:
             return flask.render_template('register.html', error=message)
 
@@ -237,7 +321,7 @@ basic routes
 @app.route('/')
 def show_home():
     return flask.render_template('show_home.html')
-    
+
 
 @app.route('/about', methods=['GET'])
 def show_about():
@@ -260,7 +344,7 @@ twilio handlers
 @app.route('/twilio/client', methods=['POST'])
 def twilio_client():
     return flask.render_template('twilio_client.xml')
-    
+
 
 @app.route('/twilio/incoming_handler.xml', methods=['GET'])
 def twilio_incoming():
@@ -275,7 +359,7 @@ def twilio_incoming_callback():
     # http://www.twilio.com/docs/api/twiml/twilio_request#synchronous-request-parameters
     url = flask.request.form['RecordingUrl']
     duration = flask.request.form['RecordingDuration']
-    
+
     # insert into db..
     mongo.insert_case(
             callSID
@@ -296,7 +380,7 @@ def twilio_transcription_callback():
     transcriptionText = flask.request.form['TranscriptionText']
     transcriptionStatus = flask.request.form['TranscriptionStatus']
     transcriptionURL = flask.request.form['TranscriptionUrl']
-    
+
     # insert into db..
     mongo.update_case(
             callSID
@@ -355,19 +439,19 @@ def init():
         salt = mongo._create_random_string(34)
 
         volunteer = {
-            'userName': initial_user['userName'] 
-            , 'emailAddress': initial_user['emailAddress'] 
-            , 'bio': '' 
-            , 'languages': []
-            , 'picture': None
-            , 'salt': salt
-            , 'passwordHash': generate_password_hash(initial_user['password'] + salt)
-            , 'cases': [] 
-            , 'lastLogin': int(time.time())
-            , 'created': int(time.time())
-            , 'adminRights': True
-            , 'verified': True
-        }
+                'userName': initial_user['userName'] 
+                , 'emailAddress': initial_user['emailAddress'] 
+                , 'bio': '' 
+                , 'languages': []
+                , 'picture': None
+                , 'salt': salt
+                , 'passwordHash': generate_password_hash(initial_user['password'] + salt)
+                , 'cases': [] 
+                , 'lastLogin': int(time.time())
+                , 'created': int(time.time())
+                , 'adminRights': True
+                , 'verified': True
+                }
 
         mongo.db['users'].insert(volunteer)
 

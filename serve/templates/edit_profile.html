@@ -1,124 +1,178 @@
 {% extends "layout.html" %}
 
 {% block body %}
-  <div class="container">
-      <div class="page-header" style="font-weight:normal">
-          <h1>Editing {{ userName }}</h1>
-      </div>
-      
-      <div class='row'>
+<div class="container">
+    <div class="page-header" style="font-weight:normal">
+        <h1>Editing "{{ user.userName }}"</h1>
+    </div>
 
-      <div class='span3'>
-        <p> Thanks for offering to help out!  Please fill out the info to the right and we'll be in touch!</p>
-      </div>
+    <div class='row'>
 
-      <div class='offset1 span8'>
-        {% if error %}
-          <div class="alert-message error span11">
-            <!--<a class="close" href="#">&times;</a>-->
-            <p><strong>Uh Oh!</strong> {{ error }}</p>
-          </div>
-        {% endif %}
-          
-        <form action="{{ url_for('register') }}" method=post>
-          <fieldset>
-          <div class="clearfix">
-            <label for="emailAddress">Email</label>
-            <div class="input">
-              <input class="xlarge" id="emailAddress" name="emailAddress" size="30" type="text" />
-            </div>
-          </div><!-- /clearfix -->
-          <div class="clearfix">
-            <label for="userName">Username</label>
-            <div class="input">
-              <input class="xlarge" id="userName" name="userName" size="30" type="text" />
-            </div>
-          </div><!-- /clearfix -->
+        <div class='span3'>
+            <p> Thanks again for helping out!</p>
+            {% if not user.verified %}
+            <p>We're still working on getting you verified, apologies!</p>
+            {% else %}
+            <p>You've been verified!  You can view <a href="{{ url_for('show_new_cases') }}">new cases</a> and start responding right now!</p>
+            {% endif %}
+        </div>
 
-          <div class="clearfix">
-            <label for="password">Password</label>
-            <div class="input">
-              <input class="xlarge" id="password" name="password" size="30" type="password" />
+        <div class='offset1 span8'>
+            {% if error %}
+            <div class="alert-message error span11">
+                <!--<a class="close" href="#">&times;</a>-->
+                <p><strong>Uh Oh!</strong> {{ error }}</p>
             </div>
-          </div><!-- /clearfix -->
-          
-          <div class="clearfix">
-            <label for="password">Retype Password</label>
-            <div class="input">
-              <input class="xlarge" id="retypePassword" name="retypePassword" size="30" type="password" />
+            {% elif success %}
+            <div class="alert-message success span11">
+                <!--<a class="close" href="#">&times;</a>-->
+                <p><strong>Woo!</strong> {{ success }}</p>
             </div>
-          </div><!-- /clearfix -->
-          
-          <div class="clearfix">
-            <label id="languages">Languages</label>
-            <div class="input">
-              <ul class="inputs-list">
-                <li>
-                  <label>
-                    <input type="checkbox" name="languages" value="spanish" />
-                    <span>Spanish</span>
-                  </label>
-                </li>
-				<li>
-                  <label>
-                    <input type="checkbox" name="languages" value="vietnamese" />
-                    <span>Vietnamese</span>
-                  </label>
-                </li>
-                <li>
-                  <label>
-                    <input type="checkbox" name="languages" value="mandarin" />
-                    <span>Mandarin</span>
-                  </label>
-                </li>
-				<li>
-                  <label>
-                    <input type="checkbox" name="languages" value="mandarin" />
-                    <span>Cantonese</span>
-                  </label>
-                </li>
-				<li>
-                  <label>
-                    <input type="checkbox" name="languages" value="vietnamese" />
-                    <span>Tagalog</span>
-                  </label>
-                </li>
-                <li>
-                  <label>
-                    <input type="checkbox" name="languages" value="french" />
-                    <span>French</span>
-                  </label>
-                </li>
-              </ul>
-              <span class="help-block">
-                please indicate your proficiency below
-              </span>
-            </div>
-          </div><!-- /clearfix -->
+            {% endif %}
 
-          <div class="clearfix">
-            <label for="bio">Bio</label>
-            <div class="input">
-              <textarea class="xxlarge" id="bio" name="bio" rows="4"></textarea>
-              <span class="help-block">
-                tell us about yourself, personally and professionaly.
-              </span>
-            </div>
-          </div><!-- /clearfix -->
+            <form action="{{ url_for('edit_profile', userName=user.userName) }}" method=post>
+                <fieldset>
+                    <div class="clearfix">
+                        <label for="emailAddress">Email</label>
+                        <div class="input">
+                            <input class="xlarge" id="emailAddress" value="{{ user.emailAddress }}" name="emailAddress" size="30" type="text" disabled/>
+                        </div>
+                    </div><!-- /clearfix -->
+                    <div class="clearfix">
+                        <label for="userNameVisible">Username</label>
+                        <div class="input">
+                            <input class="xlarge" id="userNameVisible" value="{{ user.userName }}" name="userNameVisible" size="30" type="text" disabled/>
+                        </div>
+                    </div><!-- /clearfix -->
 
-          <div class="clearfix">
-            <label for="userName">How did you find us?</label>
-            <div class="input">
-              <input class="xlarge" id="howDidYouFindUs" name="howDidYouFindUs" size="30" type="text" />
-            </div>
-          </div><!-- /clearfix -->
+                    <!-- send this as the username; disabled form fields aren't sent at all, apparently -->  
+                    <input class="xlarge" id="userName" value="{{ user.userName }}" name="userName" size="30" type="hidden"/>
 
-          <div class="actions">
-            <input type="submit" class="btn primary" value="Submit">
-          </div>
+                    <div class="clearfix">
+                        <label for="oldPassword">Old Password</label>
+                        <div class="input">
+                            <input class="xlarge" id="oldPassword" name="oldPassword" size="30" type="password" />
+                        </div>
+                    </div><!-- /clearfix -->
 
-        </div><! -- /offset1 span8 -->
-      </div><!-- /row -->
-    </div><!-- /container -->
-{% endblock %}
+                    <div class="clearfix">
+                        <label for="newPassword">New Password</label>
+                        <div class="input">
+                            <input class="xlarge" id="newPassword" name="newPassword" size="30" type="password" />
+                        </div>
+                    </div><!-- /clearfix -->
+
+                    <div class="clearfix">
+                        <label for="retypeNewPassword">Retype New Password</label>
+                        <div class="input">
+                            <input class="xlarge" id="retypeNewPassword" name="retypeNewPassword" size="30" type="password" />
+                        </div>
+                    </div><!-- /clearfix -->
+
+                    <div class="clearfix">
+                        <label id="languages">Languages</label>
+                        <div class="input">
+                            <ul class="inputs-list">
+                                {% for language in ['spanish', 'vietnamese', 'mandarin', 'cantonese', 'tagalog', 'french'] %}
+                                <li>
+                                <label>
+                                    <input type="checkbox" name="languages" value="{{ language }}" 
+                                    {% if language in user.languages %}
+                                    checked='checked'
+                                    {% endif %}
+                                    />
+                                    <span>{{ language.capitalize() }}</span>
+                                </label>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                            <span class="help-block">
+                                please indicate your proficiency below
+                            </span>
+                        </div>
+                    </div><!-- /clearfix -->
+
+                    <div class="clearfix">
+                        <label for="bio">Bio</label>
+                        <div class="input">
+                            <textarea class="xxlarge" id="bio" name="bio" rows="4">{{ user.bio }}</textarea>
+                            <span class="help-block">
+                                tell us about yourself, personally and professionaly.
+                            </span>
+                        </div>
+                    </div><!-- /clearfix -->
+
+                    {% if session.adminRights %}
+                    <div class="clearfix">
+                        <label id="verifiedOptions">Verification Status</label>
+                        <div class="input">
+                            <ul class="inputs-list">
+                                <li>
+                                <label>
+                                    <input type="radio" 
+                                    {% if user.verified %}
+                                    checked
+                                    {% endif %}
+                                    name="verifiedOptions" value="True" />
+                                    <span>verified</span>
+                                </label>
+                                </li>
+                                <li>
+                                <label>
+                                    <input type="radio" 
+                                    {% if not user.verified %}
+                                    checked
+                                    {% endif %}
+                                    name="verifiedOptions" value="False" />
+                                    <span><strong>not</strong> verified</span>
+                                </label>
+                                </li>
+                            </ul>
+                            <span class="help-block">
+                                allows {{ user.userName }} to listen to calls, reply to calls, and see other users.
+                            </span>
+                        </div>
+                    </div><!-- /clearfix -->
+
+                    <div class="clearfix">
+                        <label id="adminOptions">Admin Status</label>
+                        <div class="input">
+                            <ul class="inputs-list">
+                                <li>
+                                <label>
+                                    <input type="radio" 
+                                    {% if user.adminRights %}
+                                    checked
+                                    {% endif %}
+                                    name="adminOptions" value="True" />
+                                    <span>is an admin</span>
+                                </label>
+                                </li>
+                                <li>
+                                <label>
+                                    <input type="radio" 
+                                    {% if not user.adminRights %}
+                                    checked
+                                    {% endif %}
+                                    name="adminOptions" value="False" />
+                                    <span>is <strong>not</strong> an admin</span>
+                                </label>
+                                </li>
+                            </ul>
+                            <span class="help-block">
+                                allows {{ user.userName }} to activate other admins and even deactivate your admin status! enable with caution.
+                            </span>
+                        </div>
+                    </div><!-- /clearfix -->
+                    {% endif %}
+
+
+                    <div class="actions">
+                        <input type="submit" class="btn primary" value="Submit">
+                    </div>
+
+                </div><! -- /offset1 span8 -->
+            </div><!-- /row -->
+        </div><!-- /container -->
+        {% endblock %}
 

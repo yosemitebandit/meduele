@@ -222,6 +222,20 @@ class Mongo:
         return (True, 'patient created')
 
 
+    def update_user(self, userName, bio, passwordHash, languages, verified, adminRights):
+        ''' handles any edits to the user page
+        userName and emailAddress are currently immutable, though presumably one of them could be changed..
+        '''
+        query = {'userName': userName}
+        self.db['users'].update(query, {'$set': {
+                                            'bio': bio
+                                            , 'passwordHash': passwordHash
+                                            , 'languages': languages
+                                            , 'verified': verified
+                                            , 'adminRights': adminRights}})
+        return (True, 'user info updated!')
+
+
     def register_user(self, userName, emailAddress, salt, passwordHash, languages, bio, picture):
         ''' handles the web registration
         '''
