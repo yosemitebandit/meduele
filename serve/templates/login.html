@@ -1,14 +1,43 @@
 {% extends "layout.html" %}
+
 {% block body %}
-  <h2>Login</h2>
-  {% if error %}<p class=error><strong>Error:</strong> {{ error }}{% endif %}
-  <form action="{{ url_for('login') }}" method=post>
-      <dl>
-          <dt>Email Address:
-          <dd><input type=text name=emailAddress>
-          <dt>Password:
-          <dd><input type=password name=password>
-          <dd><input type=submit value=Login>
-      </dl>
-  </form>
+  <div class="container">
+      <div class="page-header" style="font-weight:normal">
+        <h1>Login</h1>
+      </div>
+      
+      <div class='row'>
+        
+      <div class='offset4 span8'>
+        {% if error %}
+          <div class="alert-message error span7">
+            <!--<a class="close" href="#">&times;</a>-->
+            <p><strong>Uh Oh!  </strong>{{ error }}</p>
+          </div>
+        {% endif %}
+          
+        <form action="{{ url_for('login') }}" method=post>
+          <fieldset>
+          <div class="clearfix">
+            <label for="userName">Username</label>
+            <div class="input">
+              <input class="xlarge" id="userName" name="userName" size="20" type="text" />
+            </div>
+          </div><!-- /clearfix -->
+
+          <div class="clearfix">
+            <label for="password">Password</label>
+            <div class="input">
+              <input class="xlarge" id="password" name="password" size="20" type="password" />
+            </div>
+          </div><!-- /clearfix -->
+          
+          <div class="actions">
+            <input type="submit" class="btn primary" value="Submit">
+          </div>
+
+      </div>
+      </div>
+  </div>
 {% endblock %}
+

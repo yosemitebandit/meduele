@@ -2,6 +2,14 @@
 {% block body %}
 
     <div class="container">
+          {% if notVerified %}
+            <div class='offset1 span8'>
+              <div class="alert-message warning span11">
+                <!--<a class="close" href="#">&times;</a>-->
+                <p><strong>Sorry!</strong>  We're still working on getting you verified.  Hang tight!</p>
+              </div>
+            </div>
+          {% else %}
     	<div class="page-header">
             <h1>{{ patientName }}</h1>
         </div>
@@ -10,6 +18,7 @@
 		</div>
         {% for case in unresolved %}
         <div class="row">
+                         <h3><a href="{{ url_for('show_case', patientName=patientName, caseName=case.caseName) }}"> {{ case.timestamp }} </a></h3>
 			<div class="span10">
                 <h4> Transcription:</h4>
                 {% if not case.transcriptionText %}
@@ -33,8 +42,7 @@
 			
 			
             <div class="span6">
-                <h4> Date: {{ case.timestamp }} </h4>
-                <h4> Duration: {{ case.duration }} </h4>
+                <h4> Duration: {{ case.duration }}s</h4>
 			</div>
         </div>	
         {% else %}
@@ -75,7 +83,8 @@
         {% else %}
         <h4>No unresolved cases at this time.</h4>
         {% endfor %}
- 	</div>
+        {% endif %}
+    </div><!--/container-->
 
 {% endblock %}
 

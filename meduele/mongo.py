@@ -17,10 +17,20 @@ class Mongo:
         self.db = self.connection[mongoConfig['dbName']]
 
 
+    def find_patientName_by_phoneNumber(self, phoneNumber):
+        query = {'phoneNumber': phoneNumber}
+        patients = list(self.db['patients'].find(query))[0]
+        return patients['patientName']
+
+
     def retrieve_unresolved_cases(self, responseLimit):
-        query = {'needResolution': True}
-        cases = list(self.db['cases'].find(query).sort('timestamp', pymongo.ASCENDING).limit(responseLimit))
-        return cases 
+        query = {'needsResolution': True}
+        cases = list(self.db['cases'].find(query).sort('timestamp', pymongo.DESCENDING).limit(responseLimit))
+        _cases = []
+        for case in cases:
+            case['timestamp'] = time.strftime('%a, %d %b %Y %H:%M', time.localtime(case['timestamp'] - 7*60*60))
+            _cases.append(case)
+        return _cases
    
 
     def retrieve_cases(self, patientName):
@@ -31,24 +41,33 @@ class Mongo:
         # now get cases based on phone number
         query = {'phoneNumber': patient['phoneNumber']}
         cases = list(self.db['cases'].find(query))
-        return cases
+        
+        _cases = []
+        for case in cases:
+            case['timestamp'] = time.strftime('%a, %d %b %Y %H:%M', time.localtime(case['timestamp'] - 7*60*60))
+            _cases.append(case)
+        return _cases
 
 
     def retrieve_case_by_caseName(self, caseName):
         query = {'caseName': caseName}
         case = list(self.db['cases'].find(query))[0]
+        case['timestamp'] = time.strftime('%a, %d %b %Y %H:%M', time.localtime(case['timestamp'] - 7*60*60))
         return case
 
 
-    def retrieve_user(self, **kwargs):
+    def retrieve_users(self, **kwargs):
+        ''' return users based on ..something
+        '''
         emailAddress = kwargs.pop('emailAddress', None)
         userName = kwargs.pop('userName', None)
-        ''' return user info based on a specified email address
-        '''
-        if emailAddress == '*':
-            query = {}
-        else:
+
+        if emailAddress:
             query = {'emailAddress': emailAddress}
+        elif userName:
+            query = {'userName': userName}
+        else:
+            query = {}
         returnFields = {'_id': False}
         return list(self.db['users'].find(query, returnFields))
 
@@ -86,7 +105,7 @@ class Mongo:
         '''
         query = {'needsResolution': True}
         returnFields = {'_id': False}
-        return list(self.db['calls'].find(query, returnFields).sort('timestamp', pymongo.ASCENDING).limit(responseNumberLimit))
+        return list(self.db['calls'].find(query, returnFields).sort('timestamp', pymongo.DESCENDING).limit(responseNumberLimit))
 
 
     def retrieve_cases_by_name(self, projectNames):
@@ -203,39 +222,53 @@ class Mongo:
         return (True, 'patient created')
 
 
-    def insert_new_user(self, userName, emailAddress, bio, picture, salt, passwordHash, adminRights, cases):
-        ''' create a new user in the db if the user doesn't exist already
+    def update_user(self, userName, bio, passwordHash, languages, verified, adminRights):
+        ''' handles any edits to the user page
+        userName and emailAddress are currently immutable, though presumably one of them could be changed..
         '''
+        query = {'userName': userName}
+        self.db['users'].update(query, {'$set': {
+                                            'bio': bio
+                                            , 'passwordHash': passwordHash
+                                            , 'languages': languages
+                                            , 'verified': verified
+                                            , 'adminRights': adminRights}})
+        return (True, 'user info updated!')
+
+
+    def register_user(self, userName, emailAddress, salt, passwordHash, languages, bio, picture):
+        ''' handles the web registration
+        '''
+        if not userName or not emailAddress or not salt or not passwordHash or not bio:
+            return (False, 'you seem to be missing some info')
+
         query = {'emailAddress': emailAddress}
         returnFields = {'_id': True}
         if list(self.db['users'].find(query, returnFields)):
-            return (False, 'user exists')
+            return (False, 'the email address "%s" is already registered with us' % emailAddress)
 
-        user = {
-            'emailAddress': emailAddress
-            , 'userName': userName
+        query = {'userName': userName}
+        returnFields = {'_id': True}
+        if list(self.db['users'].find(query, returnFields)):
+            return (False, 'the username "%s" is already registered with us' % userName)
+
+        volunteer = {
+            'userName': userName
+            , 'emailAddress': emailAddress
             , 'bio': bio
+            , 'languages': languages
             , 'picture': picture
             , 'salt': salt
-            , 'password_hash': passwordHash
-            , 'cases': cases
-            , 'lastLogin': None
+            , 'passwordHash': passwordHash
+            , 'cases': [] 
+            , 'lastLogin': int(time.time())
             , 'created': int(time.time())
-            , 'adminRights': adminRights
+            , 'adminRights': False
+            , 'verified': False
         }
-        result = self.db['users'].insert(user)
-        return (True, 'An account for "%s" has been made' % emailAddress)
 
-    
-    def update_project_info(self, projectName, client, description, emailAddress):
-        ''' updates the mutable project data
-        '''
-        query = {'name': projectName}
-        self.db['cases'].update(query, {'$set': {'client': client
-                                                    , 'description': description
-                                                    , 'updatedAt': int(time.time())
-                                                    , 'updatedBy': emailAddress}})
-        return (True, 'project %s updated' % projectName)
+        self.db['users'].insert(volunteer)
+        return (True, 'thanks for signing up, we\'ll work to verify you soon!')
 
 
     def update_last_login(self, emailAddress):

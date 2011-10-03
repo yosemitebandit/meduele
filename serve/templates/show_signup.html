@@ -1,5 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
+<<<<<<< HEAD
 
     <div class="container">
     	<div class="page-header">
@@ -77,5 +78,33 @@
         {% endfor %}
  	</div>
 
+=======
+  <div class="container">
+      <div class="page-header" style="font-weight:normal;margin-top=80px">
+        <br />
+        <br />
+        <h1>Sign Up to Volunteer</h1>
+      {% if error %}
+        <p class=error><strong>Error:</strong> {{ error }}
+      {% endif %}
+      <form action="{{ url_for('add_user') }}" method=post>
+          <dl>
+              <dt>Email Address:
+              <dd><input type=text name=emailAddress />
+              <dt>Password:
+              <dd><input type=password name=password />
+              <dt>Admin:
+              <dd><p><input type=radio name=adminRights value=True />True</p>
+              <dd><p><input type=radio name=adminRights value=False />False</p>
+              <dt>Projects:
+              {% for project in projects %}
+                <dd><p><input type=checkbox name=projects value='{{project.name}}' />{{project.name}}</p>
+              {% endfor %}  
+              <dd><input type=submit value=Create />
+          </dl>
+      </form>
+      </div>
+  </div>
+>>>>>>> e2e5d420075592a12c8ac54fe1aece9a85973141
 {% endblock %}
 
