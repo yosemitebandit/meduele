@@ -27,21 +27,12 @@ body {
     text-shadow:rgba(0, 0, 0, 0.296875) 0 1px 1px;
 }
 
-/*
-.page-header {
-    margin-top:47px;
-}*/
-
 .masthead {
     background-color:#74B4E2;
     background-image:-webkit-linear-gradient(top, #74B4E2, #74B4E2);
     background-repeat:no-repeat no-repeat;
 }
 
-.span-one-third {
-    width:260px;
-    margin-right:40px;
-}
 
 .topbar a {
     /*color:#404040;*/
