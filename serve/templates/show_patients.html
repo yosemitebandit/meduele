@@ -18,7 +18,7 @@
 		</div>
         {% for case in unresolved %}
         <div class="row">
-                         <h3><a href="{{ url_for('show_case', patientName=patientName, caseName=case.caseName) }}"> {{ case.timestamp }} </a></h3>
+                         <h3><a href="{{ url_for('show_case', patientName=patientName, caseName=case.caseName) }}"> {{ case.formattedTimestamp }} </a></h3>
 			<div class="span10">
                 <h4> Transcription:</h4>
                 {% if not case.transcriptionText %}
@@ -76,7 +76,7 @@
 			
 			
             <div class="span6">
-                <h4> Date: {{ case.timestamp }} </h4>
+                <h4> Date: {{ case.formattedTimestamp }} </h4>
                 <h4> Duration: {{ case.duration }} </h4>
 			</div>
         </div>	

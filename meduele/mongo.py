@@ -25,12 +25,7 @@ class Mongo:
 
     def retrieve_unresolved_cases(self, responseLimit):
         query = {'needsResolution': True}
-        cases = list(self.db['cases'].find(query).sort('timestamp', pymongo.DESCENDING).limit(responseLimit))
-        _cases = []
-        for case in cases:
-            case['timestamp'] = time.strftime('%a, %d %b %Y %H:%M', time.localtime(case['timestamp'] - 7*60*60))
-            _cases.append(case)
-        return _cases
+        return = list(self.db['cases'].find(query).sort('timestamp', pymongo.DESCENDING).limit(responseLimit))
    
 
     def retrieve_cases(self, patientName):
@@ -40,20 +35,12 @@ class Mongo:
 
         # now get cases based on phone number
         query = {'phoneNumber': patient['phoneNumber']}
-        cases = list(self.db['cases'].find(query))
-        
-        _cases = []
-        for case in cases:
-            case['timestamp'] = time.strftime('%a, %d %b %Y %H:%M', time.localtime(case['timestamp'] - 7*60*60))
-            _cases.append(case)
-        return _cases
+        return list(self.db['cases'].find(query))
 
 
     def retrieve_case_by_caseName(self, caseName):
         query = {'caseName': caseName}
-        case = list(self.db['cases'].find(query))[0]
-        case['timestamp'] = time.strftime('%a, %d %b %Y %H:%M', time.localtime(case['timestamp'] - 7*60*60))
-        return case
+        return list(self.db['cases'].find(query))[0]
 
 
     def retrieve_users(self, **kwargs):
@@ -133,10 +120,22 @@ class Mongo:
             patient = {'patientName': self._create_patient_name(), 'phoneNumber': incomingNumber}
             self.db['patients'].insert(patient)
         
+        # save a formatted timestamp
+        tzCorrection = 7   # eh, should really adjust for caller's timezone
+        date = time.strftime('%A, %B %d, %Y', time.localtime(case['timestamp'] - tzCorrection*60*60))
+        hours = int(time.strftime('%H', time.localtime(case['timestamp'] - tzCorrection*60*60)))
+        if hours > 12:
+            suffix = 'pm'
+            hours = hours - 12
+        else:
+            suffix = 'am'
+        minutes = time.strftime('%M', time.localtime(case['timestamp'] - tzCorrection*60*60))
+
         case = {
             'caseName': self._create_case_name() 
             , 'callSID': callSID
             , 'timestamp': timestamp
+            , 'formattedTimestamp': '%s at %d:%s%s' % (date, hours, minutes, suffix)
             , 'url': url
             , 'needsResolution': needsResolution
             , 'duration': duration
