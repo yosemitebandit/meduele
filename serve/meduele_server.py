@@ -144,6 +144,12 @@ def edit_profile(userName):
                 return flask.render_template('edit_profile.html', user=user, error='please write something about yourself')
             else:
                 bio = flask.request.form['bio']
+
+            # any of the password fields are specified..
+            if flask.request.form['newPassword'] or flask.request.form['retypeNewPassword'] or flask.request.form['oldPassword']:
+                # but not /all/ of them
+                if not flask.request.form['newPassword'] or not flask.request.form['retypeNewPassword'] or not flask.request.form['oldPassword']:
+                    return flask.render_template('edit_profile.html', user=user, error='we are missing some password info')
             
             # if a new password is specified, verify some things..
             if flask.request.form['newPassword']:
@@ -234,12 +240,12 @@ def register():
             return flask.render_template('register.html')
 
 
-    if flask.request.method == 'POST':
+    if flask.request.method == 'POST':  # credential check?
         if not flask.request.form['userName'] \
-                and not flask.request.form['emailAddress'] \
-                and not flask.request.form['password'] \
-                and not flask.request.form['retypePassword'] \
-                and not flask.request.form['bio']:
+                or not flask.request.form['emailAddress'] \
+                or not flask.request.form['password'] \
+                or not flask.request.form['retypePassword'] \
+                or not flask.request.form['bio']:
                     return flask.render_template('register.html', error='we\'re missing some info')
 
         if flask.request.form['password'] != flask.request.form['retypePassword']:
@@ -417,7 +423,7 @@ def init():
     ''' adds a default admin to the database
     usage: 
         $ /path/to/virtualenv/bin/python
-        >> from airship_server import init
+        >> from meduele_server import init
         >> init()
         user "bruce@wayneindustries.com" created with specified password
     '''
