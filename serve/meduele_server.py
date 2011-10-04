@@ -463,6 +463,73 @@ def init():
         mongo.db['users'].insert(volunteer)
 
 
+def init_test_values():
+    ''' adds some data to the db
+    usage: 
+        $ /path/to/virtualenv/bin/python
+        >> from meduele_server import init_test_values
+        >> init_test_values()
+        inserting patient kuno13
+    '''
+    # inject a patient
+    patientName = mongo._create_patient_name()
+    patient = {
+        'patientName': patientName
+        , 'phoneNumber': '+1234567890'
+        , 'comments': [
+            {'author': 'asdf', 'body': 'oh yes, quite right', 'timestamp': int(time.time())}
+            , {'author': 'hjkl', 'body': 'most certainly', 'timestamp': int(time.time()-10000)}
+            , {'author': 'yuip', 'body': 'I do believe so', 'timestamp': int(time.time()-50000)}
+        ]
+    }
+    print 'inserting patient %s' % patientName
+    mongo.db['patients'].insert(patient)
+
+
+    # inject some cases
+    caseName = mongo._create_case_name()
+    case = {
+        'caseName': caseName
+        , 'callSID': 'asdf123' 
+        , 'timestamp': int(time.time())
+        , 'formattedTimestamp': 'Monday, October 3, 2011 at 3:05pm'
+        , 'url': 'http://google.com'
+        , 'needsResolution': True
+        , 'comments': [
+            {'author': 'asdf', 'body': 'oh yes, quite right', 'timestamp': int(time.time())}
+            , {'author': 'hjkl', 'body': 'most certainly', 'timestamp': int(time.time()-10000)}
+            , {'author': 'yuip', 'body': 'I do believe so', 'timestamp': int(time.time()-50000)}
+        ]
+        , 'duration': 33
+        , 'phoneNumber': '+1234567890'
+        , 'responder': None
+    }
+
+    print 'inserting case %s' % caseName 
+    mongo.db['cases'].insert(case)
+    
+    caseName = mongo._create_case_name()
+    case = {
+        'caseName': caseName
+        , 'callSID': 'yuio456' 
+        , 'timestamp': int(time.time()-10000)
+        , 'formattedTimestamp': 'Monday, October 3, 2011 at 3:05pm'
+        , 'url': 'http://nytimes.com'
+        , 'needsResolution': False
+        , 'comments': [
+            {'author': 'asdf', 'body': 'oh yes, quite right', 'timestamp': int(time.time())}
+            , {'author': 'hjkl', 'body': 'most certainly', 'timestamp': int(time.time()-10000)}
+            , {'author': 'yuip', 'body': 'I do believe so', 'timestamp': int(time.time()-50000)}
+        ]
+        , 'duration': 33
+        , 'phoneNumber': '+1234567890'
+        , 'responder': None
+    }
+
+    print 'inserting case %s' % caseName 
+    mongo.db['cases'].insert(case)
+
+
 def insert_formatted_times():
     ''' adds a formatted time to the case if the case doesn't have one already
     usage: 
