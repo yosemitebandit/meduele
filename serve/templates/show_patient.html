@@ -1,90 +1,113 @@
 {% extends "layout.html" %}
 {% block body %}
 
-    <div class="container">
-          {% if notVerified %}
-            <div class='offset1 span8'>
-              <div class="alert-message warning span11">
-                <!--<a class="close" href="#">&times;</a>-->
-                <p><strong>Sorry!</strong>  We're still working on getting you verified.  Hang tight!</p>
-              </div>
-            </div>
-          {% else %}
-    	<div class="page-header">
-            <h1>{{ patientName }}</h1>
+<div class="container">
+    {% if notVerified %}
+    <div class='offset1 span8'>
+        <div class="alert-message warning span11">
+            <!--<a class="close" href="#">&times;</a>-->
+            <p><strong>Sorry!</strong>  We're still working on getting you verified.  Hang tight!</p>
         </div>
-		<div class="page-header">
-			<h2>New Cases</h2>
-		</div>
-        {% for case in unresolved %}
-        <div class="row">
-                         <h3><a href="{{ url_for('show_case', patientName=patientName, caseName=case.caseName) }}"> {{ case.formattedTimestamp }} </a></h3>
-			<div class="span10">
-                <h4> Transcription:</h4>
-                {% if not case.transcriptionText %}
-                    <p> Transcription not yet available.</p>
+    </div>
+    {% else %}
+
+    <div class="page-header">
+        <h1>Case History of {{ patientName }}</h1>
+    </div>
+
+    <h2>Unresolved Cases</h2>
+    {% if unresolved %} 
+    <table class="zebra-striped">
+        <thead>
+            <tr>
+                <th class="header">Case</th>
+                <th class="header">Transcription</th>
+                <th class="header">Latest Comment</th>
+                <th class="header">Date of Call </th>
+                <th class="header">Length</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for case in unresolved %}
+            <tr>
+                <td><a href="{{ url_for('show_case', patientName=patientName, caseName=case.caseName) }}">{{ case.caseName }}</a></td>
+
+                {% if case.transcriptionText %}
+                <td>{{ case.transcriptionText }}</td>
                 {% else %}
-                    <p> {{ case.transcriptionText }} </p>
+                <td><i>transcription not yet available</i></td>
                 {% endif %}
-                
-                
-            <h4> Comments:</h4>
-                {% for comment in case.comments %}
-                  <p>{{ comment.body }}</p> 
-                  <p>{{ comment.author }}</p> 
-                  <p>{{ comment.timestamp }}</p> 
-                  <br />
-                 {% else %}
 
-                 <p> There are not yet any comments.</p>
-                 {% endfor %}
-			</div>
-			
-			
-            <div class="span6">
-                <h4> Duration: {{ case.duration }}s</h4>
-			</div>
-        </div>	
-        {% else %}
-        <h4>No new cases at this time.</h4>
-        {% endfor %}
+                {% if case.lastComment %}
+                <td>{{ case.lastComment }}</td>
+                {% else %}
+                <td><i>no comments yet</i></td>
+                {% endif %}
 
-		<div class="page-header">
-			<h2>Old Cases</h1>
+                <td>{{ case.formattedTimestamp }}</td>
+                <td>{{ case.duration }}s</td>
+            </tr> 
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+
+    <div class='offset2 span8'>
+        <div class="alert-message success span11">
+            <!--<a class="close" href="#">&times;</a>-->
+            <i>there are no unresolved cases at this time</i>
         </div>
-        {% for case in resolved %}
-        <div class="row">
-			<div class="span10">
-                <h4> Transcription:</h4>
-                {% if not case.transcriptionText %}
-                    <p> Transcription not yet available.</p>
-                {% else %}
-                    <p> "{{ case.transcriptionText }}" </p>
-                {% endif %}
-                
-            <h4> Comments:</h4>
-                {% for comment in case.comments %}
-                  <p>{{ comment.body }}</p> 
-                  <p>{{ comment.author }}</p> 
-                  <p>{{ comment.timestamp }}</p> 
-                  <br />
-                 {% else %}
+    </div>
 
-                 <p> There are not yet any comments.</p>
-                 {% endfor %}
-			</div>
-			
-			
-            <div class="span6">
-                <h4> Date: {{ case.formattedTimestamp }} </h4>
-                <h4> Duration: {{ case.duration }} </h4>
-			</div>
-        </div>	
-        {% else %}
-        <h4>No unresolved cases at this time.</h4>
-        {% endfor %}
-        {% endif %}
-    </div><!--/container-->
+    {% endif %}
+
+    <h2>Resolved Cases</h2>
+    {% if resolved %} 
+    <table class="zebra-striped">
+        <thead>
+            <tr>
+                <th class="header">Case</th>
+                <th class="header">Transcription</th>
+                <th class="header">Latest Comment</th>
+                <th class="header">Date of Call </th>
+                <th class="header">Length</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for case in resolved %}
+            <tr>
+                <td><a href="{{ url_for('show_case', patientName=patientName, caseName=case.caseName) }}">{{ case.caseName }}</a></td>
+
+                {% if case.transcriptionText %}
+                <td>{{ case.transcriptionText }}</td>
+                {% else %}
+                <td><i>transcription not yet available</i></td>
+                {% endif %}
+
+                {% if case.lastComment %}
+                <td>{{ case.lastComment }}</td>
+                {% else %}
+                <td><i>no comments yet</i></td>
+                {% endif %}
+
+                <td>{{ case.formattedTimestamp }}</td>
+                <td>{{ case.duration }}s</td>
+            </tr> 
+            {% endfor %}
+        </tbody>
+    </table>
+    {% else %}
+
+    <div class='offset2 span8'>
+        <div class="alert-message warning span11">
+            <!--<a class="close" href="#">&times;</a>-->
+            <i>there are no resolved cases at this time</i>
+        </div>
+    </div>
+
+    {% endif %}
+
+</div><!--/container-->
 
 {% endblock %}
 
