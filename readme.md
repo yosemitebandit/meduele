@@ -84,3 +84,5 @@ http://readthedocs.org/docs/twilio-python/en/latest/
 
 ### nice to have
  - tz knowledge and recs about when to call someone back
+ - way to mark transcription as close enough or needs attention of language expert
+    - twilioTranscription, englishTranscription, nativeLanguageTranscription would all be good
