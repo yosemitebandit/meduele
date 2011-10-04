@@ -6,28 +6,29 @@
 </div>
 
 <div class='row'>
+    {% if error %}
+    <div class="alert-message error span8 offset4">
+        <!--<a class="close" href="#">&times;</a>-->
+        <p><strong>Uh Oh!  </strong>{{ error }}</p>
+    </div>
+    {% endif %}
+</div>
 
-    <div class='offset4 span8'>
-        {% if error %}
-        <div class="alert-message error span7">
-            <!--<a class="close" href="#">&times;</a>-->
-            <p><strong>Uh Oh!  </strong>{{ error }}</p>
-        </div>
-        {% endif %}
-
+<div class='row'>
+    <div class='span8 offset4'>
         <form action="{{ url_for('login') }}" method=post>
             <fieldset>
                 <div class="clearfix">
                     <label for="userName">Username</label>
                     <div class="input">
-                        <input class="xlarge" id="userName" name="userName" size="20" type="text" />
+                        <input class="xlarge" id="userNameBottom" name="userName" size="20" type="text" />
                     </div>
                 </div><!-- /clearfix -->
 
                 <div class="clearfix">
                     <label for="password">Password</label>
                     <div class="input">
-                        <input class="xlarge" id="password" name="password" size="20" type="password" />
+                        <input class="xlarge" id="passwordBottom" name="password" size="20" type="password" />
                     </div>
                 </div><!-- /clearfix -->
 
@@ -36,8 +37,7 @@
                 </div>
             </fieldset>
         </form>
-
-    </div><!-- /offset4 span8 -->
+    </div>
 </div><!-- /row -->
 
 {% endblock %}
