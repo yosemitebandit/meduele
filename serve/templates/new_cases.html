@@ -5,7 +5,7 @@
 <div class="container">
     <div class="page-header">
         <h1>New Cases
-            <small>Choose one to listen, comment and reply</small>
+            <small>Choose a case to listen, comment and reply</small>
         </h1>
     </div>
     {% if notVerified %}
@@ -22,7 +22,8 @@
         <table class="zebra-striped">
             <thead>
                 <tr>
-                    <th class="header">Case Name</th>
+                    <th class="header">Case</th>
+                    <th class="header">Caller</th>
                     <th class="header">Transcription</th>
                     <th class="header">Last Comment</th>
                     <th class="header">Date of Call </th>
@@ -33,6 +34,7 @@
                 {% for case in cases %}
                 <tr>
                     <td><a href="{{ url_for('show_case', patientName=case.patientName, caseName=case.caseName) }}">{{ case.caseName }}</a></td>
+                    <td><a href="{{ url_for('show_patients', patientName=case.patientName) }}">{{ case.patientName }}</a></td>
 
                     {% if case.transcriptionText %}
                     <td>{{ case.transcriptionText }}</td>
