@@ -24,6 +24,9 @@ Patrick thinks this is awesome!
     patient {
       patientName
       phoneNumber
+      comments: [{
+        author, body, timestamp
+      }]
     }
 
     cases {
