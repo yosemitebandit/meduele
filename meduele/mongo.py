@@ -126,6 +126,9 @@ class Mongo:
         if hours > 12:
             suffix = 'pm'
             hours = hours - 12
+        elif hours == 0:  # convert to 12am
+            hours = 12 
+            suffix = 'am'
         else:
             suffix = 'am'
         minutes = time.strftime('%M', time.localtime(timestamp - tzCorrection*60*60))
