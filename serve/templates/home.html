@@ -1,95 +1,70 @@
 {% extends "layout.html" %}
 
-{% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='body_undo.css') }}">
-{% endblock %}
-
 {% block body %}
 
-<!-- Masthead (blueprinty thing)
-================================================== -->
 
+<div class="hero-unit" style='background-color: #74B4E2;'>
+  <div class='row'>
+    <h1>MEDuele</h1>
+  </div>
+  <br />
 
-<header class="jumbotron masthead" id="overview">
-<div class="inner">
-    <div class="container">
-        <h1>MEDuele connects patients to health information and resources</h1>
+  <div class='row'>
+    <h2>Connecting patients to health information and resources</h2>
+  </div>
+  <br />
+  <br />
+
+  <div class='row'>
+    <div class='span6'>
+      <h2>Looking for medical advice?</h2>
+      <h2 style=''>Dial <span style="color:#1930FF"> 650-262-5300</span></h2> 
     </div>
-    <br />
-    <br />
-    <div class='container'>
-        <div class='row'>
-            <div class='span8'>
-                <h2>Looking for medical advice?</h2>
-            </div>
-            <div class='span8'>
-                <h2>Want to become a volunteer?</h2>
-            </div>
-        </div>
-        <br />
 
-        <div class='row'>
-            <div class='span8 offset1'>
-                <h2>Dial <span style="color:#1930FF"> 650-262-5300</span></h2> 
-            </div>
-            <!--
-            <div class='span3'>
-                <a style="color:#31487D" class="btn large" href="#">Call for advice now</a>
-            </div>
-            -->
-            <div class='span3 offset4'>
-                <a style="color:#31487D" class="btn large" href="{{ url_for('register') }}">Sign Up &raquo;</a>
-            </div>
-        </div>
+    <div class='span6 offset2'>
+      <h2>Want to become a volunteer?</h2>
+      <a class="btn success large" style='' href="{{ url_for('register') }}">Sign Up&nbsp; &raquo;</a>
+    </div>
+  </div>
 
 
-    </div><!-- /container -->
 </div>
-</header>
 
-<!-- How it works
-================================================== -->
-<div class="container">
-    <div style="font-weight:normal">
-        <br><br><h1>How does MEDuele work?</h1>
-    </div>
-        <br>
-        <div class="row">
-            <div class="span-one-third">
-                <h2>1. Patients call <br>650-262-5300</h2><br>
-            </div>
-            <div class="span-one-third">
-                <h2>2. Volunteers select cases.</h2><br>
-            </div>
-            <div class="span-one-third">
-                <h2>3. Volunteers provide advice to patients.</h2><br>
-            </div>
-        </div>
+<div class="row">
+  <div class="span-one-third">
+    <h2>1. Patients call <br>650-262-5300</h2><br>
+  </div>
+  <div class="span-one-third">
+    <h2>2. Volunteers select cases.</h2><br>
+  </div>
+  <div class="span-one-third">
+    <h2>3. Volunteers provide advice to patients.</h2><br>
+  </div>
+</div>
 
-        <div class='row'>
-            <div class='span-one-third'>
-                <img class="thumbnail" src="{{ url_for('static', filename='Step1.png') }}" alt=""/><br>
-            </div>
-            <div class='span-one-third'>
-                <img class="thumbnail" src="{{ url_for('static', filename='Step2.png') }}" alt=""/><br>
-            </div>
-            <div class='span-one-third'>
-                <img class="thumbnail" src="{{ url_for('static', filename='Step3.png') }}" alt=""/><br>
-            </div>
-        </div>
+<div class='row'>
+  <div class='span-one-third'>
+    <img class="thumbnail" src="{{ url_for('static', filename='Step1.png') }}" alt=""/><br>
+  </div>
+  <div class='span-one-third'>
+    <img class="thumbnail" src="{{ url_for('static', filename='Step2.png') }}" alt=""/><br>
+  </div>
+  <div class='span-one-third'>
+    <img class="thumbnail" src="{{ url_for('static', filename='Step3.png') }}" alt=""/><br>
+  </div>
+</div>
 
-        <div class='row'>
-            <div class='step-description span-one-third'>
-                <p>Patients call our hotline, select their language, and then leave a message detailing their symptoms.</p>
-            </div>
-            <div class='step-description span-one-third'>
-                <p>Volunteers select these messages, review notes from previous calls, and then call the patient.</p>
-            </div>
-            <div class='step-description span-one-third'>
-                <p>Volunteers speak with patients about their symptoms and provide medical advice.</p>
-            </div>
-        </div>
+<div class='row'>
+  <div class='step-description span-one-third'>
+    <p>Patients call our hotline, select their language, and then leave a message detailing their symptoms.</p>
+  </div>
+  <div class='step-description span-one-third'>
+    <p>Volunteers select these messages, review notes from previous calls, and then call the patient.</p>
+  </div>
+  <div class='step-description span-one-third'>
+    <p>Volunteers speak with patients about their symptoms and provide medical advice.</p>
+  </div>
+</div>
 
-</div> <!-- /container -->
 {% endblock %}
 

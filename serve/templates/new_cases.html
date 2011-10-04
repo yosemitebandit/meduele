@@ -2,73 +2,70 @@
 
 {% block body %}
 
-<div class="container">
-    <div class="page-header">
-        <h1>New Cases
-            <small>Choose a case to listen, comment and reply</small>
-        </h1>
+<div class="page-header">
+    <h1>New Cases
+        <small>Choose a case to listen, comment and reply</small>
+    </h1>
+</div>
+{% if notVerified %}
+<div class='offset1 span8'>
+    <div class="alert-message warning span11">
+        <!--<a class="close" href="#">&times;</a>-->
+        <p><strong>Sorry!</strong>  We're still working on getting you verified.  Hang tight!</p>
     </div>
-    {% if notVerified %}
-    <div class='offset1 span8'>
+</div>
+{% else %}
+
+<div class="row">
+    {% if cases %}
+    <table class="zebra-striped">
+        <thead>
+            <tr>
+                <th class="header">Case</th>
+                <th class="header">Caller</th>
+                <th class="header">Transcription</th>
+                <th class="header">Latest Comment</th>
+                <th class="header">Date of Call </th>
+                <th class="header">Length</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for case in cases %}
+            <tr>
+                <td><a href="{{ url_for('show_case', patientName=case.patientName, caseName=case.caseName) }}">{{ case.caseName }}</a></td>
+                <td><a href="{{ url_for('show_patient', patientName=case.patientName) }}">{{ case.patientName }}</a></td>
+
+                {% if case.transcriptionText %}
+                <td>{{ case.transcriptionText }}</td>
+                {% else %}
+                <td><i>transcription not yet available</i></td>
+                {% endif %}
+
+                {% if case.lastComment %}
+                <td>{{ case.lastComment }}</td>
+                {% else %}
+                <td><i>no comments yet</i></td>
+                {% endif %}
+
+                <td>{{ case.formattedTimestamp }}</td>
+                <td>{{ case.duration }}s</td>
+            </tr> 
+            {% endfor %}
+        </tbody>
+    </table>
+
+    {% else %}   {# no cases #}
+    <div class='offset2 span8'>
         <div class="alert-message warning span11">
             <!--<a class="close" href="#">&times;</a>-->
-            <p><strong>Sorry!</strong>  We're still working on getting you verified.  Hang tight!</p>
+            <i>there are no new, unresolved calls at this time</i>
         </div>
     </div>
-    {% else %}
 
-    <div class="row">
-        {% if cases %}
-        <table class="zebra-striped">
-            <thead>
-                <tr>
-                    <th class="header">Case</th>
-                    <th class="header">Caller</th>
-                    <th class="header">Transcription</th>
-                    <th class="header">Latest Comment</th>
-                    <th class="header">Date of Call </th>
-                    <th class="header">Length</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for case in cases %}
-                <tr>
-                    <td><a href="{{ url_for('show_case', patientName=case.patientName, caseName=case.caseName) }}">{{ case.caseName }}</a></td>
-                    <td><a href="{{ url_for('show_patient', patientName=case.patientName) }}">{{ case.patientName }}</a></td>
+    {% endif %} {# /cases check #}
+</div> <!-- /row -->
 
-                    {% if case.transcriptionText %}
-                    <td>{{ case.transcriptionText }}</td>
-                    {% else %}
-                    <td><i>transcription not yet available</i></td>
-                    {% endif %}
-
-                    {% if case.lastComment %}
-                    <td>{{ case.lastComment }}</td>
-                    {% else %}
-                    <td><i>no comments yet</i></td>
-                    {% endif %}
-
-                    <td>{{ case.formattedTimestamp }}</td>
-                    <td>{{ case.duration }}s</td>
-                </tr> 
-                {% endfor %}
-            </tbody>
-        </table>
-
-        {% else %}   {# no cases #}
-        <div class='offset2 span8'>
-            <div class="alert-message warning span11">
-                <!--<a class="close" href="#">&times;</a>-->
-                <i>there are no new, unresolved calls at this time</i>
-            </div>
-        </div>
-
-        {% endif %} {# /cases check #}
-    </div> <!-- /row -->
-
-    {% endif %} <!-- /notVerified check -->
-</div><!--/content-->
-</div><!--/container-->
+{% endif %} <!-- /notVerified check -->
 
 {% endblock %}
 

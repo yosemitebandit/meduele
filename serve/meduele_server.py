@@ -310,7 +310,7 @@ def login():
         return flask.redirect(flask.url_for('show_new_cases'))
 
 
-@app.route('/logout', methods=['POST'])
+@app.route('/logout', methods=['POST', 'GET'])
 def logout():
     if 'logged_in' in flask.session:
         flask.session.pop('logged_in', None)
