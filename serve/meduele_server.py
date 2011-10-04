@@ -45,7 +45,8 @@ def show_case(patientName, caseName):
         return flask.redirect(flask.url_for('login'))
 
     if not flask.session['verified']:
-        return flask.render_template('show_case.html', notVerified=True)
+        return flask.redirect(flask.url_for('show_home'))
+        #return flask.render_template('show_case.html', notVerified=True)
 
     case = mongo.retrieve_case_by_caseName(caseName)
 

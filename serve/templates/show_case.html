@@ -1,72 +1,12 @@
 {% extends "layout.html" %}
 
-{% block head %}
-{% if not notVerified %}
+{#{% block head %}#}
 
 <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js'></script>
 <script src="{{ url_for('static', filename='twilio.min.js') }} "></script>
+<script src="{{ url_for('static', filename='js/case-callback.js') }} "></script>
 
 <script type="text/javascript">
-  var phoneNum = 3093609866;
-  var js_token = "{{ token }}";
-  
-  try {
-    Twilio.Device.setup(js_token);
-  } catch (err) {
-    console.log("Adobe Flash is required to use Twilio Client.");
-  }
-  
-  Twilio.Device.ready(function (device) {
-    $("#log").text("Ready");
-  });
-
-  Twilio.Device.error(function (error) {
-    $("#log").text("Error: " + error.message);
-  });
-
-  Twilio.Device.connect(function (conn) {
-    $("#log").text("Successfully established call");
-  });
-
-  Twilio.Device.disconnect(function (conn) {
-    $("#log").text("Call ended");
-  });
-
-  Twilio.Device.incoming(function (conn) {
-    $("#log").text("Incoming connection from " + conn.parameters.From);
-    // accept the incoming connection and start two-way audio
-    conn.accept();
-  });
-  
-  Twilio.Device.presence(function (pres) {
-    if (pres.available) {
-      // create an item for the client that became available
-      $("<li>", {id: pres.from, text: pres.from}).click(function () {
-        $("#number").val(pres.from);
-        call();
-      }).prependTo("#people");
-    }
-    else {
-      // find the item by client name and remove it
-      $("#" + pres.from).remove();
-    }
-  });
-
-  function call() {
-    params = {"PhoneNumber": phoneNum };
-    Twilio.Device.connect(params);
-    $("#call_button").text("Hang up");
-    $("#call_button").attr('class', 'btn large danger call');
-    $("#call_button").attr('onclick', '').click(function() { hangup(); });
-  }
-
-  function hangup() {
-    Twilio.Device.disconnectAll();
-    $("#call_button").text("Call");
-    $("#call_button").attr('class', 'btn large primary call');
-    $("#call_button").attr('onclick', '').click(function() { call(); });
-  }
-
 
 //<![CDATA[
 $(document).ready(function(){
@@ -90,98 +30,88 @@ $(document).ready(function(){
 <script type="text/javascript" src="{{ url_for('static', filename='jquery.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='jquery.jplayer.min.js') }}"></script>
 
-<!-- /verified check -->
-{% endif %}
-
-{% endblock %}
+{#{% endblock %}  #}
 
 {% block body %}
 
-
-
 <div class="container">
-          {% if notVerified %}
-            <div class='offset1 span8'>
-              <div class="alert-message warning span11">
-                <!--<a class="close" href="#">&times;</a>-->
-                <p><strong>Sorry!</strong>  We're still working on getting you verified.  Hang tight!</p>
-              </div>
-            </div>
-            {% else %}
-  <div class="page-header" style="margin-top:80px">
-    <h1>{{ case.formattedTimestamp }}</h1>
-  </div>
-
-  <div class="row">
-    <div class="span10">
-    </script>                            
-    <div id="jquery_jplayer_1" class="jp-jplayer" style="width: 0px; height: 0px; ">
-      <img id="jp_poster_0" style="width: 0px; height: 0px; display: none; "/>
-      <audio id="jp_audio_0" preload="metadata" src="{{ case.url }}" />
+    <div class="page-header">
+        <h1>{{ case.formattedTimestamp }}</h1>
     </div>
-    <div id="jp_container_1" class="jp-audio">
-      <div class="jp-type-single">
-        <div class="jp-gui jp-interface">
-          <ul class="jp-controls">
-            <li><a href="javascript:;" class="jp-play" tabindex="1">play</a></li>
-            <li><a href="javascript:;" class="jp-pause" tabindex="1">pause</a></li>
-            <li><a href="javascript:;" class="jp-stop" tabindex="1">stop</a></li>
-            <li><a href="javascript:;" class="jp-mute" tabindex="1" title="mute">mute</a></li>
-            <li><a href="javascript:;" class="jp-unmute" tabindex="1" title="unmute">unmute</a></li>
-            <li><a href="javascript:;" class="jp-volume-max" tabindex="1" title="max volume">max volume</a></li>
-          </ul>
-          <div class="jp-progress">
-            <div class="jp-seek-bar">
-              <div class="jp-play-bar"></div>
+
+    <div class="row">
+        <div class="span10">
+            <div id="jquery_jplayer_1" class="jp-jplayer" style="width: 0px; height: 0px; ">
+                <img id="jp_poster_0" style="width: 0px; height: 0px; display: none; "/>
+                <audio id="jp_audio_0" preload="metadata" src="{{ case.url }}" />
             </div>
-          </div>
-          <div class="jp-volume-bar">
-            <div class="jp-volume-bar-value"></div>
-          </div>
-          <div class="jp-time-holder">
-            <div class="jp-current-time"></div>
-            <div class="jp-duration"></div>
+            <div id="jp_container_1" class="jp-audio">
+                <div class="jp-type-single">
+                    <div class="jp-gui jp-interface">
+                        <ul class="jp-controls">
+                            <li><a href="javascript:;" class="jp-play" tabindex="1">play</a></li>
+                            <li><a href="javascript:;" class="jp-pause" tabindex="1">pause</a></li>
+                            <li><a href="javascript:;" class="jp-stop" tabindex="1">stop</a></li>
+                            <li><a href="javascript:;" class="jp-mute" tabindex="1" title="mute">mute</a></li>
+                            <li><a href="javascript:;" class="jp-unmute" tabindex="1" title="unmute">unmute</a></li>
+                            <li><a href="javascript:;" class="jp-volume-max" tabindex="1" title="max volume">max volume</a></li>
+                        </ul>
+                        <div class="jp-progress">
+                            <div class="jp-seek-bar">
+                                <div class="jp-play-bar"></div>
+                            </div>
+                        </div>
+                        <div class="jp-volume-bar">
+                            <div class="jp-volume-bar-value"></div>
+                        </div>
+                        <div class="jp-time-holder">
+                            <div class="jp-current-time"></div>
+                            <div class="jp-duration"></div>
 
-            <ul class="jp-toggles">
-              <li><a href="javascript:;" class="jp-repeat" tabindex="1" title="repeat">repeat</a></li>
-              <li><a href="javascript:;" class="jp-repeat-off" tabindex="1" title="repeat off">repeat off</a></li>
-            </ul>
-          </div>
-        </div>
+                            <ul class="jp-toggles">
+                                <li><a href="javascript:;" class="jp-repeat" tabindex="1" title="repeat">repeat</a></li>
+                                <li><a href="javascript:;" class="jp-repeat-off" tabindex="1" title="repeat off">repeat off</a></li>
+                            </ul>
+                        </div>
+                    </div>
 
-        <div class="jp-no-solution">
-          <span>Update Required</span>
-          To play the media you will need to either update your browser to a recent version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
-        </div>
-      </div>
-      
-  </div>
-    
+                    <div class="jp-no-solution">
+                        <span>Update Required</span>
+                        To play the media you will need to either update your browser to a recent version or update your <a href="http://get.adobe.com/flashplayer/" target="_blank">Flash plugin</a>.
+                    </div>
+                </div>
+            </div><!-- /jp_container_1 -->
 
-    <h4> Transcription:</h4>
-    {% if not case.transcriptionText %}
-    <p> Transcription not yet available.</p>
-    {% else %}
-    <p> {{ case.transcriptionText }} </p>
-    {% endif %}
+            <div class="span3 offset2">
+                <button class="btn large primary call" id="call_button" onclick="call();">
+                    Call
+                </button>
+            </div>
+        </div> <!-- /span10 -->
+    </div>  <!-- /row -->
 
-    <h4> Comments:</h4>
-    {% for comment in case.comments %}
-    <p>{{ comment.body }}</p> 
-    <p>{{ comment.author }}</p> 
-    <p>{{ comment.timestamp }}</p> 
-    <br />
-    {% else %}
-    <p> There are not yet any comments.</p>
-    {% endfor %}
-</div>
-      <div class="span3">
-        <button class="btn large primary call" id="call_button" onclick="call();">
-          Call
-        </button>
-      </div>
-  </div>	
-  {% endif %}
+    <div class='row'>
+        <div class='span8'>
+
+            <h4> Transcription:</h4>
+            {% if not case.transcriptionText %}
+            <p> Transcription not yet available.</p>
+            {% else %}
+            <p> {{ case.transcriptionText }} </p>
+            {% endif %}
+
+            <h4> Comments:</h4>
+            {% for comment in case.comments %}
+            <p>{{ comment.body }}</p> 
+            <p>{{ comment.author }}</p> 
+            <p>{{ comment.timestamp }}</p> 
+            <br />
+            {% else %}
+            <p> There are not yet any comments.</p>
+            {% endfor %}
+
+        </div> <!-- /span8 -->
+    </div> <!-- /row -->
 </div><!--/container-->
 
 <script type="text/javascript" src="{{ url_for('static', filename='prettify-jPlayer.js') }}"></script>
