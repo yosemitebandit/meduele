@@ -30,6 +30,7 @@ Patrick thinks this is awesome!
       caseName
       callSID
       timestamp
+      formattedTimestamp
       url
       needsResolution
       duration
@@ -79,4 +80,7 @@ or, if you're on the server, use supervisord or the fabfile or..if you must, gun
 http://readthedocs.org/docs/twilio-python/en/latest/
     
     $ pip install twilio
-    
+
+
+### nice to have
+ - tz knowledge and recs about when to call someone back
