@@ -25,7 +25,7 @@ class Mongo:
 
     def retrieve_unresolved_cases(self, responseLimit):
         query = {'needsResolution': True}
-        return = list(self.db['cases'].find(query).sort('timestamp', pymongo.DESCENDING).limit(responseLimit))
+        return list(self.db['cases'].find(query).sort('timestamp', pymongo.DESCENDING).limit(responseLimit))
    
 
     def retrieve_cases(self, patientName):
