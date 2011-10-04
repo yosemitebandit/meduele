@@ -116,20 +116,19 @@ class Mongo:
         query = {'phoneNumber': incomingNumber}
         patient = list(self.db['patients'].find(query))
         if not patient:    # first-time caller; patient-gen
-
             patient = {'patientName': self._create_patient_name(), 'phoneNumber': incomingNumber}
             self.db['patients'].insert(patient)
         
         # save a formatted timestamp
         tzCorrection = 7   # eh, should really adjust for caller's timezone
-        date = time.strftime('%A, %B %d, %Y', time.localtime(case['timestamp'] - tzCorrection*60*60))
-        hours = int(time.strftime('%H', time.localtime(case['timestamp'] - tzCorrection*60*60)))
+        date = time.strftime('%A, %B %d, %Y', time.localtime(timestamp - tzCorrection*60*60))
+        hours = int(time.strftime('%H', time.localtime(timestamp - tzCorrection*60*60)))
         if hours > 12:
             suffix = 'pm'
             hours = hours - 12
         else:
             suffix = 'am'
-        minutes = time.strftime('%M', time.localtime(case['timestamp'] - tzCorrection*60*60))
+        minutes = time.strftime('%M', time.localtime(timestamp - tzCorrection*60*60))
 
         case = {
             'caseName': self._create_case_name() 
