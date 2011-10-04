@@ -16,29 +16,56 @@
         </div>
     </div>
     {% else %}
+
     <div class="row">
+        {% if cases %}
         <table class="zebra-striped">
             <thead>
                 <tr>
                     <th class="header">Case Name</th>
+                    <th class="header">Transcription</th>
                     <th class="header">Last Comment</th>
-                    <th class="header">Date of Initial Call</th>
-                    <th class="header">Call Duration</th>
+                    <th class="header">Date of Call </th>
+                    <th class="header">Duration</th>
                 </tr>
             </thead>
             <tbody>
                 {% for case in cases %}
                 <tr>
-                    <td><a href="{{ url_for('show_patient', patientName=case.patientName) }}">{{ case.caseName }}</a></td>
+                    <td><a href="{{ url_for('show_case', patientName=case.patientName, caseName=case.caseName) }}">{{ case.caseName }}</a></td>
+
+                    {% if case.transcriptionText %}
+                    <td>{{ case.transcriptionText }}</td>
+                    {% else %}
+                    <td><i>transcription not yet available</i></td>
+                    {% endif %}
+
+                    {% if case.lastComment %}
                     <td>{{ case.lastComment }}</td>
-                    <td>{{ case.timestamp }}</td>
+                    {% else %}
+                    <td><i>no comments yet</i></td>
+                    {% endif %}
+
+                    <td>{{ case.formattedTimestamp }}</td>
                     <td>{{ case.duration }}s</td>
                 </tr> 
                 {% endfor %}
             </tbody>
         </table>
-        {% endif %}
-    </div><!--/content-->
+
+        {% else %}   {# no cases #}
+        <div class='offset2 span8'>
+            <div class="alert-message warning span11">
+                <!--<a class="close" href="#">&times;</a>-->
+                <i>there are no new, unresolved calls at this time</i>
+            </div>
+        </div>
+
+        {% endif %} {# /cases check #}
+    </div> <!-- /row -->
+
+    {% endif %} <!-- /notVerified check -->
+</div><!--/content-->
 </div><!--/container-->
 
 {% endblock %}
