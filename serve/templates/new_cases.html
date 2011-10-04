@@ -34,7 +34,7 @@
                 {% for case in cases %}
                 <tr>
                     <td><a href="{{ url_for('show_case', patientName=case.patientName, caseName=case.caseName) }}">{{ case.caseName }}</a></td>
-                    <td><a href="{{ url_for('show_patients', patientName=case.patientName) }}">{{ case.patientName }}</a></td>
+                    <td><a href="{{ url_for('show_patient', patientName=case.patientName) }}">{{ case.patientName }}</a></td>
 
                     {% if case.transcriptionText %}
                     <td>{{ case.transcriptionText }}</td>
