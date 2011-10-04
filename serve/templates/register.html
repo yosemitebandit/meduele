@@ -8,7 +8,7 @@
 
     <div class='row'>
         {% if alreadyRegistered %}
-        <div class='offset1 span8'>
+        <div class='offset2 span8'>
             <div class="alert-message warning span11">
                 <!--<a class="close" href="#">&times;</a>-->
                 <p><strong>Hey!</strong>  You're already registered!</p>
@@ -99,9 +99,12 @@
                         <input type="submit" class="btn primary" value="Submit">
                     </div>
 
-                </div><! -- /offset1 span8 -->
-                {% endif %}   {# ends alreadyRegistered check #}
-            </div><!-- /row -->
-        </div><!-- /container -->
-        {% endblock %}
+                </fieldset>
+            </form>
+
+        </div><!-- /offset1 span8 -->
+        {% endif %}   {# ends alreadyRegistered check #}
+    </div><!-- /row -->
+</div><!-- /container -->
+{% endblock %}
 
