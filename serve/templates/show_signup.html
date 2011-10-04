@@ -1,6 +1,84 @@
 {% extends "layout.html" %}
-
 {% block body %}
+<<<<<<< HEAD
+
+    <div class="container">
+    	<div class="page-header">
+            <h1>{{ patientName }}</h1>
+        </div>
+		<div class="page-header">
+			<h2>New Cases</h2>
+		</div>
+        {% for case in unresolved %}
+        <div class="row">
+			<div class="span10">
+                <h4> Transcription:</h4>
+                {% if not case.transcriptionText %}
+                    <p> Transcription not yet available.</p>
+                {% else %}
+                    <p> {{ case.transcriptionText }} </p>
+                {% endif %}
+                
+                
+            <h4> Comments:</h4>
+                {% for comment in case.comments %}
+                  <p>{{ comment.body }}</p> 
+                  <p>{{ comment.author }}</p> 
+                  <p>{{ comment.timestamp }}</p> 
+                  <br />
+                 {% else %}
+
+                 <p> There are not yet any comments.</p>
+                 {% endfor %}
+			</div>
+			
+			
+            <div class="span6">
+                <h4> Date: {{ case.timestamp }} </h4>
+                <h4> Duration: {{ case.duration }} </h4>
+			</div>
+        </div>	
+        {% else %}
+        <h4>No new cases at this time.</h4>
+        {% endfor %}
+
+		<div class="page-header">
+			<h2>Old Cases</h1>
+        </div>
+        {% for case in resolved %}
+        <div class="row">
+			<div class="span10">
+                <h4> Transcription:</h4>
+                {% if not case.transcriptionText %}
+                    <p> Transcription not yet available.</p>
+                {% else %}
+                    <p> "{{ case.transcriptionText }}" </p>
+                {% endif %}
+                
+            <h4> Comments:</h4>
+                {% for comment in case.comments %}
+                  <p>{{ comment.body }}</p> 
+                  <p>{{ comment.author }}</p> 
+                  <p>{{ comment.timestamp }}</p> 
+                  <br />
+                 {% else %}
+
+                 <p> There are not yet any comments.</p>
+                 {% endfor %}
+			</div>
+			
+			
+            <div class="span6">
+                <h4> Date: {{ case.timestamp }} </h4>
+                <h4> Duration: {{ case.duration }} </h4>
+			</div>
+        </div>	
+        {% else %}
+        <h4>No unresolved cases at this time.</h4>
+        {% endfor %}
+ 	</div>
+
+=======
   <div class="container">
       <div class="page-header" style="font-weight:normal;margin-top=80px">
         <br />
@@ -27,5 +105,6 @@
       </form>
       </div>
   </div>
+>>>>>>> e2e5d420075592a12c8ac54fe1aece9a85973141
 {% endblock %}
 
