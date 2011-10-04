@@ -327,22 +327,22 @@ basic routes
 '''
 @app.route('/')
 def show_home():
-    return flask.render_template('show_home.html')
+    return flask.render_template('home.html')
 
 
 @app.route('/about', methods=['GET'])
 def show_about():
-    return flask.render_template('show_about.html')
+    return flask.render_template('about.html')
 
 
 @app.route('/contact', methods=['GET'])
 def show_contact():
-    return flask.render_template('show_contact.html')
+    return flask.render_template('contact.html')
 
 
 @app.route('/leaderboard', methods=['GET'])
 def show_leaderboard():
-    return flask.render_template('show_leaderboard.html')
+    return flask.render_template('leaderboard.html')
 
 
 '''
@@ -413,7 +413,7 @@ def show_test():
         # call = client.calls.create( to="9196225123",
         #                                    from_="3093609866", 
         #                                    url="http://twilio.nfshost.com/med/hello-client-twiml.php")
-        # return flask.render_template('show_signup.html', error=error, client=client_name, token=token)
+        # return flask.render_template('signup.html', error=error, client=client_name, token=token)
         return flask.render_template('show_test.html', token=token, client=client_name)
 
 
