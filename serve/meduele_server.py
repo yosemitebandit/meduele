@@ -25,7 +25,7 @@ def show_patient(patientName):
         return flask.redirect(flask.url_for('login'))
 
     if not flask.session['verified']:
-        return flask.render_template('show_patients.html', notVerified=True)
+        return flask.render_template('show_patient.html', notVerified=True)
 
     cases = mongo.retrieve_cases(patientName)
     resolved = []
@@ -36,7 +36,7 @@ def show_patient(patientName):
         else:
             resolved.append(case)
 
-    return flask.render_template('show_patients.html', patientName=patientName, unresolved=unresolved, resolved=resolved)
+    return flask.render_template('show_patient.html', patientName=patientName, unresolved=unresolved, resolved=resolved)
 
 
 @app.route('/patients/<patientName>/cases/<caseName>', methods=['GET'])
