@@ -123,17 +123,18 @@ class Mongo:
 
 
     def insert_case(self, callSID, timestamp, url, needsResolution, duration, incomingNumber, responder):
-        caseName = 'odelay' + str(int(random.random()*100000))
-        
+        ''' handles incoming calls from twilio
+        generates new case (ie call) and creates a new patient if we've never seen this number before
+        '''
         query = {'phoneNumber': incomingNumber}
         patient = list(self.db['patients'].find(query))
         if not patient:    # first-time caller; patient-gen
-            patientName = 'shakespeare' + str(int(random.random()*100000))
-            patient = {'patientName': patientName, 'phoneNumber': incomingNumber}
+
+            patient = {'patientName': self._create_patient_name(), 'phoneNumber': incomingNumber}
             self.db['patients'].insert(patient)
         
         case = {
-            'caseName': caseName
+            'caseName': self._create_case_name() 
             , 'callSID': callSID
             , 'timestamp': timestamp
             , 'url': url
@@ -153,28 +154,6 @@ class Mongo:
             self.db['cases'].update(query, {'$set': {'transcriptionText': text
                                                         , 'transcriptionStatus': status
                                                         , 'transcriptionURL': url}})
-
-
-    def insert_new_project(self, projectName, client, description, emailAddress):
-        ''' create new project in the db
-        '''
-        query = {'name': projectName}
-        returnFields = {'_id': True}
-        if list(self.db['cases'].find(query, returnFields)):
-            return (False, 'project name exists')
-
-        apiID = self._create_random_string(34)
-        project = {
-            'name': projectName
-            , 'client': client
-            , 'description': description
-            , 'createdBy': emailAddress
-            , 'createdAt': int(time.time())
-            , 'apiID': apiID
-            , 'apiKey': self._create_random_string(34)
-        }
-        result = self.db['cases'].insert(project)
-        return (True, projectName)
 
 
     def track_interaction(self, caseName, userName):
@@ -204,22 +183,6 @@ class Mongo:
 
         self.track_interaction(caseName, userName)
         return (True, 'comment created')
-
-    
-    def insert_new_patient(self, name, phoneNumber):
-        ''' create a new patient if the phone number does not exist already
-        '''
-        query = {'phoneNumber': phoneNumber}
-        returnFields = {'_id': True}
-        if list(self.db['patients'].find(query, returnFields)):
-            return (False, 'phone number exists')
-
-        patient = {
-            'phoneNumber': phoneNumber
-            , 'name': name
-        }
-        result = self.db['patients'].insert(patient)
-        return (True, 'patient created')
 
 
     def update_user(self, userName, bio, passwordHash, languages, verified, adminRights):
@@ -276,6 +239,44 @@ class Mongo:
         '''
         query = {'emailAddress': emailAddress}
         self.db['users'].update(query, {'$set': {'lastLogin': int(time.time())}})
+
+    
+    def _create_patient_name(self):
+        ''' creates a cutesy identifier; moons and bikes for now
+        '''
+        eligible = [
+            'phobos', 'io', 'europa', 'callisto', 'thebe', 'metis', 'themisto', 'tethys', 'titan', 'janus', 'calypso', 'prometheus', 'oberon'
+            , 'alcyon', 'avanti', 'brennabor', 'brunswick', 'corima', 'dorel', 'ibis', 'kona', 'novara', 'rover', 'serotta', 'somec', 'zigo'
+        ]
+        while(True):
+            # create a name like somec9, see if it already exists, save if not, woo efficiency
+            proposedName = eligible[int(random.random()*len(eligible))] + str(int(random.random()*100) + 1)
+            
+            query = {'patientName': proposedName}
+            returnFields = {'_id': True}
+            if not list(self.db['patients'].find(query, returnFields).limit(1)):
+                break
+
+        return proposedName
+
+    
+    def _create_case_name(self):
+        ''' creates a cutesy identifier; garden plants for now
+        '''
+        eligible = [
+            'abelia', 'adenia', 'andira', 'cassina', 'duvalia', 'eucomis', 'ficus', 'ginko', 'hovea', 'inula', 'itea'
+            , 'inula', 'kalmia', 'luma', 'maclura', 'melia', 'morina', 'orixa', 'parodia', 'selago', 'telekia'
+        ]
+        while(True):
+            # create a name like somec9, see if it already exists, save if not, woo efficiency
+            proposedName = eligible[int(random.random()*len(eligible))] + str(int(random.random()*100) + 1)
+            
+            query = {'caseName': proposedName}
+            returnFields = {'_id': True}
+            if not list(self.db['cases'].find(query, returnFields).limit(1)):
+                break
+
+        return proposedName
 
 
     def _create_random_string(self, length):
