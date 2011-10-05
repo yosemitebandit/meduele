@@ -63,11 +63,13 @@ assume you're running a unix setup (sorry PYe).
    - you may want to use something like homebrew: https://github.com/mxcl/homebrew/wiki/installation
    - the download page: http://www.mongodb.org/downloads
    - once mongo is installed, the database server will likely start automatically.  You can check that it is running with:
+    
     ```
     $ ps aux | grep mongod
     ```
 
    - if you need to start the server, this should start it running the background:
+    
     ```
     $ mkdir -p /data/db
     $ sudo mongod --fork --logpath /var/log/mongodb.log --logappend
