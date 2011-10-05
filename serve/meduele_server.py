@@ -420,12 +420,12 @@ def show_test():
 '''
 db init and migrations
 '''
-def init():
+def init_admin():
     ''' adds a default admin to the database
     usage: 
         $ /path/to/virtualenv/bin/python
-        >> from meduele_server import init
-        >> init()
+        >> from meduele_server import init_admin
+        >> init_admin()
         user "bruce@wayneindustries.com" created with specified password
     '''
     initial_user = app.config['INITIAL_USER']

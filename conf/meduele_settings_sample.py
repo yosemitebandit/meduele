@@ -7,7 +7,7 @@ APP_PORT = 8000
 MONGO_CONFIG = {
     'dbName': 'meduele'
     , 'host': 'localhost'
-    , 'port': 12345
+    , 'port': 27017
 }
 
 INITIAL_USER = {
