@@ -12,6 +12,7 @@ takes incoming calls, lets people respond with help in an asynch fashion.  650 2
       , 'salt': salt
       , 'password_hash': passwordHash
       , 'cases': [] 
+      , 'comments': [_ids of comment objs]
       , 'lastLogin': int(time.time())
       , 'created': int(time.time())
       , 'adminRights': False
@@ -26,6 +27,12 @@ takes incoming calls, lets people respond with help in an asynch fashion.  650 2
       }]
     }
 
+    comments {
+      author
+      timestamp
+      body
+    }
+
     cases {
       caseName
       callSID
@@ -35,12 +42,8 @@ takes incoming calls, lets people respond with help in an asynch fashion.  650 2
       needsResolution
       duration
       phone number
-      who_heard
-      comments: [{
-        author
-        body
-        timestamp
-      }]
+      who_heard [_ids of volunteers]
+      comments [_ids of comment objs]
     }
 ```
 
