@@ -66,7 +66,10 @@ def show_case(patientName, caseName):
 
     case = mongo.retrieve_case_by_caseName(caseName)
 
-    comments = mongo.retrieve_comments_by_ids(case['comments'])
+    if 'comments' in case.keys():
+        comments = mongo.retrieve_comments_by_ids(case['comments'])
+    else:  # eh, old cases don't have comments stored like this..
+        comments = []
     # timestamp conversions
     now = time.time()
     tzCorrection = 7   # yeesh, should be dynamic
