@@ -69,8 +69,9 @@ class Mongo:
         return True
 
     
-    def compile_history_by_case(self, caseName):
+    #def compile_history_by_case(self, caseName):
         ''' return comments and calls linked to this case name, sorted by time
+        '''
         '''
         # get all the calls
         query = {'caseName': caseName}
@@ -85,6 +86,7 @@ class Mongo:
         history = calls
         history.extend(comments)
         return sorted(history, key = itemgetter('timestamp'))
+        '''
 
     
     def retrieve_open_cases(self, responseNumberLimit):
@@ -167,23 +169,38 @@ class Mongo:
             user['cases'] = user['cases'].append(caseName)
             query = {'caseName': caseName}
             self.db['users'].update(query, user)
-
-
-    def insert_comment(self, userName, body, caseName, callSID):
-        ''' create new comment in the db tied to the project
-        also make sure this volunteer/patient interaction is tracked
+        
+        
+    def insert_comment(self, patientName, caseName, userName, body):
+        ''' create new comment in the db 
+        insert refs to this comment into the case and user collections
         '''
         comment = {
-            'caseName': caseName 
-            , 'body': body
+            'body': body
             , 'author': userName 
             , 'timestamp': int(time.time())
-            , 'callSID': callSID
         }
-        result = self.db['comments'].insert(comment)
+        commentID = self.db['comments'].insert(comment)
 
-        self.track_interaction(caseName, userName)
+        # push this comment ID into the relevant case and collection documents
+        query = {'caseName': caseName}
+        self.db['cases'].update(query, {'$push': {'comments': commentID}})
+        
+        query = {'userName': userName}
+        self.db['users'].update(query, {'$push': {'comments': commentID}})
+
+        #self.track_interaction(caseName, userName)
         return (True, 'comment created')
+
+
+    def retrieve_comments_by_ids(self, commentIDs):
+        ''' pull down all the comments that match the specified mongo IDs
+        '''
+        _query = []
+        for commentID in commentIDs:
+            _query.append({'_id': commentID})
+            
+        return self.db['comments'].find({'$or': _query}).sort('timestamp', pymongo.DESCENDING)
 
 
     def update_user(self, userName, bio, passwordHash, languages, verified, adminRights):

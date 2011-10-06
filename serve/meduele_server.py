@@ -39,7 +39,7 @@ def show_patient(patientName):
     return flask.render_template('show_patient.html', patientName=patientName, unresolved=unresolved, resolved=resolved)
 
 
-@app.route('/patients/<patientName>/cases/<caseName>', methods=['GET'])
+@app.route('/patients/<patientName>/cases/<caseName>', methods=['GET', 'POST'])
 def show_case(patientName, caseName):
     if 'logged_in' not in flask.session or not flask.session['logged_in']:  # not defined or is false
         return flask.redirect(flask.url_for('login'))
@@ -48,7 +48,55 @@ def show_case(patientName, caseName):
         return flask.redirect(flask.url_for('show_home'))
         #return flask.render_template('show_case.html', notVerified=True)
 
+    if flask.request.method == 'POST':
+        # handle comment-creation
+        if not flask.request.form['body']:
+            return flask.redirect(flask.url_for('show_case', patientName=patientName, caseName=caseName))
+        
+        print flask.request.form['body']
+
+        (success, message) = mongo.insert_comment(patientName
+                                , caseName
+                                , flask.session['userName']
+                                , flask.request.form['body'])
+
+    elif flask.request.method == 'GET':
+        success = None
+        message = None
+
     case = mongo.retrieve_case_by_caseName(caseName)
+
+    comments = mongo.retrieve_comments_by_ids(case['comments'])
+    # timestamp conversions
+    now = time.time()
+    tzCorrection = 7   # yeesh, should be dynamic
+    _comments = []
+    for comment in comments:
+        diff = now - comment['timestamp']
+        if diff <= 2*60:
+            comment['dynamicFormattedTimestamp'] = 'just now'  # italicize for double bonus points
+        elif diff <= 10*60:
+            comment['dynamicFormattedTimestamp'] = '%d minutes ago' % int(diff/60)
+        else:   
+            hours = int(time.strftime('%H', time.localtime(comment['timestamp'] - tzCorrection*60*60)))
+            minutes = int(time.strftime('%M', time.localtime(comment['timestamp'])))
+            suffix = 'am'   # default
+            if hours > 12:
+                hours -= 12
+                suffix = 'pm'
+            elif hours == 0:
+                hours = 12
+
+            if diff < 24*60*60:   # under a day
+                comment['dynamicFormattedTimestamp'] = 'today at %d:%d%s' % (hours, minutes, suffix)
+            elif diff < 48*60*60:
+                comment['dynamicFormattedTimestamp'] = 'yesterday at %d:%d%s' % (hours, minutes, suffix)
+            else:
+                date = time.strftime('%A, %B %d, %Y', time.localtime(case['timestamp'] - tzCorrection*60*60))
+                comment['dynamicFormattedTimestamp'] = 'on %s at %d:%d%s' % (date, hours, minutes, suffix)
+
+        _comments.append(comment)
+    comments = _comments
 
     client_name = 'will'
     capability = TwilioCapability(app.config['TWILIO_ACCOUNT_SID'], app.config['TWILIO_AUTH_TOKEN'])
@@ -58,7 +106,16 @@ def show_case(patientName, caseName):
     url = case['url']
     protocol = url.split(':')
     case['url'] = protocol[0] + 's:' + protocol[1]
-    return flask.render_template('show_case.html', client=client_name, token=token, patientName=patientName, case=case)
+    # this is getting silly..
+    return flask.render_template('show_case.html'
+                    , client=client_name
+                    , token=token
+                    , patientName=patientName
+                    , case=case
+                    , comments=comments
+                    , success=success
+                    , message=message)
+
 
 
 @app.route('/cases', methods=['GET'])
@@ -476,11 +533,7 @@ def init_test_values():
     patient = {
         'patientName': patientName
         , 'phoneNumber': '+1234567890'
-        , 'comments': [
-            {'author': 'asdf', 'body': 'oh yes, quite right', 'timestamp': int(time.time())}
-            , {'author': 'hjkl', 'body': 'most certainly', 'timestamp': int(time.time()-10000)}
-            , {'author': 'yuip', 'body': 'I do believe so', 'timestamp': int(time.time()-50000)}
-        ]
+        , 'comments': []
     }
     print 'inserting patient %s' % patientName
     mongo.db['patients'].insert(patient)
@@ -495,11 +548,7 @@ def init_test_values():
         , 'formattedTimestamp': 'Monday, October 3, 2011 at 3:05pm'
         , 'url': 'http://google.com'
         , 'needsResolution': True
-        , 'comments': [
-            {'author': 'asdf', 'body': 'oh yes, quite right', 'timestamp': int(time.time())}
-            , {'author': 'hjkl', 'body': 'most certainly', 'timestamp': int(time.time()-10000)}
-            , {'author': 'yuip', 'body': 'I do believe so', 'timestamp': int(time.time()-50000)}
-        ]
+        , 'comments': []
         , 'duration': 33
         , 'phoneNumber': '+1234567890'
         , 'responder': None
@@ -516,11 +565,7 @@ def init_test_values():
         , 'formattedTimestamp': 'Monday, October 3, 2011 at 3:05pm'
         , 'url': 'http://nytimes.com'
         , 'needsResolution': False
-        , 'comments': [
-            {'author': 'asdf', 'body': 'oh yes, quite right', 'timestamp': int(time.time())}
-            , {'author': 'hjkl', 'body': 'most certainly', 'timestamp': int(time.time()-10000)}
-            , {'author': 'yuip', 'body': 'I do believe so', 'timestamp': int(time.time()-50000)}
-        ]
+        , 'comments': []
         , 'duration': 33
         , 'phoneNumber': '+1234567890'
         , 'responder': None
