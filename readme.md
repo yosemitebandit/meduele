@@ -61,7 +61,11 @@ assume you're running a unix setup (sorry PYe).
 
 1. install mongodb
    - you may want to use something like homebrew: https://github.com/mxcl/homebrew/wiki/installation
-   - the download page: http://www.mongodb.org/downloads
+      - one you have homebrew:
+    ```
+    $ brew install mongodb
+    ```
+   - or get mongo from the download page: http://www.mongodb.org/downloads
    - once mongo is installed, the database server will likely start automatically.  You can check that it is running with:
     ```
     $ ps aux | grep mongod
@@ -168,3 +172,5 @@ http://readthedocs.org/docs/twilio-python/en/latest/
 
 ### should-fix
  - failures in firefox; related to <audio> element? ..if so, I don't think this element is needed
+ - CSRF protection
+ - alignment of those little error bars
