@@ -2,24 +2,27 @@
 
 {% block body %}
 <div class="page-header">
-    <h1>{{ languageName }} Language Hub</h1>
+  <h1>{{ languageName }} Language Hub</h1>
 </div>
-{% if notVerified %}
-<div class='offset1 span8'>
-    <div class="alert-message warning span11">
-        <!--<a class="close" href="#">&times;</a>-->
-        <p><strong>Sorry!</strong>  We're still working on getting you verified.  Hang tight!</p>
-    </div>
-</div>
-{% else %}
+<div class='row'>
 
-<div class='offset1 span8'>
+  {% if notVerified %}
+  <div class='offset1 span8'>
     <div class="alert-message warning span11">
-        <!--<a class="close" href="#">&times;</a>-->
-        <p><strong>Sorry!</strong>  We're still working on building this space.  Hang tight!</p>
+      <!--<a class="close" href="#">&times;</a>-->
+      <p><strong>Sorry!</strong>  We're still working on getting you verified.  Hang tight!</p>
     </div>
+  </div>
+  {% else %}
+
+  <div class='offset1 span8'>
+    <div class="alert-message warning span11">
+      <!--<a class="close" href="#">&times;</a>-->
+      <p><strong>Sorry!</strong>  We're still working on building this space.  Hang tight!</p>
+    </div>
+  </div>
+
+  {% endif %} {# /verifed check #}
 </div>
 
-{% endif %} {# /verifed check #}
 {% endblock %}
-
