@@ -83,6 +83,12 @@ def show_case(patientName, caseName):
         else:   
             hours = int(time.strftime('%H', time.localtime(comment['timestamp'] - tzCorrection*60*60)))
             minutes = int(time.strftime('%M', time.localtime(comment['timestamp'])))
+            # prepend a zero
+            if minutes < 10:
+                minutes = '0%d' % minutes
+            else:
+                minutes = str(minutes)
+
             suffix = 'am'   # default
             if hours > 12:
                 hours -= 12
@@ -91,12 +97,12 @@ def show_case(patientName, caseName):
                 hours = 12
 
             if diff < 24*60*60:   # under a day
-                comment['dynamicFormattedTimestamp'] = 'today at %d:%d%s' % (hours, minutes, suffix)
+                comment['dynamicFormattedTimestamp'] = 'today at %d:%s%s' % (hours, minutes, suffix)
             elif diff < 48*60*60:
-                comment['dynamicFormattedTimestamp'] = 'yesterday at %d:%d%s' % (hours, minutes, suffix)
+                comment['dynamicFormattedTimestamp'] = 'yesterday at %d:%s%s' % (hours, minutes, suffix)
             else:
                 date = time.strftime('%A, %B %d, %Y', time.localtime(case['timestamp'] - tzCorrection*60*60))
-                comment['dynamicFormattedTimestamp'] = 'on %s at %d:%d%s' % (date, hours, minutes, suffix)
+                comment['dynamicFormattedTimestamp'] = 'on %s at %d:%s%s' % (date, hours, minutes, suffix)
 
         _comments.append(comment)
     comments = _comments
