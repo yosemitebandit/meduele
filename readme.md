@@ -105,8 +105,9 @@ change the initial user paramters -- this user will be injected into the databas
  
 ### go-time
 
-    $ export MEDUELE_SETTINGS=/path/to/conf/meduele_settings.py
-    $ pip install -E /path/to/virtualenvs/meduele-lib -e /path/to/meduele
+ - make sure you've reinstalled the latest meduele lib (step five above)
+ - the MEDUELE_SETTINGS env var must point to a config (see steps six and seven in the setup process above)
+
     $ /path/to/virtualenv/python /path/to/meduele/serve/meduele_server.py
 
 or, if you're on the server, use supervisord or the fabfile or..if you must, gunicorn
