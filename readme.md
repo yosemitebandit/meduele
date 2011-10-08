@@ -1,62 +1,6 @@
 # meduele
 takes incoming calls, lets people respond with help in an asynch fashion.  650 262 5300
 
-### high-level data types
-```json
-    volunteer = {
-      'userName': userName
-      , 'emailAddress': emailAddress
-      , 'bio': bio
-      , 'languages': languages
-      , 'picture': picture
-      , 'salt': salt
-      , 'password_hash': passwordHash
-      , 'cases': [] 
-      , 'comments': [_ids of comment objs]
-      , 'lastLogin': int(time.time())
-      , 'created': int(time.time())
-      , 'adminRights': False
-      , 'verified': False
-    }
- 
-    patient {
-      patientName
-      phoneNumber
-      comments: [{
-        author, body, timestamp
-      }]
-    }
-
-    comments {
-      author
-      timestamp
-      body
-    }
-
-    cases {
-      caseName
-      callSID
-      timestamp
-      formattedTimestamp
-      url
-      needsResolution
-      duration
-      phone number
-      who_heard [_ids of volunteers]
-      comments [_ids of comment objs]
-    }
-```
-
-### git workflow
-
-    $ git add readme.md
-    $ git commit -m 'some message'
-    $ git pull
-
-you may have to resolve conflicts at this point -- ask around if things looks weird
-
-    $ git push
-
 
 ## testing and dependencies
 here are some steps to run this whole project locally -- mongodb and several python packages are required.  this will
@@ -175,6 +119,53 @@ or, if you're on the server, use supervisord or the fabfile or..if you must, gun
 http://readthedocs.org/docs/twilio-python/en/latest/
     
     $ pip install twilio
+
+
+### high-level data types
+```json
+    volunteer = {
+      'userName': userName
+      , 'emailAddress': emailAddress
+      , 'bio': bio
+      , 'languages': languages
+      , 'picture': picture
+      , 'salt': salt
+      , 'password_hash': passwordHash
+      , 'cases': [] 
+      , 'comments': [_ids of comment objs]
+      , 'lastLogin': int(time.time())
+      , 'created': int(time.time())
+      , 'adminRights': False
+      , 'verified': False
+    }
+ 
+    patient {
+      patientName
+      phoneNumber
+      comments: [{
+        author, body, timestamp
+      }]
+    }
+
+    comments {
+      author
+      timestamp
+      body
+    }
+
+    cases {
+      caseName
+      callSID
+      timestamp
+      formattedTimestamp
+      url
+      needsResolution
+      duration
+      phone number
+      who_heard [_ids of volunteers]
+      comments [_ids of comment objs]
+    }
+```
 
 
 ### would be nice to have
