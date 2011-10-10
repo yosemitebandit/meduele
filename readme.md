@@ -176,5 +176,4 @@ http://readthedocs.org/docs/twilio-python/en/latest/
 
 ### should-fix
  - failures in firefox; related to <audio> element? ..if so, I don't think this element is needed
- - CSRF protection
  - alignment of those little error bars

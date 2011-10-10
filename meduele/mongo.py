@@ -193,14 +193,19 @@ class Mongo:
         return (True, 'comment created')
 
 
-    def retrieve_comments_by_ids(self, commentIDs):
-        ''' pull down all the comments that match the specified mongo IDs
+    def retrieve_latest_comments(self, commentIDs, **kwargs):
+        ''' pull down all the comments that match specific mongo IDs
+        return up to limit of them, sort by timestamp, most recent first
         '''
-        _query = []
-        for commentID in commentIDs:
-            _query.append({'_id': commentID})
-            
-        return self.db['comments'].find({'$or': _query}).sort('timestamp', pymongo.DESCENDING)
+        limit = kwargs.pop('limit', 100)    # uh, maybe just pass None into pymongo limit and see
+
+        if not commentIDs:
+            return []
+        else:
+            query = []
+            for commentID in commentIDs:
+                query.append({'_id': commentID})
+            return self.db['comments'].find({'$or': query}).limit(limit).sort('timestamp', pymongo.DESCENDING)
 
 
     def update_user(self, userName, bio, passwordHash, languages, verified, adminRights):

@@ -165,12 +165,13 @@
                 </div><!-- /clearfix -->
                 {% endif %}
 
+                <input name=_csrf_token type=hidden value="{{ csrf_token() }}">
 
                 <div class="actions">
                     <input type="submit" class="btn primary" value="Submit">
                 </div>
 
-            </div><! -- /offset1 span8 -->
+            </div><!-- /offset1 span8 -->
         </div><!-- /row -->
         {% endblock %}
 

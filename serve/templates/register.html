@@ -97,6 +97,8 @@
                             <input class="xlarge" id="howDidYouFindUs" name="howDidYouFindUs" size="30" type="text" />
                         </div>
                     </div><!-- /clearfix -->
+                    
+                    <input name=_csrf_token type=hidden value="{{ csrf_token() }}">
 
                     <div class="actions">
                         <input type="submit" class="btn primary" value="Submit">

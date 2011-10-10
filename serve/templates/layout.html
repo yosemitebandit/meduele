@@ -58,6 +58,7 @@
                             <form action="{{ url_for('login') }}" method='post'>
                                 <input type="text" class='small' id='userName' name='userName' placeholder="Username" size='20' />
                                 <input type="password" class='small' id='password' name='password' placeholder="Password" size='20' />
+                                <input name=_csrf_token type=hidden value="{{ csrf_token() }}">
                                 <button class="btn primary" type='submit'>Log In</button>
                             </form>
                         </ul>
@@ -66,8 +67,6 @@
                 </div><!-- /topbar-inner -->
             </div><!-- /topbar -->
         </div><!-- /topbar-wrapper -->
-
-
 
         <div class='container'>
 

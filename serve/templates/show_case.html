@@ -134,6 +134,8 @@ $(document).ready(function(){
                     </span>
                 </div>
             </div><!-- /clearfix -->
+            
+            <input name=_csrf_token type=hidden value="{{ csrf_token() }}">
 
             <div class='clearfix' style='margin:-25px 0 0 40px'> {# should remove inline styling.. #}
                 <input type="submit" class="btn success offset9" value="Comment">

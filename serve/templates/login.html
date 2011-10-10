@@ -31,6 +31,8 @@
                         <input class="xlarge" id="passwordBottom" name="password" size="20" type="password" />
                     </div>
                 </div><!-- /clearfix -->
+                
+                <input name=_csrf_token type=hidden value="{{ csrf_token() }}">
 
                 <div class="actions">
                     <input type="submit" class="btn primary" value="Submit">

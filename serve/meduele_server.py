@@ -31,6 +31,11 @@ def show_patient(patientName):
     resolved = []
     unresolved = []
     for case in cases:
+        if 'comments' in case.keys() and case['comments']:
+            case['latestComment'] = mongo.retrieve_latest_comments(case['comments'], limit=1)[0]
+        #else:
+            #case['latestComments'] = []
+
         if 'needsResolution' in case.keys() and case['needsResolution']:
             unresolved.append(case)
         else:
@@ -67,7 +72,8 @@ def show_case(patientName, caseName):
     case = mongo.retrieve_case_by_caseName(caseName)
 
     if 'comments' in case.keys():
-        comments = mongo.retrieve_comments_by_ids(case['comments'])
+        comments = mongo.retrieve_latest_comments(case['comments'])
+        #comments = mongo.retrieve_comments_by_ids(case['comments'])
     else:  # eh, old cases don't have comments stored like this..
         comments = []
     # timestamp conversions
@@ -126,7 +132,6 @@ def show_case(patientName, caseName):
                     , message=message)
 
 
-
 @app.route('/cases', methods=['GET'])
 def show_new_cases():
     if 'logged_in' not in flask.session or not flask.session['logged_in']:  # not defined or is false
@@ -138,12 +143,15 @@ def show_new_cases():
     cases = mongo.retrieve_unresolved_cases(20)
     _cases = []
     for case in cases:
+        if 'comments' in case.keys() and case['comments']:
+            case['latestComment'] = mongo.retrieve_latest_comments(case['comments'], limit=1)[0]
+
         patientName = mongo.find_patientName_by_phoneNumber(case['phoneNumber'])
         case['patientName'] = patientName
         _cases.append(case)
 
     return flask.render_template('new_cases.html', cases=_cases)
-
+    
 
 '''
 user mgmt
@@ -482,6 +490,23 @@ def show_test():
         # return flask.render_template('signup.html', error=error, client=client_name, token=token)
         return flask.render_template('show_test.html', token=token, client=client_name)
 
+
+@app.before_request
+def csrf_protect():
+    ''' csrf protection: http://flask.pocoo.org/snippets/3/
+    '''
+    if flask.request.method == "POST":
+        token = flask.session.pop('_csrf_token', None)
+        if not token or token != flask.request.form.get('_csrf_token'):
+            flask.abort(403)
+
+def generate_csrf_token():
+    if '_csrf_token' not in flask.session:
+        flask.session['_csrf_token'] = mongo._create_random_string(24)
+    return flask.session['_csrf_token']
+
+app.jinja_env.globals['csrf_token'] = generate_csrf_token
+    
 
 '''
 db init and migrations

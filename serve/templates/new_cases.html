@@ -40,9 +40,9 @@
                 {% else %}
                 <td><i>transcription not yet available</i></td>
                 {% endif %}
-
-                {% if case.lastComment %}
-                <td>{{ case.lastComment }}</td>
+                
+                {% if case.latestComment %}
+                <td>{{ case.latestComment.body }}</td>
                 {% else %}
                 <td><i>no comments yet</i></td>
                 {% endif %}
