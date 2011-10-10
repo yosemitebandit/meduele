@@ -8,10 +8,12 @@
     </h1>
 </div>
 {% if notVerified %}
-<div class='offset1 span8'>
-    <div class="alert-message warning span11">
-        <!--<a class="close" href="#">&times;</a>-->
-        <p><strong>Sorry!</strong>  We're still working on getting you verified.  Hang tight!</p>
+<div class = 'row'>
+    <div class='offset1 span8'>
+        <div class="alert-message warning span11">
+            <!--<a class="close" href="#">&times;</a>-->
+            <p><strong>Sorry!</strong>  We're still working on getting you verified.  Hang tight!</p>
+        </div>
     </div>
 </div>
 {% else %}
@@ -40,7 +42,7 @@
                 {% else %}
                 <td><i>transcription not yet available</i></td>
                 {% endif %}
-                
+
                 {% if case.latestComment %}
                 <td>{{ case.latestComment.body }}</td>
                 {% else %}
