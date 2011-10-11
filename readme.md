@@ -130,12 +130,8 @@ own CallSid)
  6. the template rendered for the /twilio/outgoing_volunteer_call endpoint is passed a phone number based on the callSID
     parameter and the TwiML dial verb gets this phone number to start the call
 
-
-### using twilio-python for outgoing calls
-
+see more: 
 http://readthedocs.org/docs/twilio-python/en/latest/
-    
-    $ pip install twilio
 
 
 ### high-level data types
