@@ -2,7 +2,7 @@
 <Response>
     <Say>
         Welcome to May Dwaylay.
-        Please leave a message and a medical professional will get back to you soon.
+        Please leave a message, a medical professional will call you back soon.
     </Say>
     <Record
         action="https://callmeduele.com/twilio/incoming_callback"
