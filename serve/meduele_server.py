@@ -423,8 +423,14 @@ twilio handlers (see also the single-case view with the callback button)
 @app.route('/twilio/outgoing_volunteer_call', methods=['GET', 'POST'])
 def twilio_client():
     # search cases for the specified callSID to find the phone number
-    case = mongo.retrieve_case_by_callSID(flask.request.form['callSID'])
-    return flask.render_template('twilio_client.xml', phoneNumber=case['phoneNumber'])
+    case = mongo.retrieve_case_by_callSID(flask.request.args.get('callSID'))
+    if not case:
+        notFound = True   # renders an error message in twiml
+        phoneNumber = None
+    else:
+        notFound = False
+        phoneNumber = case[0]['phoneNumber']
+    return flask.render_template('twilio_client.xml', phoneNumber=phoneNumber, notFound=notFound)
 
 
 @app.route('/twilio/incoming_handler.xml', methods=['GET'])
