@@ -6,7 +6,7 @@
     </Say>
     <Record
         action="https://callmeduele.com/twilio/incoming_callback"
-        method="GET"
+        method="POST"
         maxLength="120"
         finishOnKey="*"
         transcribeCallback="https://callmeduele.com/twilio/transcription_callback"

@@ -462,7 +462,7 @@ def twilio_incoming_callback():
     return flask.redirect(flask.url_for('show_home'))
 
 
-@app.route('/twilio/transcription_callback', methods=['GET'])
+@app.route('/twilio/transcription_callback', methods=['GET', 'POST'])
 def twilio_transcription_callback():
     callSID = flask.request.form['CallSid']
     # http://www.twilio.com/docs/api/twiml/twilio_request#synchronous-request-parameters
