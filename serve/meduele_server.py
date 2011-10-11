@@ -429,7 +429,9 @@ def twilio_client():
         phoneNumber = None
     else:
         notFound = False
-        phoneNumber = case[0]['phoneNumber']
+        phoneNumber = case[0]['phoneNumber']  # at this time, the format is "+16506812119"
+        # format to 650-681-2219, as per the twilio docs
+        phoneNumber = '%s-%s-%s' % (phoneNumber[2:5], phoneNumber[5:8], phoneNumber[8:12])
     return flask.render_template('twilio_client.xml', phoneNumber=phoneNumber, notFound=notFound)
 
 
