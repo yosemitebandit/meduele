@@ -435,12 +435,12 @@ def twilio_client():
     return flask.render_template('twilio_client.xml', phoneNumber=phoneNumber, notFound=notFound)
 
 
-@app.route('/twilio/incoming_handler.xml', methods=['GET'])
+@app.route('/twilio/incoming_handler', methods=['GET'])
 def twilio_incoming():
     return flask.render_template('twilio_incoming.xml')
 
 
-@app.route('/twilio/incoming_callback', methods=['POST'])
+@app.route('/twilio/incoming_callback', methods=['GET'])
 def twilio_incoming_callback():
     callSID = flask.request.form['CallSid']
     incomingNumber = flask.request.form['From']
@@ -462,7 +462,7 @@ def twilio_incoming_callback():
     return flask.redirect(flask.url_for('show_home'))
 
 
-@app.route('/twilio/transcription_callback', methods=['POST'])
+@app.route('/twilio/transcription_callback', methods=['GET'])
 def twilio_transcription_callback():
     callSID = flask.request.form['CallSid']
     # http://www.twilio.com/docs/api/twiml/twilio_request#synchronous-request-parameters
