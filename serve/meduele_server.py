@@ -486,9 +486,12 @@ def csrf_protect():
     ''' csrf protection: http://flask.pocoo.org/snippets/3/
     '''
     if flask.request.method == "POST":
-        token = flask.session.pop('_csrf_token', None)
-        if not token or token != flask.request.form.get('_csrf_token'):
-            flask.abort(403)
+        # this is really borking twilio stuff -- only proceed if "twilio" isn't in flask's 'script_root'
+        flask_script_root = flask.request.script_root
+        if flask_script_root.find('twilio') == -1:
+            token = flask.session.pop('_csrf_token', None)
+            if not token or token != flask.request.form.get('_csrf_token'):
+                flask.abort(403)
 
 def generate_csrf_token():
     if '_csrf_token' not in flask.session:
