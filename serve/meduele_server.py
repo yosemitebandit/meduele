@@ -435,12 +435,12 @@ def twilio_client():
     return flask.render_template('twilio_client.xml', phoneNumber=phoneNumber, notFound=notFound)
 
 
-@app.route('/twilio/incoming_handler', methods=['GET'])
+@app.route('/twilio/incoming_handler', methods=['GET', 'POST'])
 def twilio_incoming():
     return flask.render_template('twilio_incoming.xml')
 
 
-@app.route('/twilio/incoming_callback', methods=['GET'])
+@app.route('/twilio/incoming_callback', methods=['GET', 'POST'])
 def twilio_incoming_callback():
     callSID = flask.request.form['CallSid']
     incomingNumber = flask.request.form['From']
