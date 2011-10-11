@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Response>
     <Say>
-        Please leave a message at the beep. 
-        Press the star key when finished. 
+        Welcome to May Dwaylay
+        Please leave a message and a medical professional will get back to you soon.
     </Say>
     <Record
         action="https://callmeduele.com/twilio/incoming_callback"
-        method="POST"
+        method="GET"
         maxLength="120"
         finishOnKey="*"
         transcribeCallback="https://callmeduele.com/twilio/transcription_callback"
