@@ -113,7 +113,6 @@ def show_case(patientName, caseName):
         _comments.append(comment)
     comments = _comments
 
-    client_name = 'will'
     capability = TwilioCapability(app.config['TWILIO_ACCOUNT_SID'], app.config['TWILIO_AUTH_TOKEN'])
     capability.allow_client_outgoing(app.config['TWILIO_APP_SID'])
     token = capability.generate()
@@ -123,7 +122,6 @@ def show_case(patientName, caseName):
     case['url'] = protocol[0] + 's:' + protocol[1]
     # this is getting silly..
     return flask.render_template('show_case.html'
-                    , client=client_name
                     , token=token
                     , patientName=patientName
                     , case=case
@@ -420,11 +418,13 @@ def show_leaderboard():
 
 
 '''
-twilio handlers
+twilio handlers (see also the single-case view with the callback button)
 '''
-@app.route('/twilio/client', methods=['POST'])
+@app.route('/twilio/outgoing_volunteer_call', methods=['POST'])
 def twilio_client():
-    return flask.render_template('twilio_client.xml')
+    # search cases for the specified callSID to find the phone number
+    case = mongo.retrieve_case_by_callSID(flask.request.form['callSID'])
+    return flask.render_template('twilio_client.xml', phoneNumber=case['phoneNumber'])
 
 
 @app.route('/twilio/incoming_handler.xml', methods=['GET'])
@@ -471,24 +471,6 @@ def twilio_transcription_callback():
 
     # not sure what to return here..
     return flask.redirect(flask.url_for('show_home'))
-
-
-@app.route('/test', methods=['GET'])
-def show_test():
-    # if 'logged_in' not in flask.session or not flask.session['logged_in']:  # not defined or is false
-    #     return flask.redirect(flask.url_for('show_home'))
-    # else:
-        client_name = flask.session['userName']
-        capability = TwilioCapability(app.config['TWILIO_ACCOUNT_SID'], app.config['TWILIO_AUTH_TOKEN'])
-        capability.allow_client_outgoing(app.config['TWILIO_APP_SID'])
-        capability.allow_client_incoming(client_name)
-        token = capability.generate()
-        # client = TwilioRestClient(TWILIO_ACCOUNT_SID, TWILIO_AUTH_TOKEN)
-        # call = client.calls.create( to="9196225123",
-        #                                    from_="3093609866", 
-        #                                    url="http://twilio.nfshost.com/med/hello-client-twiml.php")
-        # return flask.render_template('signup.html', error=error, client=client_name, token=token)
-        return flask.render_template('show_test.html', token=token, client=client_name)
 
 
 @app.before_request

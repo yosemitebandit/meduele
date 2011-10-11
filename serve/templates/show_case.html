@@ -36,6 +36,49 @@ $(document).ready(function(){
 
 {% block body %}
 
+<script>
+  var js_token = "{{ token }}";
+
+  try {
+    Twilio.Device.setup(js_token);
+    } catch (err) {
+    console.log("Adobe Flash is required to use Twilio Client.");
+  }
+
+  Twilio.Device.ready(function (device) {
+    $("#log").text("Ready");
+  });
+
+  Twilio.Device.error(function (error) {
+    $("#log").text("Error: " + error.message);
+  });
+
+  Twilio.Device.connect(function (conn) {
+    $("#log").text("Successfully established call");
+  });
+
+  Twilio.Device.disconnect(function (conn) {
+    $("#log").text("Call ended");
+  });
+
+  function call() {
+    params = {'callSID': '{{ case.callSID }}'};
+    Twilio.Device.connect(params);
+    $("#call_button").text("Hang up");
+    $("#call_button").attr('class', 'btn large danger call');
+    $("#call_button").attr('onclick', '').click(function() { hangup(); });
+  }
+
+  function hangup() {
+    Twilio.Device.disconnectAll();
+    $("#call_button").text("Call");
+    $("#call_button").attr('class', 'btn large primary call');
+    $("#call_button").attr('onclick', '').click(function() { call(); });
+  }
+
+</script>
+
+
 <div class="page-header">
     <h1>{{ case.formattedTimestamp }}
         <small>call from <a href="{{ url_for('show_patient', patientName=patientName) }}">{{ patientName }}</a></small>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Response>
-    <Dial callerId="+17037943748">
-        3093609866
+    <Dial callerId="+6502625300">
+        {{ phoneNumber }}
 </Dial>
 </Response>
 

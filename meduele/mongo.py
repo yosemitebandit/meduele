@@ -43,6 +43,11 @@ class Mongo:
         return list(self.db['cases'].find(query))[0]
 
 
+    def retrieve_case_by_callSID(self, callSID):
+        query = {'callSID': callSID}
+        return list(self.db['cases'].find(query).limit(1))[0]
+
+
     def retrieve_users(self, **kwargs):
         ''' return users based on ..something
         '''
