@@ -420,7 +420,7 @@ def show_leaderboard():
 '''
 twilio handlers (see also the single-case view with the callback button)
 '''
-@app.route('/twilio/outgoing_volunteer_call', methods=['POST'])
+@app.route('/twilio/outgoing_volunteer_call', methods=['GET', 'POST'])
 def twilio_client():
     # search cases for the specified callSID to find the phone number
     case = mongo.retrieve_case_by_callSID(flask.request.form['callSID'])
