@@ -177,3 +177,7 @@ http://readthedocs.org/docs/twilio-python/en/latest/
 ### should-fix
  - failures in firefox; related to <audio> element? ..if so, I don't think this element is needed
  - alignment of those little error bars
+ - twilio-csrf exception
+   - get rid of the exception for twilio paths
+   - or prevent 'twilio' from appearing in any routes other than the twilio callbacks
+      - this is currently the case since patient and case names are generated from a preset (twilio-less) list
