@@ -114,6 +114,22 @@ or, if you're on the server, use supervisord or the fabfile or..if you must, gun
 
     $ /path/to/virtualenv/gunicorn -c /path/to/gunicorn/conf.py run:app
 
+### twilio flow
+when volunteers view a case, a call-back button is visible.  Here's what happens behind the scenes:
+
+ 1. in rendering that template, the twilio python library uses an Account ID and Auth Key (both bound to a paying
+    account) as well as an App SID (bound to an App created under that account) to generate a capability token.
+ 2. this token is enabled for making outbound calls and is injected into the Twilio Client's javascript library
+ 3. the button is clicked and an outbound call begins, Twilio looks at the registered App's voice URL to determine what
+    to do
+ 4. at the moment, that voice URL points to an endpoint at /twilio/outgoing_volunteer_call and the callSID of the
+    original patient call is passed in as a URL parameter (somewhat confusing as this volunteer-initiated call has its
+own CallSid)
+ 5. there were some issues with GETing vs POSTing to this URL (and other twilio endpoints) because of CSRF protection.
+    There is currently a bit of a hack in place that doesn't perform a csrf check if 'twilio' is in the path
+ 6. the template rendered for the /twilio/outgoing_volunteer_call endpoint is passed a phone number based on the callSID
+    parameter and the TwiML dial verb gets this phone number to start the call
+
 
 ### using twilio-python for outgoing calls
 
