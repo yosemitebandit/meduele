@@ -16,38 +16,36 @@ class Mongo:
         self.connection = pymongo.Connection(mongoConfig['host'], int(mongoConfig['port']))   # mongo mandates integer ports
         self.db = self.connection[mongoConfig['dbName']]
 
-
+    '''
+    patients
+    '''
     def find_patientName_by_phoneNumber(self, phoneNumber):
         query = {'phoneNumber': phoneNumber}
         patients = list(self.db['patients'].find(query))[0]
         return patients['patientName']
 
+    
+    def _create_patient_name(self):
+        ''' creates a cutesy identifier; moons and bikes for now
+        '''
+        eligible = [
+            'phobos', 'io', 'europa', 'callisto', 'thebe', 'metis', 'themisto', 'tethys', 'titan', 'janus', 'calypso', 'prometheus', 'oberon'
+            , 'alcyon', 'avanti', 'brennabor', 'brunswick', 'corima', 'dorel', 'ibis', 'kona', 'novara', 'rover', 'serotta', 'somec', 'zigo'
+        ]
+        while(True):
+            # create a name like somec9, see if it already exists, save if not, woo efficiency
+            proposedName = eligible[int(random.random()*len(eligible))] + str(int(random.random()*100) + 1)
+            
+            query = {'patientName': proposedName}
+            returnFields = {'_id': True}
+            if not list(self.db['patients'].find(query, returnFields).limit(1)):
+                break
+        return proposedName
 
-    def retrieve_unresolved_cases(self, responseLimit):
-        query = {'needsResolution': True}
-        return list(self.db['cases'].find(query).sort('timestamp', pymongo.DESCENDING).limit(responseLimit))
-   
-
-    def retrieve_cases(self, patientName):
-        # first get the phone number from patients coll
-        query = {'patientName': patientName}
-        patient = list(self.db['patients'].find(query))[0]
-
-        # now get cases based on phone number
-        query = {'phoneNumber': patient['phoneNumber']}
-        return list(self.db['cases'].find(query))
-
-
-    def retrieve_case_by_caseName(self, caseName):
-        query = {'caseName': caseName}
-        return list(self.db['cases'].find(query))[0]
-
-
-    def retrieve_case_by_callSID(self, callSID):
-        query = {'callSID': callSID}
-        return list(self.db['cases'].find(query).limit(1))
-
-
+    
+    '''
+    users
+    '''
     def retrieve_users(self, **kwargs):
         ''' return users based on ..something
         '''
@@ -73,27 +71,91 @@ class Mongo:
         # eh, mongo doesn't really reply..sigh
         return True
 
+
+    def update_user(self, userName, bio, passwordHash, languages, verified, adminRights):
+        ''' handles any edits to the user page
+        userName and emailAddress are currently immutable, though presumably one of them could be changed..
+        '''
+        query = {'userName': userName}
+        self.db['users'].update(query, {'$set': {
+                                            'bio': bio
+                                            , 'passwordHash': passwordHash
+                                            , 'languages': languages
+                                            , 'verified': verified
+                                            , 'adminRights': adminRights}})
+        return (True, 'user info updated!')
+
+
+    def register_user(self, userName, emailAddress, salt, passwordHash, languages, bio, picture):
+        ''' handles the web registration
+        '''
+        if not userName or not emailAddress or not salt or not passwordHash or not bio:
+            return (False, 'you seem to be missing some info')
+
+        query = {'emailAddress': emailAddress}
+        returnFields = {'_id': True}
+        if list(self.db['users'].find(query, returnFields)):
+            return (False, 'the email address "%s" is already registered with us' % emailAddress)
+
+        query = {'userName': userName}
+        returnFields = {'_id': True}
+        if list(self.db['users'].find(query, returnFields)):
+            return (False, 'the username "%s" is already registered with us' % userName)
+
+        volunteer = {
+            'userName': userName
+            , 'emailAddress': emailAddress
+            , 'bio': bio
+            , 'languages': languages
+            , 'picture': picture
+            , 'salt': salt
+            , 'passwordHash': passwordHash
+            , 'cases': [] 
+            , 'lastLogin': int(time.time())
+            , 'created': int(time.time())
+            , 'adminRights': False
+            , 'verified': False
+        }
+
+        self.db['users'].insert(volunteer)
+        return (True, 'thanks for signing up, we\'ll work to verify you soon!')
+
+
+    def update_last_login(self, emailAddress):
+        ''' updates the last-login field with the current time
+        '''
+        query = {'emailAddress': emailAddress}
+        self.db['users'].update(query, {'$set': {'lastLogin': int(time.time())}})
+
     
-    #def compile_history_by_case(self, caseName):
-        ''' return comments and calls linked to this case name, sorted by time
-        '''
-        '''
-        # get all the calls
+    '''
+    cases
+    '''
+    def retrieve_unresolved_cases(self, responseLimit):
+        query = {'needsResolution': True}
+        return list(self.db['cases'].find(query).sort('timestamp', pymongo.DESCENDING).limit(responseLimit))
+   
+
+    def retrieve_cases(self, patientName):
+        # first get the phone number from patients coll
+        query = {'patientName': patientName}
+        patient = list(self.db['patients'].find(query))[0]
+
+        # now get cases based on phone number
+        query = {'phoneNumber': patient['phoneNumber']}
+        return list(self.db['cases'].find(query))
+
+
+    def retrieve_case_by_caseName(self, caseName):
         query = {'caseName': caseName}
-        returnFields = {'_id': False}
-        calls = list(self.db['calls'].find(query, returnFields).sort('timestamp', pymongo.DESCENDING).limit(10))
+        return list(self.db['cases'].find(query))[0]
 
-        # get all the comments; cheating a bit with the same query
-        
-        comments = list(self.db['comments'].find(query, returnFields).sort('timestamp', pymongo.DESCENDING).limit(10))
 
-        # combine and sort by timestamp
-        history = calls
-        history.extend(comments)
-        return sorted(history, key = itemgetter('timestamp'))
-        '''
+    def retrieve_case_by_callSID(self, callSID):
+        query = {'callSID': callSID}
+        return list(self.db['cases'].find(query).limit(1))
 
-    
+
     def retrieve_open_cases(self, responseNumberLimit):
         ''' get three of the oldest calls that have not been marked resolved 
         '''
@@ -174,8 +236,30 @@ class Mongo:
             user['cases'] = user['cases'].append(caseName)
             query = {'caseName': caseName}
             self.db['users'].update(query, user)
+    
+    
+    def _create_case_name(self):
+        ''' creates a cutesy identifier; garden plants for now
+        '''
+        eligible = [
+            'abelia', 'adenia', 'andira', 'cassina', 'duvalia', 'eucomis', 'ficus', 'ginko', 'hovea', 'inula', 'itea'
+            , 'inula', 'kalmia', 'luma', 'maclura', 'melia', 'morina', 'orixa', 'parodia', 'selago', 'telekia'
+        ]
+        while(True):
+            # create a name like somec9, see if it already exists, save if not, woo efficiency
+            proposedName = eligible[int(random.random()*len(eligible))] + str(int(random.random()*100) + 1)
+            
+            query = {'caseName': proposedName}
+            returnFields = {'_id': True}
+            if not list(self.db['cases'].find(query, returnFields).limit(1)):
+                break
+
+        return proposedName
         
-        
+
+    '''
+    comments
+    '''
     def insert_comment(self, patientName, caseName, userName, body):
         ''' create new comment in the db 
         insert refs to this comment into the case and user collections
@@ -211,100 +295,6 @@ class Mongo:
             for commentID in commentIDs:
                 query.append({'_id': commentID})
             return self.db['comments'].find({'$or': query}).limit(limit).sort('timestamp', pymongo.DESCENDING)
-
-
-    def update_user(self, userName, bio, passwordHash, languages, verified, adminRights):
-        ''' handles any edits to the user page
-        userName and emailAddress are currently immutable, though presumably one of them could be changed..
-        '''
-        query = {'userName': userName}
-        self.db['users'].update(query, {'$set': {
-                                            'bio': bio
-                                            , 'passwordHash': passwordHash
-                                            , 'languages': languages
-                                            , 'verified': verified
-                                            , 'adminRights': adminRights}})
-        return (True, 'user info updated!')
-
-
-    def register_user(self, userName, emailAddress, salt, passwordHash, languages, bio, picture):
-        ''' handles the web registration
-        '''
-        if not userName or not emailAddress or not salt or not passwordHash or not bio:
-            return (False, 'you seem to be missing some info')
-
-        query = {'emailAddress': emailAddress}
-        returnFields = {'_id': True}
-        if list(self.db['users'].find(query, returnFields)):
-            return (False, 'the email address "%s" is already registered with us' % emailAddress)
-
-        query = {'userName': userName}
-        returnFields = {'_id': True}
-        if list(self.db['users'].find(query, returnFields)):
-            return (False, 'the username "%s" is already registered with us' % userName)
-
-        volunteer = {
-            'userName': userName
-            , 'emailAddress': emailAddress
-            , 'bio': bio
-            , 'languages': languages
-            , 'picture': picture
-            , 'salt': salt
-            , 'passwordHash': passwordHash
-            , 'cases': [] 
-            , 'lastLogin': int(time.time())
-            , 'created': int(time.time())
-            , 'adminRights': False
-            , 'verified': False
-        }
-
-        self.db['users'].insert(volunteer)
-        return (True, 'thanks for signing up, we\'ll work to verify you soon!')
-
-
-    def update_last_login(self, emailAddress):
-        ''' updates the last-login field with the current time
-        '''
-        query = {'emailAddress': emailAddress}
-        self.db['users'].update(query, {'$set': {'lastLogin': int(time.time())}})
-
-    
-    def _create_patient_name(self):
-        ''' creates a cutesy identifier; moons and bikes for now
-        '''
-        eligible = [
-            'phobos', 'io', 'europa', 'callisto', 'thebe', 'metis', 'themisto', 'tethys', 'titan', 'janus', 'calypso', 'prometheus', 'oberon'
-            , 'alcyon', 'avanti', 'brennabor', 'brunswick', 'corima', 'dorel', 'ibis', 'kona', 'novara', 'rover', 'serotta', 'somec', 'zigo'
-        ]
-        while(True):
-            # create a name like somec9, see if it already exists, save if not, woo efficiency
-            proposedName = eligible[int(random.random()*len(eligible))] + str(int(random.random()*100) + 1)
-            
-            query = {'patientName': proposedName}
-            returnFields = {'_id': True}
-            if not list(self.db['patients'].find(query, returnFields).limit(1)):
-                break
-
-        return proposedName
-
-    
-    def _create_case_name(self):
-        ''' creates a cutesy identifier; garden plants for now
-        '''
-        eligible = [
-            'abelia', 'adenia', 'andira', 'cassina', 'duvalia', 'eucomis', 'ficus', 'ginko', 'hovea', 'inula', 'itea'
-            , 'inula', 'kalmia', 'luma', 'maclura', 'melia', 'morina', 'orixa', 'parodia', 'selago', 'telekia'
-        ]
-        while(True):
-            # create a name like somec9, see if it already exists, save if not, woo efficiency
-            proposedName = eligible[int(random.random()*len(eligible))] + str(int(random.random()*100) + 1)
-            
-            query = {'caseName': proposedName}
-            returnFields = {'_id': True}
-            if not list(self.db['cases'].find(query, returnFields).limit(1)):
-                break
-
-        return proposedName
 
 
     def _create_random_string(self, length):
