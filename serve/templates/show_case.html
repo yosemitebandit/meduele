@@ -4,7 +4,7 @@
 
 <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js'></script>
 <!-- may be pointless to host the twilio lib since the lib itself goes to twilio for more anyway -->
-<script src="{{ url_for('static', filename='twilio.min.js') }} "></script>
+<script src="{{ url_for('static', filename='js/twilio.min.js') }} "></script>
 <script src="{{ url_for('static', filename='js/case-callback.js') }} "></script>
 
 <script type="text/javascript">
@@ -30,7 +30,7 @@ $(document).ready(function(){
 #}
 <link href="{{ url_for('static', filename='jPlayer/prettify-jPlayer.css') }}" rel="stylesheet" type="text/css" />
 <link href="{{ url_for('static', filename='jPlayer/jplayer.blue.monday.css') }}" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="{{ url_for('static', filename='jquery.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
 <script type="text/javascript" src="{{ url_for('static', filename='jPlayer/jquery.jplayer.min.js') }}"></script>
 
 {% endblock %}
