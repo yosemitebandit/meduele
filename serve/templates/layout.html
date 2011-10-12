@@ -5,8 +5,13 @@
         <title>MEDuele</title>
         <meta name="description" content="">
         <meta name="author" content="">
+
         <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+
+        <!--  should fall back to local
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+        -->
+        <script src="{{ url_for('static', filename='js/jquery.min.js') }}"></script>
         <script src="{{ url_for('static', filename='js/bootstrap-dropdown.js') }}"></script>
 
         <style type="text/css">
