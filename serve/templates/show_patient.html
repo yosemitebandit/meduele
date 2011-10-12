@@ -51,15 +51,17 @@
         </tbody>
     </table>
     {% else %}
-
-    <div class='offset2 span8'>
-        <div class="alert-message success span11">
-            <!--<a class="close" href="#">&times;</a>-->
-            <i>there are no unresolved cases at this time</i>
+  
+    <div class='row' style='margin-top:5px'>
+        <div class='offset2 span8'>
+            <div class="alert-message success span11">
+                <!--<a class="close" href="#">&times;</a>-->
+                <i>there are no unresolved cases at this time</i>
+            </div>
         </div>
     </div>
 
-    {% endif %}
+    {% endif %}  {# /unresolved #}
 
     <h2>Resolved Cases</h2>
     {% if resolved %} 
@@ -97,11 +99,13 @@
         </tbody>
     </table>
     {% else %}
-
-    <div class='offset2 span8'>
-        <div class="alert-message warning span11">
-            <!--<a class="close" href="#">&times;</a>-->
-            <i>there are no resolved cases at this time</i>
+    
+    <div class='row'>
+        <div class='offset2 span8'>
+            <div class="alert-message warning span11">
+                <!--<a class="close" href="#">&times;</a>-->
+                <i>there are no resolved cases at this time</i>
+            </div>
         </div>
     </div>
 
