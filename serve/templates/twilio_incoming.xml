@@ -11,6 +11,6 @@
         finishOnKey="*"
         transcribeCallback="https://callmeduele.com/twilio/transcription_callback"
         />
-    <Say>I did not receive a recording</Say>
+    <Say>Sorry, we can not hear you.  Please call us back.</Say>
 </Response>
 
