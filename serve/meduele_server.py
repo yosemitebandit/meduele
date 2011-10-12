@@ -502,7 +502,7 @@ app.jinja_env.globals['csrf_token'] = generate_csrf_token
     
 
 '''
-db init and migrations
+db init
 '''
 def init_admin():
     ''' adds a default admin to the database
@@ -580,7 +580,6 @@ def init_test_values():
         , 'phoneNumber': '+1234567890'
         , 'responder': None
     }
-
     print 'inserting case %s' % caseName 
     mongo.db['cases'].insert(case)
     
@@ -597,7 +596,6 @@ def init_test_values():
         , 'phoneNumber': '+1234567890'
         , 'responder': None
     }
-
     print 'inserting case %s' % caseName 
     mongo.db['cases'].insert(case)
 
