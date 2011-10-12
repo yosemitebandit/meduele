@@ -12,7 +12,7 @@
 
 {% else %}
 
-<div class="page-header" style="font-weight:normal">
+<div class="page-header">
     <h1>{{ user.userName }}</h1>
 </div>
 
@@ -28,19 +28,19 @@
         <p>{{ user.bio }}</p>
 
         <h3>Language Proficiencies</h3>
+        {% if user.languages %}
         <ul>
             {% for lang in user.languages %}
             <a href="{{ url_for('show_language_hub', language=lang) }}"><li>{{ lang }}</li></a>
-            {% else %}
-            <i>None listed</i>
             {% endfor %}
-        </ul>
+          </ul>
+          {% else %}
+          <p><i>None listed</i></p>
+          {% endif %}
 
         {% if session.adminRights or user.userName == session.userName %}
         {# an admin or the page's owner #}
-        <a href="{{ url_for('edit_profile', userName=user.userName) }}">
-            <input class="btn primary span1" value="Edit">
-        </a>
+        <a href="{{ url_for('edit_profile', userName=user.userName) }}" class='btn primary span1'>Edit</a>
     </div>
 </div>
 {% endif %}
