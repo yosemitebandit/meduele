@@ -3,6 +3,7 @@
 {% block head %}
 
 <script src='https://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js'></script>
+<!-- may be pointless to host the twilio lib since the lib itself goes to twilio for more anyway -->
 <script src="{{ url_for('static', filename='twilio.min.js') }} "></script>
 <script src="{{ url_for('static', filename='js/case-callback.js') }} "></script>
 
@@ -16,7 +17,7 @@ $(document).ready(function(){
         mp3:"{{ case.url }}"
       });
     },
-    swfPath: "../js",
+    swfPath: "../js",   // not entirely clear as to what this line does..
     supplied: "mp3",
     wmode: "window"
   });
@@ -27,10 +28,10 @@ $(document).ready(function(){
 {# brutally overrides the bootstrap styles
 <link href="{{ url_for('static', filename='jPlayer.css') }}" rel="stylesheet" type="text/css" />
 #}
-<link href="{{ url_for('static', filename='prettify-jPlayer.css') }}" rel="stylesheet" type="text/css" />
-<link href="{{ url_for('static', filename='jplayer.blue.monday.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ url_for('static', filename='jPlayer/prettify-jPlayer.css') }}" rel="stylesheet" type="text/css" />
+<link href="{{ url_for('static', filename='jPlayer/jplayer.blue.monday.css') }}" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="{{ url_for('static', filename='jquery.min.js') }}"></script>
-<script type="text/javascript" src="{{ url_for('static', filename='jquery.jplayer.min.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jPlayer/jquery.jplayer.min.js') }}"></script>
 
 {% endblock %}
 
@@ -188,7 +189,7 @@ $(document).ready(function(){
     </form>
 </div> <!-- /row -->
 
-<script type="text/javascript" src="{{ url_for('static', filename='prettify-jPlayer.js') }}"></script>
+<script type="text/javascript" src="{{ url_for('static', filename='jPlayer/prettify-jPlayer.js') }}"></script>
 
 {% endblock %}
 
