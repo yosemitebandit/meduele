@@ -142,51 +142,52 @@ $(document).ready(function(){
 <br />
 
 <div class='row'>
-    <div class='span12'>
+  <div class='span12'>
 
-        <h4> Transcription:</h4>
-        {% if not case.transcriptionText %}
-        <i> Transcription not yet available.</i>
-        {% else %}
-        <p> {{ case.transcriptionText }} </p>
-        {% endif %}
+    <h4> Transcription</h4>
+    {% if not case.transcriptionText %}
+    <i> Transcription not yet available.</i>
+    {% else %}
+    <p> {{ case.transcriptionText }} </p>
+    {% endif %}
+  </div>
 
-        <h4> Comments:</h4>
-        {% for comment in comments %}
-        <blockquote>
-            <p>{{ comment.body }}</p> 
-            <small class='pull-right'>
-                <a href={{ url_for('show_profile', userName=comment.author) }}>{{ comment.author }}</a> 
-                {{ comment.dynamicFormattedTimestamp }}
-            </small>
-            <br />
-        </blockquote>
-        {% else %}
-        <i> There are not yet any comments.</i>
-        {% endfor %}
-
-    </div> <!-- /span8 -->
-
+  <div class='span12' style='margin-top: 20px'>
+    <h4> Comments</h4>
     <form action="{{ url_for('show_case', patientName=patientName, caseName=case.caseName) }}" method=post>
-        <fieldset>
-            <div class="clearfix">
-                <label for="body">Leave a Comment</label>
-                <div class="input">
-                    <textarea class="xxlarge" id="body" name="body" rows="4"></textarea>
-                    <span class="help-block">
-                        any comments on what the caller had to say or how you think we should proceed
-                    </span>
-                </div>
-            </div><!-- /clearfix -->
-            
-            <input name=_csrf_token type=hidden value="{{ csrf_token() }}">
+      <fieldset>
+        <div class="clearfix">
+          <div class="input">
+            <textarea class="xxlarge" id="body" name="body" rows="3"></textarea>
+            <span class="help-block">
+              any comments on what the caller had to say or how you think we should proceed
+            </span>
+          </div>
+        </div><!-- /clearfix -->
 
-            <div class='clearfix' style='margin:-25px 0 0 40px'> {# should remove inline styling.. #}
-                <input type="submit" class="btn success offset9" value="Comment">
-            </div><!-- /clearfix -->
+        <input name=_csrf_token type=hidden value="{{ csrf_token() }}">
 
-        </fieldset>
+        <div class='clearfix' style='margin:-25px 0 0 40px'> {# should remove inline styling.. #}
+          <input type="submit" class="btn success offset9" value="Comment">
+        </div><!-- /clearfix -->
+
+      </fieldset>
     </form>
+
+    {% for comment in comments %}
+    <blockquote>
+      <p>{{ comment.body }}</p> 
+      <small class='pull-right'>
+        <a href={{ url_for('show_profile', userName=comment.author) }}>{{ comment.author }}</a> 
+        {{ comment.dynamicFormattedTimestamp }}
+      </small>
+      <br />
+    </blockquote>
+    {% else %}
+    <i> There are not yet any comments.</i>
+    {% endfor %}
+  </div> <!-- /span -->
+
 </div> <!-- /row -->
 
 <script type="text/javascript" src="{{ url_for('static', filename='jPlayer/prettify-jPlayer.js') }}"></script>
