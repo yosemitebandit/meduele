@@ -510,7 +510,7 @@ def init_admin():
         $ /path/to/virtualenv/bin/python
         >> from meduele_server import init_admin
         >> init_admin()
-        user "bruce@wayneindustries.com" created with specified password
+        inserting "thebat"
     '''
     initial_user = app.config['INITIAL_USER']
 
@@ -526,7 +526,7 @@ def init_admin():
     elif names:
         print 'failed, username exists'
     else:
-        print 'inserting %s' % initial_user['userName']
+        print 'inserting "%s"' % initial_user['userName']
         salt = mongo._create_random_string(34)
 
         volunteer = {
