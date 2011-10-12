@@ -1,8 +1,20 @@
 # meduele
-takes incoming calls, lets people respond with help in an asynch fashion.  650 262 5300
+MEDuele was built originally for the Cal Health Hackathon after hearing about the crowded free clinics in the South Bay.
+The clinics offer their services to low-income patients but can only do so for a few hours each week.  The clinics also
+have a high demand for translators as many of the incoming patients do not use English as their primary language.
+
+The service we are prototyping allows patients to call in to a phone number and leave a message describing their ailments and questions.  They
+are encouraged to speak in a language in which they are comfortable (ie, English is not mandatory).  After the call is
+complete, a "case" is listed inside the MEDuele web app.  Verified volunteers can listen to the calls from their browser
+and leave comments on the case itself.  Volunteers would be a mix of bilingual people that can aid in translation, 
+medical professionals who can offer advice and, of course, medical professionals who also happen to be bilingual.  After listening to the original call and reviewing the case comments and any history from this caller, volunteers may then return the original client's call from the webapp using the magic of Twilio Client.
+
+MEDuele is live at https://callmeduele.com and you can call our hotline at 650-262-5300
+
+Check out the source and get involved: https://github.com/yosemitebandit/meduele
 
 
-## testing and dependencies
+## setting up a local server
 here are some steps to run this whole project locally -- mongodb and several python packages are required.  this will
 assume you're running a unix setup (sorry PYe).
 
@@ -114,6 +126,7 @@ or, if you're on the server, use supervisord or the fabfile or..if you must, gun
 
     $ /path/to/virtualenv/gunicorn -c /path/to/gunicorn/conf.py run:app
 
+
 ### twilio flow
 when volunteers view a case, a call-back button is visible.  Here's what happens behind the scenes:
 
@@ -126,7 +139,8 @@ when volunteers view a case, a call-back button is visible.  Here's what happens
     original patient call is passed in as a URL parameter (somewhat confusing as this volunteer-initiated call has its
 own CallSid)
  5. there were some issues with GETing vs POSTing to this URL (and other twilio endpoints) because of CSRF protection.
-    There is currently a bit of a hack in place that doesn't perform a csrf check if 'twilio' is in the path
+    There is currently a bit of a hack in place that doesn't perform a csrf check if 'twilio' is in the path.  This is a
+problem only with profiles since all other names are auto-generated.
  6. the template rendered for the /twilio/outgoing_volunteer_call endpoint is passed a phone number based on the callSID
     parameter and the TwiML dial verb gets this phone number to start the call
 
@@ -183,13 +197,13 @@ http://readthedocs.org/docs/twilio-python/en/latest/
 
 ### would be nice to have
  - tz knowledge and recs about when to call someone back
+ - phone menu for incoming calls
  - way to mark transcription as close enough or needs attention of language expert
     - twilioTranscription, englishTranscription, nativeLanguageTranscription would all be good
+ - make this a true hotline -- if a volunteer is online and 'available' route an incoming call to them rather than
+   voicemail
+
 
 ### should-fix
  - failures in firefox; related to <audio> element? ..if so, I don't think this element is needed
  - alignment of those little error bars
- - twilio-csrf exception
-   - get rid of the exception for twilio paths
-   - or prevent 'twilio' from appearing in any routes other than the twilio callbacks
-      - this is currently the case since patient and case names are generated from a preset (twilio-less) list
