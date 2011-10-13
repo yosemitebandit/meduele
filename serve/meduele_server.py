@@ -501,38 +501,6 @@ def generate_csrf_token():
 app.jinja_env.globals['csrf_token'] = generate_csrf_token
     
 
-def insert_formatted_times():
-    ''' adds a formatted time to the case if the case doesn't have one already
-    usage: 
-        $ /path/to/virtualenv/bin/python
-        >> from meduele_server import insert_formatted_times
-        >> insert_formatted_times()
-        nova13 updated
-        aberdeen4 updated
-        ..
-    '''
-    cases = mongo.db['cases'].find()
-
-    for case in cases:
-        # save a formatted timestamp
-        if 'formattedTimestamp' in case.keys():
-            continue
-
-        tzCorrection = 7   # eh, should really adjust for caller's timezone
-        date = time.strftime('%A, %B %d, %Y', time.localtime(case['timestamp'] - tzCorrection*60*60))
-        hours = int(time.strftime('%H', time.localtime(case['timestamp'] - tzCorrection*60*60)))
-        if hours > 12:
-            suffix = 'pm'
-            hours = hours - 12
-        else:
-            suffix = 'am'
-        minutes = time.strftime('%M', time.localtime(case['timestamp'] - tzCorrection*60*60))
-
-        query = {'caseName': case['caseName']}
-        mongo.db['cases'].update(query, {'$set': {'formattedTimestamp':  '%s at %d:%s%s' % (date, hours, minutes, suffix)}})
-        print '%s updated' % case['caseName']
-
-
 if __name__ == '__main__':
     app.run(host=app.config['APP_IP'], port=app.config['APP_PORT'])
 
