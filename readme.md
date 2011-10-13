@@ -207,3 +207,12 @@ http://readthedocs.org/docs/twilio-python/en/latest/
 ### should-fix
  - failures in firefox; related to <audio> element? ..if so, I don't think this element is needed
  - alignment of those little error bars
+
+
+### other notes
+ - visit anaestheseologists, cardiologists, nurses for advice
+    - close to patients, very open to talking
+    - early morning surgical centers 
+ - translators are sometimes in short supply
+ - but translators often needed in the hospital itself
+ - a native speaker at your side can be very comforting
