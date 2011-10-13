@@ -149,6 +149,8 @@ http://readthedocs.org/docs/twilio-python/en/latest/
 
 
 ### high-level data types
+at the moment, this is not a perfect description of the actual data model.  But the test mongo db doesn't have it all
+either; still working to reconcile the two.
 ```json
     volunteer = {
       'userName': userName
@@ -165,7 +167,10 @@ http://readthedocs.org/docs/twilio-python/en/latest/
       , 'adminRights': False
       , 'verified': False
     }
- 
+```
+
+I don't think patients track comments like this..
+```json 
     patient {
       patientName
       phoneNumber
@@ -173,13 +178,18 @@ http://readthedocs.org/docs/twilio-python/en/latest/
         author, body, timestamp
       }]
     }
+```
 
+```json
     comments {
       author
       timestamp
       body
     }
+```
 
+cases are also injected with transcription data
+```json
     cases {
       caseName
       callSID
@@ -189,8 +199,9 @@ http://readthedocs.org/docs/twilio-python/en/latest/
       needsResolution
       duration
       phone number
-      who_heard [_ids of volunteers]
+      listeners [_ids of volunteers]
       comments [_ids of comment objs]
+      responders [_ids of volunteers]
     }
 ```
 
@@ -202,11 +213,12 @@ http://readthedocs.org/docs/twilio-python/en/latest/
     - twilioTranscription, englishTranscription, nativeLanguageTranscription would all be good
  - make this a true hotline -- if a volunteer is online and 'available' route an incoming call to them rather than
    voicemail
+ - method for marking cases as resolved
+ - method to flag a call as 'in need of translation'
 
 
 ### should-fix
  - failures in firefox; related to <audio> element? ..if so, I don't think this element is needed
- - alignment of those little error bars
 
 
 ### other notes
