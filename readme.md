@@ -52,9 +52,9 @@ assume you're running a unix setup (sorry PYe).
     ```
 
 3. create a virtualenv to hold all the dependencies for this project.  One pattern is to create a directory at
-   ```~/virtualenvs/``` to hold virtualenvs for all your future projects.  A virtualenv is literally a directory inside
-this dir; I typically append a "-lib" to the name of my main project.  Setting the --python flag is only needed if
-you want this virtualenv to run a specific flavor of python.  The --no-site-packages makes a virtualenv with (almost) no
+   `~/virtualenvs/` to hold virtualenvs for all your future projects.  A virtualenv is literally a directory inside
+this dir; I typically append a "-lib" to the name of my main project.  Setting the `--python` flag is only needed if
+you want this virtualenv to run a specific flavor of python.  The `--no-site-packages` makes a virtualenv with (almost) no
 packages, as if your computer was brand new.
     
     ```
@@ -80,10 +80,10 @@ packages, as if your computer was brand new.
     ```
 
 6. the meduele project uses a small config file to initialize things and authenticate to other services like mongodb and
-   twilio.  A sample config is inside the project at ```conf/meduele_settings.py```  You will want to make a copy of
+   twilio.  A sample config is inside the project at `conf/meduele_settings.py`  You will want to make a copy of
 this config somewhere *outside* of the project directory.  We will be adding sensitive info into the config that should
 never be committed to source control.  We will also need to tell the meduele project where this real version of the
-config file is; we do so by setting the ```MEDUELE_SETTINGS``` environmental variable.  We also want to put this env-var
+config file is; we do so by setting the `MEDUELE_SETTINGS` environmental variable.  We also want to put this env-var
 setting into /etc/profile so the var gets set every time the shell starts up.  here's the whole process:
     
     ```
@@ -94,11 +94,11 @@ setting into /etc/profile so the var gets set every time the shell starts up.  h
     $ sudo echo export MEDUELE_SETTINGS=~/conf/meduele_settings.py >> /etc/profile
     ```
 
-7. edit the ```~/conf/meduele_settings.py``` file to have the appropriate settings.  You will probably want to set
-   ```DEBUG``` to be true so that the flask app is more responsive in your test environment.  You will also want to
+7. edit the `~/conf/meduele_settings.py` file to have the appropriate settings.  You will probably want to set
+   `DEBUG` to be true so that the flask app is more responsive in your test environment.  You will also want to
 change the initial user paramters -- this user will be injected into the database as the first account
 
-8. initialize the database with the first user and some test content.  This is done by two functions within ```meduele_server.py```
+8. initialize the database with the first user and some test content.  This is done by two functions within `meduele_server.py`
     
     ```
     $ cd ~/meduele/serve
