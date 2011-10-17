@@ -19,7 +19,7 @@ $(document).ready(function(){
         mp3: mp3Target
       });
     },
-    swfPath: "jPlayer.swf",   // path to the swf file; not sure how to get this in static
+    swfPath: "{{ url_for('static', filename='jPlayer/jPlayer.swf') }}",
     supplied: "mp3",
     wmode: "window"
   });
