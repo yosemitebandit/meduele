@@ -11,10 +11,12 @@
 
 //<![CDATA[
 $(document).ready(function(){
+  var mp3Target = "{{ case.url }}";
+  mp3Target += '.mp3';
   $("#jquery_jplayer_1").jPlayer({
     ready: function (event) {
       $(this).jPlayer("setMedia", {
-        mp3:"{{ case.url }}" + '.mp3'
+        mp3: mp3Target
       });
     },
     swfPath: "../js",   // not entirely clear as to what this line does..
