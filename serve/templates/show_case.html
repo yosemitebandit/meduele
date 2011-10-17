@@ -14,7 +14,7 @@ $(document).ready(function(){
   $("#jquery_jplayer_1").jPlayer({
     ready: function (event) {
       $(this).jPlayer("setMedia", {
-        mp3:"{{ case.url }}"
+        mp3:"{{ case.url }} + '.mp3'"
       });
     },
     swfPath: "../js",   // not entirely clear as to what this line does..
