@@ -18,7 +18,7 @@ def prod():
 
 def deploy():
     # pull down changes
-    local('git pull')
+    local('git pull origin master')
 
     # push changes of specific branch
     local('git push origin %s' % env.branch)
