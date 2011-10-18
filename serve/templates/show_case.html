@@ -74,7 +74,7 @@ $(document).ready(function(){
 
   function hangup() {
     Twilio.Device.disconnectAll();
-    $("#call_button").text("Call");
+    $("#call_button").text("Call Back");
     $("#call_button").attr('class', 'btn large primary call');
     $("#call_button").attr('onclick', '').click(function() { call(); });
   }
@@ -133,7 +133,7 @@ $(document).ready(function(){
         </div><!-- /jp_container_1 -->
 
     </div> <!-- /span -->
-
+    
     <div class="offset10" style="margin-top:20px;">
         <button class="btn large primary call" id="call_button" onclick="call();">
             Call Back
