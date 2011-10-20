@@ -215,6 +215,7 @@ cases are also injected with transcription data
    voicemail
  - method for marking cases as resolved
  - method to flag a call as 'in need of translation'
+ - a demo account + a demo case + a demo callback
 
 
 ### should-fix
