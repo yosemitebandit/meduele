@@ -218,6 +218,7 @@ cases are also injected with transcription data
  - method to flag a call as 'in need of translation'
  - view all patients
  - view all volunteers
+ - a demo account + a demo case + a demo callback
 
 
 ### should-fix
