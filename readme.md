@@ -207,6 +207,7 @@ cases are also injected with transcription data
 
 
 ### would be nice to have
+ - different numbers for different languages
  - tz knowledge and recs about when to call someone back
  - phone menu for incoming calls
  - way to mark transcription as close enough or needs attention of language expert
@@ -215,10 +216,13 @@ cases are also injected with transcription data
    voicemail
  - method for marking cases as resolved
  - method to flag a call as 'in need of translation'
+ - view all patients
+ - view all volunteers
 
 
 ### should-fix
- - failures in firefox; related to <audio> element? ..if so, I don't think this element is needed
+ - there's a lot of js in places where it is not needed
+ - the api is..cluttered, so cluttered
 
 
 ### other notes
