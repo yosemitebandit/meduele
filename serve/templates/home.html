@@ -1,7 +1,10 @@
 {% extends "layout.html" %}
 
-{% block body %}
+{% block head %}
+  <script src="{{ url_for('static', filename='js/bootstrap-modal.js') }} "></script>
+{% endblock %}
 
+{% block body %}
 
 <div class="hero-unit">
   <h1 class='highlight'>MEDuele</h1>
@@ -22,10 +25,15 @@
     <div class='span6 offset2'>
       <h2 class='highlight'>Want to become a volunteer?</h2>
       <a class="btn success large" style='margin-top:5px;' href="{{ url_for('register') }}">Sign Up&nbsp; &raquo;</a>
+      <button class="btn info large" data-controls-modal='video-modal' data-backdrop='true' data-keyboard='true'
+        style='margin:5px 0 0 90px;'>Watch a Video&nbsp; &raquo;</button>
     </div>
   </div>
+</div>
 
-
+<!-- modal content -->
+<div id='video-modal' class='modal hide fade' style='width:853px; height:480px; margin-left: -425px;'>
+  <iframe width="853" height="480" src="http://www.youtube.com/embed/q_gSaW4sj6I?hd=1" frameborder="0" allowfullscreen></iframe>
 </div>
 
 <div class="row">
