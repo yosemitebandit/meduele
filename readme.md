@@ -222,6 +222,7 @@ cases are also injected with transcription data
 
 
 ### should-fix
+ - the copy could be /a lot/ better
  - there's a lot of js in places where it is not needed
  - the api is..cluttered, so cluttered
 
