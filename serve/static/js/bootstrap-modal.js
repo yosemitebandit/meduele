@@ -100,6 +100,10 @@
       }
 
     , hide: function (e) {
+        
+        // for the home page; stop the video when the modal is hidden
+        player.stopVideo();
+
         e && e.preventDefault()
 
         if ( !this.isShown ) {
