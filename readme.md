@@ -151,6 +151,7 @@ http://readthedocs.org/docs/twilio-python/en/latest/
 ### high-level data types
 at the moment, this is not a perfect description of the actual data model.  But the test mongo db doesn't have it all
 either; still working to reconcile the two.
+
 ```json
     volunteer = {
       'userName': userName
@@ -170,6 +171,7 @@ either; still working to reconcile the two.
 ```
 
 I don't think patients track comments like this..
+
 ```json 
     patient {
       patientName
@@ -189,6 +191,7 @@ I don't think patients track comments like this..
 ```
 
 cases are also injected with transcription data
+
 ```json
     cases {
       caseName
