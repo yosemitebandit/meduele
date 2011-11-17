@@ -225,6 +225,8 @@ cases are also injected with transcription data
  - the copy could be /a lot/ better
  - there's a lot of js in places where it is not needed
  - the api is..cluttered, so cluttered
+ - iframe errors with youtube; SO says it's ok but it'd be nice to make them go away
+   - http://stackoverflow.com/questions/6346176/youtube-embed-unsafe-javascript-attempt-to-access-frame
 
 
 ### other notes
