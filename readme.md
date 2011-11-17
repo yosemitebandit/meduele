@@ -222,7 +222,6 @@ cases are also injected with transcription data
 
 
 ### should-fix
- - the copy could be /a lot/ better
  - there's a lot of js in places where it is not needed
  - the api is..cluttered, so cluttered
  - iframe errors with youtube; SO says it's ok but it'd be nice to make them go away
